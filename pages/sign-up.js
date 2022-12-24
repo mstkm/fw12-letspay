@@ -86,7 +86,7 @@ const SignUp = () => {
             {eyePassword ? <Eye onClick={() => setEyePassword(false)} className={filledPassword ? 'text-primary' : 'text-slate-300'}  /> : <EyeOff onClick={() => setEyePassword(true)} className={filledPassword ? 'text-primary' : 'text-slate-300'}  />}
           </div>
           <div className="flex justify-center items-center w-full h-8 mb-10">
-            <button disabled={!filledEmail || !filledPassword || !filledFirstName || !filledLastName} className={`w-full ${filledEmail && filledPassword ? ' bg-primary' : ' bg-slate-300'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm text-white`}>Sign Up</button>
+            <button disabled={!filledEmail || !filledPassword || !filledFirstName || !filledLastName} className={`w-full ${filledEmail && filledPassword ? ' bg-primary' : ' bg-slate-300'} ${filledEmail && filledPassword ? ' text-white' : ' text-secondary'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm text-white`}>Sign Up</button>
           </div>
         </form>
         <div className="text-center">
