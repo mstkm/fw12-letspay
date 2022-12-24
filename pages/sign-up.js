@@ -60,8 +60,8 @@ const SignUp = () => {
         </div>
         <div className="bg-white md:bg-transparent p-10 md:p-0 border-none rounded-t-3xl">
         <div className="md:hidden text-center mb-10">
-          <h3 className="font-bold text-xl mb-3">Login</h3>
-          <p>Login to your existing account to access all the features in FazzPay.</p>
+          <h3 className="font-bold text-xl mb-3">Sign Up</h3>
+          <p>Create your account to access FazzPay.</p>
         </div>
         <div className="hidden md:block mb-10">
           <h2 className="font-bold text-xl mb-5">Start Accessing Banking Needs With All Devices and All Platforms With 30.000+ Users</h2>
@@ -80,16 +80,13 @@ const SignUp = () => {
             <Mail className={filledEmail ? 'text-primary' : 'text-slate-300'} />
             <input onChange={(e)=> checkEmailValue(e.target.value)} type='text' name='email' placeholder='Enter your email' className="flex-1 bg-transparent focus:outline-none"/>
           </div>
-          <div className={`flex gap-5 mb-1 pb-3 border-b-2 ${filledPassword ? ' border-primary' : ''}`}>
+          <div className={`flex gap-5 mb-16 pb-3 border-b-2 ${filledPassword ? ' border-primary' : ''}`}>
             <Lock className={filledPassword ? 'text-primary' : 'text-slate-300'}  />
             <input onChange={(e)=> checkPasswordValue(e.target.value)} type={eyePassword ? 'password' : 'text'} name='password' placeholder='Enter your password' className="flex-1 bg-transparent focus:outline-none"/>
             {eyePassword ? <Eye onClick={() => setEyePassword(false)} className={filledPassword ? 'text-primary' : 'text-slate-300'}  /> : <EyeOff onClick={() => setEyePassword(true)} className={filledPassword ? 'text-primary' : 'text-slate-300'}  />}
           </div>
-          <div className="flex justify-end mb-10 text-end">
-            <p className="cursor-pointer w-fit hover:font-bold">Forgot password?</p>
-          </div>
           <div className="flex justify-center items-center w-full h-8 mb-10">
-            <button disabled={!filledEmail || !filledPassword || !filledFirstName || !filledLastName} className={`w-full ${filledEmail && filledPassword ? ' bg-primary' : ' bg-slate-300'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm`}>Login</button>
+            <button disabled={!filledEmail || !filledPassword || !filledFirstName || !filledLastName} className={`w-full ${filledEmail && filledPassword ? ' bg-primary' : ' bg-slate-300'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm text-white`}>Sign Up</button>
           </div>
         </form>
         <div className="text-center">
