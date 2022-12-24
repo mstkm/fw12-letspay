@@ -71,7 +71,10 @@ const CreateNewPassword = () => {
             {eyeConfirmPassword ? <Eye onClick={() => setEyeConfirmPassword(false)} className={filledConfirmPassword ? 'text-primary' : 'text-slate-300'}  /> : <EyeOff onClick={() => setEyeConfirmPassword(true)} className={filledConfirmPassword ? 'text-primary' : 'text-slate-300'}  />}
           </div>
           <div className="flex justify-center items-center w-full h-8 mb-10">
-            <button disabled={!filledPassword} className={`w-full ${filledPassword ? ' bg-primary' : ' bg-slate-300'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm`}>Reset Password</button>
+          {!filledPassword || !filledConfirmPassword ?
+          <button disabled className={`w-full bg-slate-300 text-secondary font-bold py-3 border rounded-xl`}>Reset Password</button> :
+          <button className={`w-full bg-primary text-white font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm`}>Reset Password</button>
+          }
           </div>
         </form>
 
