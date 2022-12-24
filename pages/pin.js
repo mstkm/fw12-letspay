@@ -29,7 +29,7 @@ const Pin = () => {
       </div>
 
       {/* Right */}
-      <div className="flex-[45%] bg-blue-50 md:pl-16 md:pr-36 md:py-10">
+      <div className="flex-[45%] flex flex-col justify-center h-screen bg-blue-50 md:pl-16 md:pr-36 md:py-10">
         <div className="md:hidden text-center p-16">
           <h1 className="font-bold text-4xl text-primary">FazzPay</h1>
         </div>
@@ -43,7 +43,7 @@ const Pin = () => {
           <h2 className="font-bold text-xl mb-5">Secure Your Account, Your Wallet, and Your Data With 6 Digits PIN That You Created Yourself.</h2>
           <p>Create 6 digits pin to secure all your money and your data in FazzPay app. Keep it secret and don&apos;t tell anyone about your FazzPay account password and the PIN.</p>
         </div>
-        <form onSubmit={createPin}>
+        <form onSubmit={createPin} className='flex flex-col items-center'>
           <PinInput
             length={6}
             initialValue=""
