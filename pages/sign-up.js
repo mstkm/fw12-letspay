@@ -2,12 +2,28 @@ import Image from "next/image"
 import Head from "next/head"
 import Link from "next/link"
 import React from 'react'
-import {Mail, Lock, Eye, EyeOff} from 'react-feather'
+import {User, Mail, Lock, Eye, EyeOff} from 'react-feather'
 
-const Login = () => {
+const SignUp = () => {
+  const [filledFirtsName, setFilledFirtsName] = React.useState(false)
+  const [filledLastName, setfilledLastName] = React.useState(false)
   const [filledEmail, setFilledEmail] = React.useState(false)
   const [filledPassword, setFilledPassword] = React.useState(false)
   const [eyePassword, setEyePassword] = React.useState(false)
+  const checkFirstNameValue = (value) => {
+    if (value) {
+      setFilledFirtsName(true)
+    } else {
+      setFilledFirtsName(false)
+    }
+  }
+  const checkLastNameValue = (value) => {
+    if (value) {
+      setfilledLastName(true)
+    } else {
+      setfilledLastName(false)
+    }
+  }
   const checkEmailValue = (value) => {
     if (value) {
       setFilledEmail(true)
@@ -32,7 +48,7 @@ const Login = () => {
   return(
     <>
     <Head>
-      <title>Login | FazzPay</title>
+      <title>Sign Up | FazzPay</title>
     </Head>
     <div className="flex font-primary">
       {/* Left */}
@@ -44,7 +60,7 @@ const Login = () => {
       </div>
 
       {/* Right */}
-      <div className="flex-[45%] bg-blue-50 md:pl-16 md:pr-36 md:py-10">
+      <div className="flex-[45%] bg-blue-50 md:pl-16 md:pr-36 md:py-10 overflow-y-scroll h-screen">
         <div className="md:hidden text-center p-16">
           <h1 className="font-bold text-2xl text-primary">FazzPay</h1>
         </div>
@@ -58,6 +74,14 @@ const Login = () => {
           <p>Transfering money is eassier than ever, you can access FazzPay wherever you are. Desktop, laptop, mobile phone? we cover all of that for you!</p>
         </div>
         <form>
+          <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${filledFirtsName ? ' border-primary' : ''}`}>
+            <User className={filledFirtsName ? 'text-primary' : 'text-slate-300'} />
+            <input onChange={(e)=> checkFirstNameValue(e.target.value)} type='text' name='email' placeholder='Enter your firtsname' className="flex-1 bg-transparent focus:outline-none"/>
+          </div>
+          <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${filledLastName ? ' border-primary' : ''}`}>
+            <User className={filledLastName ? 'text-primary' : 'text-slate-300'} />
+            <input onChange={(e)=> checkLastNameValue(e.target.value)} type='text' name='email' placeholder='Enter your lastsname' className="flex-1 bg-transparent focus:outline-none"/>
+          </div>
           <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${filledEmail ? ' border-primary' : ''}`}>
             <Mail className={filledEmail ? 'text-primary' : 'text-slate-300'} />
             <input onChange={(e)=> checkEmailValue(e.target.value)} type='text' name='email' placeholder='Enter your email' className="flex-1 bg-transparent focus:outline-none"/>
@@ -71,11 +95,11 @@ const Login = () => {
             <p className="cursor-pointer w-fit hover:font-bold">Forgot password?</p>
           </div>
           <div className="flex justify-center items-center w-full h-8 mb-10">
-            <button disabled={!filledEmail || !filledPassword} className={`w-full ${filledEmail && filledPassword ? ' bg-primary' : ' bg-slate-300'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm`}>Login</button>
+            <button disabled={!filledEmail || !filledPassword || !filledFirtsName || !filledLastName} className={`w-full ${filledEmail && filledPassword ? ' bg-primary' : ' bg-slate-300'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm`}>Login</button>
           </div>
         </form>
         <div className="text-center">
-          <p>Don&apos;t have an account? Let&apos;s <Link href='/sign-up' className="text-primary cursor-pointer hover:font-bold">Sign Up</Link></p>
+          <p>Already have an account? Let&apos;s <Link href='/login' className="text-primary cursor-pointer hover:font-bold">Login</Link></p>
         </div>
         </div>
       </div>
@@ -84,4 +108,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default SignUp
