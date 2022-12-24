@@ -7,7 +7,7 @@ import {Mail, Lock, Eye, EyeOff} from 'react-feather'
 const Login = () => {
   const [filledEmail, setFilledEmail] = React.useState(false)
   const [filledPassword, setFilledPassword] = React.useState(false)
-  const [eyePassword, setEyePassword] = React.useState(false)
+  const [eyePassword, setEyePassword] = React.useState(true)
   const checkEmailValue = (value) => {
     if (value) {
       setFilledEmail(true)
@@ -21,12 +21,6 @@ const Login = () => {
     } else {
       setFilledPassword(false)
     }
-  }
-  const showPassword = () => {
-    setEyePassword(true)
-  }
-  const hidePassword = () => {
-    setEyePassword(false)
   }
 
   return(
@@ -64,8 +58,8 @@ const Login = () => {
           </div>
           <div className={`flex gap-5 mb-1 pb-3 border-b-2 ${filledPassword ? ' border-primary' : ''}`}>
             <Lock className={filledPassword ? 'text-primary' : 'text-slate-300'}  />
-            <input onChange={(e)=> checkPasswordValue(e.target.value)} type={eyePassword ? 'password' : 'text'} name='email' placeholder='Enter your password' className="flex-1 bg-transparent focus:outline-none"/>
-            {eyePassword ? <EyeOff onClick={hidePassword} className={filledPassword ? 'text-primary' : 'text-slate-300'}  /> : <Eye onClick={showPassword} className={filledPassword ? 'text-primary' : 'text-slate-300'}  />}
+            <input onChange={(e)=> checkPasswordValue(e.target.value)} type={eyePassword ? 'password' : 'text'} name='password' placeholder='Enter your password' className="flex-1 bg-transparent focus:outline-none"/>
+            {eyePassword ? <Eye onClick={() => {setEyePassword(false)}} className={filledPassword ? 'text-primary' : 'text-slate-300'}  /> : <EyeOff onClick={() => {setEyePassword(true)}} className={filledPassword ? 'text-primary' : 'text-slate-300'}  />}
           </div>
           <div className="flex justify-end mb-10 text-end">
             <p className="cursor-pointer w-fit hover:font-bold">Forgot password?</p>

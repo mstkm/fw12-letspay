@@ -5,16 +5,16 @@ import React from 'react'
 import {User, Mail, Lock, Eye, EyeOff} from 'react-feather'
 
 const SignUp = () => {
-  const [filledFirtsName, setFilledFirtsName] = React.useState(false)
+  const [filledFirstName, setFilledFirstName] = React.useState(false)
   const [filledLastName, setfilledLastName] = React.useState(false)
   const [filledEmail, setFilledEmail] = React.useState(false)
   const [filledPassword, setFilledPassword] = React.useState(false)
-  const [eyePassword, setEyePassword] = React.useState(false)
+  const [eyePassword, setEyePassword] = React.useState(true)
   const checkFirstNameValue = (value) => {
     if (value) {
-      setFilledFirtsName(true)
+      setFilledFirstName(true)
     } else {
-      setFilledFirtsName(false)
+      setFilledFirstName(false)
     }
   }
   const checkLastNameValue = (value) => {
@@ -37,12 +37,6 @@ const SignUp = () => {
     } else {
       setFilledPassword(false)
     }
-  }
-  const showPassword = () => {
-    setEyePassword(true)
-  }
-  const hidePassword = () => {
-    setEyePassword(false)
   }
 
   return(
@@ -74,13 +68,13 @@ const SignUp = () => {
           <p>Transfering money is eassier than ever, you can access FazzPay wherever you are. Desktop, laptop, mobile phone? we cover all of that for you!</p>
         </div>
         <form>
-          <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${filledFirtsName ? ' border-primary' : ''}`}>
-            <User className={filledFirtsName ? 'text-primary' : 'text-slate-300'} />
-            <input onChange={(e)=> checkFirstNameValue(e.target.value)} type='text' name='email' placeholder='Enter your firtsname' className="flex-1 bg-transparent focus:outline-none"/>
+          <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${filledFirstName ? ' border-primary' : ''}`}>
+            <User className={filledFirstName ? 'text-primary' : 'text-slate-300'} />
+            <input onChange={(e)=> checkFirstNameValue(e.target.value)} type='text' name='firstName' placeholder='Enter your firtsname' className="flex-1 bg-transparent focus:outline-none"/>
           </div>
           <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${filledLastName ? ' border-primary' : ''}`}>
             <User className={filledLastName ? 'text-primary' : 'text-slate-300'} />
-            <input onChange={(e)=> checkLastNameValue(e.target.value)} type='text' name='email' placeholder='Enter your lastsname' className="flex-1 bg-transparent focus:outline-none"/>
+            <input onChange={(e)=> checkLastNameValue(e.target.value)} type='text' name='lastName' placeholder='Enter your lastsname' className="flex-1 bg-transparent focus:outline-none"/>
           </div>
           <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${filledEmail ? ' border-primary' : ''}`}>
             <Mail className={filledEmail ? 'text-primary' : 'text-slate-300'} />
@@ -88,14 +82,14 @@ const SignUp = () => {
           </div>
           <div className={`flex gap-5 mb-1 pb-3 border-b-2 ${filledPassword ? ' border-primary' : ''}`}>
             <Lock className={filledPassword ? 'text-primary' : 'text-slate-300'}  />
-            <input onChange={(e)=> checkPasswordValue(e.target.value)} type={eyePassword ? 'password' : 'text'} name='email' placeholder='Enter your password' className="flex-1 bg-transparent focus:outline-none"/>
-            {eyePassword ? <EyeOff onClick={hidePassword} className={filledPassword ? 'text-primary' : 'text-slate-300'}  /> : <Eye onClick={showPassword} className={filledPassword ? 'text-primary' : 'text-slate-300'}  />}
+            <input onChange={(e)=> checkPasswordValue(e.target.value)} type={eyePassword ? 'password' : 'text'} name='password' placeholder='Enter your password' className="flex-1 bg-transparent focus:outline-none"/>
+            {eyePassword ? <Eye onClick={() => setEyePassword(false)} className={filledPassword ? 'text-primary' : 'text-slate-300'}  /> : <EyeOff onClick={() => setEyePassword(true)} className={filledPassword ? 'text-primary' : 'text-slate-300'}  />}
           </div>
           <div className="flex justify-end mb-10 text-end">
             <p className="cursor-pointer w-fit hover:font-bold">Forgot password?</p>
           </div>
           <div className="flex justify-center items-center w-full h-8 mb-10">
-            <button disabled={!filledEmail || !filledPassword || !filledFirtsName || !filledLastName} className={`w-full ${filledEmail && filledPassword ? ' bg-primary' : ' bg-slate-300'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm`}>Login</button>
+            <button disabled={!filledEmail || !filledPassword || !filledFirstName || !filledLastName} className={`w-full ${filledEmail && filledPassword ? ' bg-primary' : ' bg-slate-300'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm`}>Login</button>
           </div>
         </form>
         <div className="text-center">
