@@ -65,7 +65,7 @@ const Login = () => {
             <p className="cursor-pointer w-fit hover:font-bold">Forgot password?</p>
           </div>
           <div className="flex justify-center items-center w-full h-8 mb-10">
-            <button disabled={!filledEmail || !filledPassword} className={`w-full ${filledEmail && filledPassword ? ' bg-primary' : ' bg-slate-300'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm`}>Login</button>
+            <button disabled={!filledEmail || !filledPassword} className={`w-full ${filledEmail && filledPassword ? ' bg-primary' : ' bg-slate-300'} ${filledEmail && filledPassword ? ' text-white' : ' text-secondary'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm`}>Login</button>
           </div>
         </form>
         <div className="text-center">
