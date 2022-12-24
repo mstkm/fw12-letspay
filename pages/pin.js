@@ -33,7 +33,8 @@ const Pin = () => {
         <div className="md:hidden text-center p-16">
           <h1 className="font-bold text-2xl text-primary">FazzPay</h1>
         </div>
-        {confirmSubmit ? <div className="bg-white md:bg-transparent p-10 md:p-0 border-none rounded-t-3xl">
+        {confirmSubmit ?
+        <div className="bg-white md:bg-transparent p-10 md:p-0 border-none rounded-t-3xl">
         <div className="md:hidden text-center mb-10">
           <h3 className="font-bold text-xl mb-3">Create Security PIN</h3>
           <p>Create a PIN that&apos;s contain 6 digits number for security purpose in FazzPay.</p>
@@ -66,15 +67,15 @@ const Pin = () => {
         </div>
         :
         // after confirm
-        <div className="flex flex-col justify-center h-full bg-white md:bg-transparent p-10 md:p-0 border-none rounded-t-3xl">
+        <div className="md:flex flex-col justify-center md:h-full bg-white md:bg-transparent p-10 md:p-0 border-none rounded-t-3xl">
+        <div className="flex justify-center md:block mb-5">
+          <div className="flex items-center justify-center bg-green-500 w-12 h-12 border-none rounded-full"><Check className="text-white" /></div>
+        </div>
         <div className="md:hidden text-center mb-10">
           <h3 className="font-bold text-xl mb-3">Create Security PIN</h3>
           <p>Create a PIN that&apos;s contain 6 digits number for security purpose in FazzPay.</p>
         </div>
         <div className="hidden md:block mb-10">
-          <div className="mb-5">
-            <div className="flex items-center justify-center bg-green-500 w-12 h-12 border-none rounded-full"><Check className="text-white" /></div>
-          </div>
           <h2 className="font-bold text-xl mb-5">Your PIN Was Successfully Created.</h2>
           <p>Your PIN was successfully created and you can now access all the features in FazzPay.</p>
         </div>
