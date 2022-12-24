@@ -2,6 +2,7 @@ import React from 'react'
 import {Phone, Lock, Download, ArrowLeft, ArrowRight} from 'react-feather'
 import Link from "next/link"
 import Image from "next/image"
+import Head from 'next/head'
 import bannerSatu from "../assets/images/bannersatu.png"
 import bannerDua from "../assets/images/bannerdua.png"
 import appStore from "../assets/images/appstore.png"
@@ -12,8 +13,12 @@ import airbnb from "../assets/images/airbnb.png"
 import canon from "../assets/images/canon.png"
 import dell from "../assets/images/dell.png"
 
-const Home = () => {
+const LandingPage = () => {
   return(
+    <>
+    <Head>
+      <title>FazzPay</title>
+    </Head>
     <div className="font-primary">
       {/* Navbar and Jumbotron */}
       <div className="bg-blue-100 px-5 md:px-28 py-5">
@@ -22,9 +27,9 @@ const Home = () => {
           <div className="flex-1">
             <h1 className="font-bold text-primary text-3xl">FazzPay</h1>
           </div>
-          <div className="flex justify-center items-center w-28 h-8">
+          <Link href='/login' className="flex justify-center items-center w-28 h-8">
             <button className="text-primary font-bold bg-white border-[1px] border-primary py-1 w-24 rounded-lg hover:bg-primary hover:text-white active:py-0 active:w-20 active:h-6 active:text-xs md:active:text-sm text-sm md:text-base">Login</button>
-          </div>
+          </Link>
           <div className="flex justify-center items-center w-28 h-8">
             <button className="text-primary font-bold bg-white border-[1px] border-primary py-1 w-24 rounded-lg hover:bg-primary hover:text-white active:py-0 active:w-20 active:h-6 active:text-xs md:active:text-sm text-sm md:text-base">Sign Up</button>
           </div>
@@ -150,7 +155,8 @@ const Home = () => {
       </div>
 
     </div>
+    </>
   )
 }
 
-export default Home
+export default LandingPage
