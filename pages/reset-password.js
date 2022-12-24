@@ -54,7 +54,7 @@ const Login = () => {
             <input onChange={(e)=> checkEmailValue(e.target.value)} type='text' name='email' placeholder='Enter your email' className="flex-1 bg-transparent focus:outline-none"/>
           </div>
           <div className="flex justify-center items-center w-full h-8 mb-10">
-            <button disabled={!filledEmail} className={`w-full ${filledEmail ? ' bg-primary' : ' bg-slate-300'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm`}>Confirm</button>
+            <button disabled={!filledEmail} className={`w-full ${filledEmail ? ' bg-primary' : ' bg-slate-300'} ${filledEmail ? ' text-white' : ' text-secondary'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm`}>Confirm</button>
           </div>
         </form>
         </div>
