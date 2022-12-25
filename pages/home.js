@@ -14,6 +14,18 @@ const Home = () => {
     </Head>
 
     <Header />
+    <section className="md:hidden flex items-center bg-primary md:bg-white rounded-b-3xl drop-shadow-md font-primary px-5 md:px-32 py-8">
+      <div className="md:hidden mr-3 bg-slate-300 p-2 rounded">
+        <Image src={require('../assets/images/user.png')} className='w-8' alt='photo-profile'/>
+      </div>
+      <div className="flex-1 md:hidden">
+        <p className="text-sm text-slate-500">Balance</p>
+        <h5 className="font-bold text-lg text-white md:text-secondary">Rp120.000</h5>
+      </div>
+      <div className="ml-8 md:hidden">
+        <Bell className="text-white md:text-secondary"/>
+      </div>
+    </section>
 
     <section className="flex gap-5 font-primary md:px-32 md:py-10 text-secondary">
       <Menu />
@@ -77,7 +89,7 @@ const Home = () => {
               <Link href='' className="text-sm font-bold text-primary hover:underline">See All</Link>
             </div>
             <div className="flex flex-col gap-3 md:gap-5 pb-10 md:pb-0">
-              <div className="flex items-center bg-white shadow md:bg-transparent p-5 md:p-0 rounded-lg md:rounded-0">
+              <div className="flex items-center bg-white shadow md:bg-transparent md:shadow-none p-5 md:p-0 rounded-lg md:rounded-0">
                 <div className="bg-slate-300 w-10 h-10 rounded mr-2">
                   <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
                 </div>
@@ -89,7 +101,7 @@ const Home = () => {
                   <p className="text-green-500 font-bold">+Rp50.000</p>
                 </div>
               </div>
-              <div className="flex items-center bg-white shadow md:bg-transparent p-5 md:p-0 rounded-lg md:rounded-0">
+              <div className="flex items-center bg-white shadow md:bg-transparent md:shadow-none p-5 md:p-0 rounded-lg md:rounded-0">
                 <div className="bg-slate-300 w-10 h-10 rounded mr-2">
                   <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
                 </div>
@@ -101,7 +113,7 @@ const Home = () => {
                   <p className="text-red-500 font-bold">-Rp149.000</p>
                 </div>
               </div>
-              <div className="flex items-center bg-white shadow md:bg-transparent p-5 md:p-0 rounded-lg md:rounded-0">
+              <div className="flex items-center bg-white shadow md:bg-transparent md:shadow-none p-5 md:p-0 rounded-lg md:rounded-0">
                 <div className="bg-slate-300 w-10 h-10 rounded mr-2">
                   <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
                 </div>
@@ -113,7 +125,7 @@ const Home = () => {
                   <p className="text-green-500 font-bold">+Rp150.000</p>
                 </div>
               </div>
-              <div className="flex items-center bg-white shadow md:bg-transparent p-5 md:p-0 rounded-lg md:rounded-0">
+              <div className="flex items-center bg-white shadow md:bg-transparent md:shadow-none p-5 md:p-0 rounded-lg md:rounded-0">
                 <div className="bg-slate-300 w-10 h-10 rounded mr-2">
                   <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
                 </div>
