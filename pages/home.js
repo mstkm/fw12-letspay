@@ -4,9 +4,11 @@ import { Bell, Grid, ArrowUp, Plus, User, LogOut, ArrowDown } from "react-feathe
 import Link from "next/link"
 import Header from "../assets/components/Header"
 import Footer from "../assets/components/Footer"
-import Menu from "../assets/components/Menu"
+import { useRouter } from "next/router"
 
 const Home = () => {
+  const router = useRouter()
+
   return(
     <div className="bg-orange-100">
     <Head>
@@ -27,8 +29,35 @@ const Home = () => {
       </div>
     </section>
 
-    <section className="flex gap-5 font-primary md:px-32 md:py-10 text-secondary">
-      <Menu />
+    <section className="flex gap-5 font-primary md:px-28 md:py-10 text-secondary">
+      {/* Menu */}
+      <div className="hidden md:flex flex-col flex-[30%] bg-white shadow rounded-xl py-8">
+        <div className="flex-1">
+          <div className="flex items-center gap-5 px-8 text-primary font-bold border-l-2 border-primary cursor-pointer mb-8">
+            <Grid />
+            <p>Dashboard</p>
+          </div>
+          <div onClick={() => router.push('/transfer')} className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
+            <ArrowUp />
+            <p>Transfer</p>
+          </div>
+          <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
+            <Plus />
+            <p>Top Up</p>
+          </div>
+          <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
+            <User />
+            <p>Profile</p>
+          </div>
+        </div>
+        <div>
+          <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer">
+            <LogOut />
+            <p>Logout</p>
+          </div>
+        </div>
+      </div>
+
       <div className="flex-[70%] flex flex-col gap-5">
         <div className="hidden md:flex items-center bg-primary shadow p-5 rounded-xl">
           <div className="flex-1 text-white">
@@ -37,7 +66,7 @@ const Home = () => {
             <p>+62 813-9387-7946</p>
           </div>
           <div className="flex flex-col gap-3">
-            <div className="h-10 w-32 flex items-center justify-center  cursor-pointer">
+            <div onClick={() => router.push('/transfer')} className="h-10 w-32 flex items-center justify-center  cursor-pointer">
               <button className="flex items-center justify-center  cursor-pointer gap-2 font-bold bg-orange-400 border-2 rounded-lg h-10 w-32 text-white border-white active:h-8 active:w-28 active:text-sm">
                 <ArrowUp />
                 <p>Transfer</p>
@@ -70,7 +99,7 @@ const Home = () => {
             </div>
           </div>
           <div className="flex justify-center gap-3 px-5 py-5 md:hidden">
-            <div className="flex w-full items-center justify-center  cursor-pointer">
+            <div onClick={() => router.push('/transfer')} className="flex w-full items-center justify-center  cursor-pointer">
               <button className="flex py-3 w-full items-center justify-center  cursor-pointer gap-2 font-bold bg-orange-400 border-2 rounded-lg text-white border-white active:h-8 active:w-28 active:text-sm">
                 <ArrowUp />
                 <p>Transfer</p>
@@ -86,7 +115,7 @@ const Home = () => {
           <div className="md:flex-[45%] md:bg-white md:shadow md:p-5 md:rounded-xl">
             <div className="flex items-center mb-8 px-5 md:px-0 mt-5 md:mt-0">
               <p className="flex-1 font-bold">Transaction History</p>
-              <Link href='' className="text-sm font-bold text-primary hover:underline">See All</Link>
+              <Link href='/history' className="text-sm font-bold text-primary hover:underline">See All</Link>
             </div>
             <div className="flex flex-col gap-3 md:gap-5 pb-10 md:pb-0">
               <div className="flex items-center bg-white shadow md:bg-transparent md:shadow-none p-5 md:p-0 rounded-lg md:rounded-0">

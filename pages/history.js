@@ -1,11 +1,13 @@
 import Head from "next/head"
 import Image from "next/image"
+import { useRouter } from "next/router"
 import Header from "../assets/components/Header"
-import Menu from "../assets/components/Menu"
 import Footer from "../assets/components/Footer"
-import { ArrowDown, ArrowLeft, ArrowUp } from "react-feather"
+import { ArrowDown, ArrowLeft, ArrowUp, Grid, Plus, User, LogOut } from "react-feather"
 
 const History = () => {
+  const router = useRouter()
+
   return(
     <div className="bg-orange-100">
     <Head>
@@ -15,14 +17,40 @@ const History = () => {
     <Header />
 
     <section className="px-5 py-10 bg-primary rounded-b-3xl font-primary md:hidden">
-      <div className="flex items-center gap-5 text-white">
+      <div onClick={() => router.push('/home')} className="flex items-center gap-5 text-white">
         <ArrowLeft />
         <h3 className="font-bold">History</h3>
       </div>
     </section>
 
     <section className="flex flex-col md:flex-row gap-5 font-primary text-secondary md:px-28 py-10">
-      <Menu />
+      {/* Menu */}
+      <div className="hidden md:flex flex-col flex-[30%] bg-white shadow rounded-xl py-8">
+        <div className="flex-1">
+          <div className="flex items-center gap-5 px-8 text-primary font-bold border-l-2 border-primary cursor-pointer mb-8">
+            <Grid />
+            <p>Dashboard</p>
+          </div>
+          <div onClick={() => router.push('/transfer')} className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
+            <ArrowUp />
+            <p>Transfer</p>
+          </div>
+          <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
+            <Plus />
+            <p>Top Up</p>
+          </div>
+          <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
+            <User />
+            <p>Profile</p>
+          </div>
+        </div>
+        <div>
+          <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer">
+            <LogOut />
+            <p>Logout</p>
+          </div>
+        </div>
+      </div>
 
       {/* Transaction History Laptop */}
       <div className="flex-[70%] hidden md:flex flex-col gap-8 md:bg-white md:shadow rounded-xl p-5">
@@ -31,7 +59,7 @@ const History = () => {
             <h3 className="font-bold">Transaction History</h3>
           </div>
           <div>
-            <select className="bg-slate-300 rounded-xl p-2 focus:outline-none font-bold text-sm">
+            <select className="bg-slate-300 rounded-xl px-5 py-2 focus:outline-none font-bold text-sm appearance-none">
               <option>--Select Filter--</option>
             </select>
           </div>
