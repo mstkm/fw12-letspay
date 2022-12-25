@@ -4,6 +4,7 @@ import { Bell, Grid, ArrowUp, Plus, User, LogOut, ArrowDown } from "react-feathe
 import Link from "next/link"
 import Header from "../assets/components/Header"
 import Footer from "../assets/components/Footer"
+import Menu from "../assets/components/Menu"
 
 const Home = () => {
   return(
@@ -15,32 +16,7 @@ const Home = () => {
     <Header />
 
     <section className="flex gap-5 font-primary md:px-32 md:py-10 text-secondary">
-      <div className="hidden md:flex flex-col flex-[30%] bg-white shadow rounded-xl py-8">
-        <div className="flex-1">
-          <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
-            <Grid />
-            <p>Dashboard</p>
-          </div>
-          <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
-            <ArrowUp />
-            <p>Transfer</p>
-          </div>
-          <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
-            <Plus />
-            <p>Top Up</p>
-          </div>
-          <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
-            <User />
-            <p>Profile</p>
-          </div>
-        </div>
-        <div>
-          <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer">
-            <LogOut />
-            <p>Logout</p>
-          </div>
-        </div>
-      </div>
+      <Menu />
       <div className="flex-[70%] flex flex-col gap-5">
         <div className="hidden md:flex items-center bg-primary shadow p-5 rounded-xl">
           <div className="flex-1 text-white">
