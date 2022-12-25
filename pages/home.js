@@ -2,6 +2,8 @@ import Head from "next/head"
 import Image from "next/image"
 import { Bell, Grid, ArrowUp, Plus, User, LogOut, ArrowDown } from "react-feather"
 import Link from "next/link"
+import Header from "../assets/components/Header"
+import Footer from "../assets/components/Footer"
 
 const Home = () => {
   return(
@@ -10,25 +12,7 @@ const Home = () => {
       <title>Home | Fazzpay</title>
     </Head>
 
-    <section className="flex items-center bg-primary md:bg-white rounded-b-3xl drop-shadow-md font-primary px-5 md:px-32 py-8">
-      <div className="md:flex-1">
-        <h1 className="hidden md:block font-bold text-3xl text-primary">FazzPay</h1>
-      </div>
-      <div className="mr-3 bg-slate-300 p-2 rounded">
-        <Image src={require('../assets/images/user.png')} className='w-8' alt='photo-profile'/>
-      </div>
-      <div className="hidden md:block">
-        <h5>Robert Chandler</h5>
-        <p>+62 8139 3877 7946</p>
-      </div>
-      <div className="flex-1 md:hidden">
-        <p className="text-sm text-slate-500">Balance</p>
-        <h5 className="font-bold text-lg text-white md:text-secondary">Rp120.000</h5>
-      </div>
-      <div className="ml-8">
-        <Bell className="text-white md:text-secondary"/>
-      </div>
-    </section>
+    <Header />
 
     <section className="flex gap-5 font-primary md:px-32 md:py-10 text-secondary">
       <div className="hidden md:flex flex-col flex-[30%] bg-white shadow rounded-xl py-8">
@@ -171,11 +155,7 @@ const Home = () => {
       </div>
     </section>
 
-    <footer className="hidden md:flex gap-10 bg-primary text-white px-32 py-5">
-      <p className="flex-1">2020 FazzPay. All right reserved.</p>
-      <p>+62 5637 8882 9901</p>
-      <p>contact@fazzpay.com</p>
-    </footer>
+    <Footer />
     </div>
   )
 }
