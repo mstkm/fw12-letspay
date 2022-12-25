@@ -12,7 +12,7 @@ const Transfer = () => {
   const [filledNotes, setFilledNotes] = React.useState(false)
 
   return(
-    <div className="bg-orange-100 h-screen md:h-full">
+    <div className="bg-orange-100 h-full">
     <Head>
       <title>Transfer | FazzPay</title>
     </Head>
@@ -85,7 +85,7 @@ const Transfer = () => {
         <div className='hidden md:block'>
           <p className="w-2/4">Type the amount you want to transfer and then press continue to the next steps.</p>
         </div>
-        <div className="flex flex-col items-center gap-5 md:py-10">
+        <div className="flex flex-col items-center gap-5 md:py-10 mb-10 md:mb-0">
           <div>
             <input type='number' name='amount' placeholder='0.00' className="text-center bg-transparent text-primary text-3xl font-bold focus:outline-none "/>
           </div>
@@ -95,9 +95,9 @@ const Transfer = () => {
             <input onChange={() => setFilledNotes(true)} type='text' name='notes' placeholder="Add some notes" className="pl-10 focus:outline-none bg-transparent"/>
           </div>
         </div>
-        <div className="hidden md:flex justify-end">
-          <div className="flex justify-center items-center w-28 h-12">
-            <button className="bg-primary px-5 py-2 rounded-xl text-white font-bold active:text-sm active:px-4 active:py-1">Continue</button>
+        <div className="flex justify-end">
+          <div onClick={() => router.push('/confirmation')} className="flex justify-center items-center w-full md:w-32 h-12">
+            <button className="bg-primary w-full h-12 rounded-xl text-white font-bold active:text-sm active:w-9/12 active:h-10">Continue</button>
           </div>
         </div>
       </div>
