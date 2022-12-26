@@ -1,0 +1,102 @@
+import React from 'react'
+import Head from "next/head"
+import Image from "next/image"
+import { useRouter } from "next/router"
+import Header from "../assets/components/Header"
+import Footer from "../assets/components/Footer"
+import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Edit2, ArrowRight, ToggleRight } from "react-feather"
+
+const Profile = () => {
+  const router = useRouter()
+  const [toggleNotification, setToggleNotification] = React.useState(true)
+
+  const clickToggle = () => {
+    if (toggleNotification === true) {
+      setToggleNotification(false)
+    } else {
+      setToggleNotification(true)
+    }
+  }
+
+  return(
+    <div className="bg-orange-100 relative">
+    <Head>
+      <title>Profile | FazzPay</title>
+    </Head>
+
+    <Header />
+
+    <section className="flex flex-col md:flex-row gap-5 font-primary text-secondary md:px-28 py-5 md:py-10">
+      {/* Menu */}
+      <div className="hidden md:flex flex-col flex-[30%] bg-white shadow rounded-xl py-8">
+        <div className="flex-1">
+          <div onClick={() => router.push('/home')} className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
+            <Grid />
+            <p>Dashboard</p>
+          </div>
+          <div onClick={() => router.push('/transfer')} className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
+            <ArrowUp />
+            <p>Transfer</p>
+          </div>
+          <div onClick={() => router.push('/top-up')} className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
+            <Plus />
+            <p>Top Up</p>
+          </div>
+          <div className="flex items-center gap-5 px-8 text-primary font-bold border-l-2 border-primary cursor-pointer mb-8">
+            <User />
+            <p>Profile</p>
+          </div>
+        </div>
+        <div>
+          <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer">
+            <LogOut />
+            <p>Logout</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex-[70%] flex flex-col gap-5 md:bg-white md:shadow rounded-xl p-8">
+        <div>
+          <ArrowLeft />
+        </div>
+        <div className='flex flex-col items-center gap-5'>
+          <div className='flex flex-col items-center'>
+            <Image src={require('../assets/images/user.png')} alt='profile' className='w-12 mb-2' />
+            <div className='flex gap-2 items-center cursor-pointer'>
+              <Edit2 className='w-3'/>
+              <p className='text-sm'>Edit</p>
+            </div>
+            <h3 className='font-bold py-2'>Robert Chandler</h3>
+            <p>+62 813-9387-7946</p>
+          </div>
+          <div className='flex items-center px-3 w-full md:w-3/5 h-12 bg-slate-300 rounded-lg cursor-pointer active:border-2'>
+            <p className='flex-1 font-bold'>Personal Information</p>
+            <ArrowRight />
+          </div>
+          <div className='flex items-center px-3 w-full md:w-3/5 h-12 bg-slate-300 rounded-lg cursor-pointer active:border-2'>
+            <p className='flex-1 font-bold'>Change Password</p>
+            <ArrowRight />
+          </div>
+          <div className='flex items-center px-3 w-full md:w-3/5 h-12 bg-slate-300 rounded-lg cursor-pointer active:border-2'>
+            <p className='flex-1 font-bold'>Change PIN</p>
+            <ArrowRight />
+          </div>
+          <div className='flex md:hidden items-center px-3 w-full md:w-3/5 h-12 bg-slate-300 rounded-lg cursor-pointer active:border-2'>
+            <p className='flex-1 font-bold'>Notification</p>
+            <div onClick={clickToggle} className={`flex items-center w-12 h-6 ${toggleNotification ? 'bg-primary justify-end' : 'bg-slate-500 justify-start'} rounded-xl px-1`}>
+              <div className='h-4 w-4 rounded-full bg-white'></div>
+            </div>
+          </div>
+          <div className='flex items-center px-3 w-full md:w-3/5 h-12 bg-slate-300 rounded-lg cursor-pointer active:border-2'>
+            <p className='flex-1 font-bold'>Logout</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <Footer />
+    </div>
+  )
+}
+
+export default Profile
