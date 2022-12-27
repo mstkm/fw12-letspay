@@ -4,10 +4,10 @@ import Image from "next/image"
 import { useRouter } from "next/router"
 import Header from "../assets/components/Header"
 import Footer from "../assets/components/Footer"
-import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, X, Check, Download } from "react-feather"
+import { ArrowUp, Grid, Plus, User, LogOut, X, Check, Download } from "react-feather"
 import PinInput from "react-pin-input"
 
-const Confirmation = () => {
+const TransferStatus = () => {
   const router = useRouter()
   const [pin, setPin] = React.useState(null)
   const [showEnterPIN, setShowEnterPIN] = React.useState(false)
@@ -189,4 +189,4 @@ const Confirmation = () => {
   )
 }
 
-export default Confirmation
+export default TransferStatus

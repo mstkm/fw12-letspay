@@ -141,12 +141,12 @@ const Confirmation = () => {
             />
         </div>
         <div className="hidden md:flex justify-end">
-          <div className="flex justify-center items-center w-28 h-12">
+          <div onClick={() => router.push('/transfer-status')} className="flex justify-center items-center w-28 h-12">
             <button className="bg-primary px-5 py-3 rounded-xl text-white font-bold active:text-sm active:px-4 active:py-2">Continue</button>
           </div>
         </div>
         <div className=" md:hidden flex justify-end">
-          <div className="flex justify-center items-center w-full h-12">
+          <div onClick={() => router.push('/transfer-status')} className="flex justify-center items-center w-full h-12">
             <button className="bg-primary w-full px-5 py-3 rounded-xl text-white font-bold active:text-sm active:px-3 active:py-2">Transfer Now</button>
           </div>
         </div>

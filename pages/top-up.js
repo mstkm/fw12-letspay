@@ -142,7 +142,7 @@ const TopUp = () => {
         <div className='relative'>
           <p className='font-bold mb-5'>Topup</p>
           <p>Enter the amount of money, and click submit</p>
-          <div onClick={() => router.push('/transfer')} className='absolute top-0 right-0'>
+          <div onClick={() => router.push('/home')} className='absolute top-0 right-0'>
             <button><X /></button>
           </div>
         </div>

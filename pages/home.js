@@ -41,11 +41,11 @@ const Home = () => {
             <ArrowUp />
             <p>Transfer</p>
           </div>
-          <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
+          <div onClick={() => router.push('/top-up')} className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
             <Plus />
             <p>Top Up</p>
           </div>
-          <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
+          <div onClick={() => router.push('/profile')} className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
             <User />
             <p>Profile</p>
           </div>
@@ -72,7 +72,7 @@ const Home = () => {
                 <p>Transfer</p>
               </button>
             </div>
-            <div className="h-10 w-32 flex items-center justify-center  cursor-pointer">
+            <div onClick={() => router.push('/top-up')} className="h-10 w-32 flex items-center justify-center  cursor-pointer">
               <button className="flex items-center justify-center  cursor-pointer gap-2 font-bold bg-orange-400 border-2 rounded-lg h-10 w-32 text-white border-white active:h-8 active:w-28 active:text-sm">
                 <Plus />
                 <p>Top Up</p>
@@ -105,7 +105,7 @@ const Home = () => {
                 <p>Transfer</p>
               </button>
             </div>
-            <div className="flex w-full items-center justify-center  cursor-pointer">
+            <div onClick={() => router.push('/top-up')} className="flex w-full items-center justify-center  cursor-pointer">
               <button className="flex py-3 w-full items-center justify-center  cursor-pointer gap-2 font-bold bg-orange-400 border-2 rounded-lg text-white border-white active:h-8 active:w-28 active:text-sm">
                 <Plus />
                 <p>Top Up</p>

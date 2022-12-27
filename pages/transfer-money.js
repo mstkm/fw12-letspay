@@ -4,11 +4,10 @@ import Image from "next/image"
 import { useRouter } from "next/router"
 import Header from "../assets/components/Header"
 import Footer from "../assets/components/Footer"
-import { ArrowDown, ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Search, Edit2 } from "react-feather"
+import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Edit2 } from "react-feather"
 
-const Transfer = () => {
+const TransferMoney = () => {
   const router = useRouter()
-  const [selectedReceiver, setSelectedReceiver] = React.useState(false)
   const [filledNotes, setFilledNotes] = React.useState(false)
 
   return(
@@ -96,7 +95,7 @@ const Transfer = () => {
           </div>
         </div>
         <div className="flex justify-end">
-          <div onClick={() => router.push('/confirmation')} className="flex justify-center items-center w-full md:w-32 h-12">
+          <div onClick={() => router.push('/transfer-confirmation')} className="flex justify-center items-center w-full md:w-32 h-12">
             <button className="bg-primary w-full h-12 rounded-xl text-white font-bold active:text-sm active:w-9/12 active:h-10">Continue</button>
           </div>
         </div>
@@ -108,4 +107,4 @@ const Transfer = () => {
   )
 }
 
-export default Transfer
+export default TransferMoney

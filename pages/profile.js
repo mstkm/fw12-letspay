@@ -4,7 +4,7 @@ import Image from "next/image"
 import { useRouter } from "next/router"
 import Header from "../assets/components/Header"
 import Footer from "../assets/components/Footer"
-import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Edit2, ArrowRight, ToggleRight } from "react-feather"
+import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Edit2, ArrowRight } from "react-feather"
 
 const Profile = () => {
   const router = useRouter()
@@ -56,8 +56,8 @@ const Profile = () => {
       </div>
 
       <div className="flex-[70%] flex flex-col gap-5 md:bg-white md:shadow rounded-xl p-8">
-        <div>
-          <ArrowLeft />
+        <div className='md:hidden'>
+          <ArrowLeft onClick={() => router.push('/home')} />
         </div>
         <div className='flex flex-col items-center gap-5'>
           <div className='flex flex-col items-center'>
@@ -69,15 +69,15 @@ const Profile = () => {
             <h3 className='font-bold py-2'>Robert Chandler</h3>
             <p>+62 813-9387-7946</p>
           </div>
-          <div className='flex items-center px-3 w-full md:w-3/5 h-12 bg-slate-300 rounded-lg cursor-pointer active:border-2'>
+          <div onClick={() => router.push('/personal-information')} className='flex items-center px-3 w-full md:w-3/5 h-12 bg-slate-300 rounded-lg cursor-pointer active:border-2'>
             <p className='flex-1 font-bold'>Personal Information</p>
             <ArrowRight />
           </div>
-          <div className='flex items-center px-3 w-full md:w-3/5 h-12 bg-slate-300 rounded-lg cursor-pointer active:border-2'>
+          <div onClick={() => router.push('/change-password')} className='flex items-center px-3 w-full md:w-3/5 h-12 bg-slate-300 rounded-lg cursor-pointer active:border-2'>
             <p className='flex-1 font-bold'>Change Password</p>
             <ArrowRight />
           </div>
-          <div className='flex items-center px-3 w-full md:w-3/5 h-12 bg-slate-300 rounded-lg cursor-pointer active:border-2'>
+          <div onClick={() => router.push('/change-pin')} className='flex items-center px-3 w-full md:w-3/5 h-12 bg-slate-300 rounded-lg cursor-pointer active:border-2'>
             <p className='flex-1 font-bold'>Change PIN</p>
             <ArrowRight />
           </div>

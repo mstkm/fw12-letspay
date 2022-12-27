@@ -4,19 +4,10 @@ import Image from "next/image"
 import { useRouter } from "next/router"
 import Header from "../assets/components/Header"
 import Footer from "../assets/components/Footer"
-import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Edit2, ArrowRight } from "react-feather"
+import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut } from "react-feather"
 
 const PersonalInformation = () => {
   const router = useRouter()
-  const [toggleNotification, setToggleNotification] = React.useState(true)
-
-  const clickToggle = () => {
-    if (toggleNotification === true) {
-      setToggleNotification(false)
-    } else {
-      setToggleNotification(true)
-    }
-  }
 
   return(
     <div className="bg-orange-100 relative">
@@ -42,7 +33,7 @@ const PersonalInformation = () => {
             <Plus />
             <p>Top Up</p>
           </div>
-          <div className="flex items-center gap-5 px-8 text-primary font-bold border-l-2 border-primary cursor-pointer mb-8">
+          <div onClick={() => router.push('/profile')} className="flex items-center gap-5 px-8 text-primary font-bold border-l-2 border-primary cursor-pointer mb-8">
             <User />
             <p>Profile</p>
           </div>
@@ -56,8 +47,8 @@ const PersonalInformation = () => {
       </div>
 
       <div className="flex-[70%] flex flex-col gap-5 md:bg-white md:shadow rounded-xl p-8">
-        <div className='flex md:hidden gap-5'>
-          <ArrowLeft />
+        <div className='flex gap-5'>
+          <ArrowLeft onClick={() => router.push('/profile')} className='md:hidden'/>
           <h3 className='font-bold'>Personal Information</h3>
         </div>
         <p>We got your personal information from the sign up proccess. If you want to make changes on your information, contact our support.</p>
@@ -79,7 +70,7 @@ const PersonalInformation = () => {
             <p className='font-bold text-lg'>+62 813-9387-7946</p>
           </div>
           <div>
-            <p className='text-primary cursor-pointer font-bold active:font-medium'>Manage</p>
+            <p onClick={() => router.push('/manage-phone-number')} className='text-primary cursor-pointer font-bold active:font-medium'>Manage</p>
           </div>
         </div>
       </div>
