@@ -8,23 +8,23 @@ import PinInput from 'react-pin-input'
 import { useSelector } from 'react-redux'
 import http from '../helper/http'
 
-const ChangePIN = () => {
+const ChangeNewPIN = () => {
   const router = useRouter()
   const token = useSelector((state) => state?.auth?.token?.token)
-  const [pin, setPin] = React.useState(null)
-  const [user, setUser] = React.useState({})
+  const [pin, setPin] = React.useState('')
+  const [message, setMessage] =  React.useState('')
+  const [alertSuccess, setAlertSuccess] = React.useState(false)
+  const [alertFailed, setAlertFailed] = React.useState(false)
 
-  // Get User
-  const getUser = async (e) => {
+  const updatePIN = async (e) => {
     if (e && e.preventDefault) { e.preventDefault(); }
     try {
-      const response = await http(token).get('/profile')
-      setUser(response?.data?.results)
-      if (user?.pin === pin) {
-        router.push('/change-new-pin')
-      }
+      const response = await http(token).post('/profile/change-pin', {newPin: pin})
+      setMessage(response?.data?.message)
+      setAlertSuccess(true)
     } catch(error) {
-      console.log(error)
+      setMessage(error?.response?.data?.message)
+      setAlertFailed(true)
     }
   }
 
@@ -70,8 +70,8 @@ const ChangePIN = () => {
           <ArrowLeft onClick={() => router.push('/profile')} className='md:hidden'/>
           <h3 className='font-bold'>Change PIN</h3>
         </div>
-        <p>Enter your current 6 digits Fazzpay PIN below to continue to the next steps.</p>
-        <form onSubmit={getUser} className='flex relative flex-col items-center gap-8 py-10'>
+        <p>Type your new 6 digits security PIN to use in Fazzpay.</p>
+        <form onSubmit={updatePIN} className='flex relative flex-col items-center gap-8 py-10'>
           <PinInput
               length={6}
               name='pin'
@@ -87,10 +87,19 @@ const ChangePIN = () => {
               regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
             />
           <div className='flex-1 flex justify-center w-full py-5'>
-            {(pin?.length === 6) ?
-            <button type='submit' className='bg-primary md:w-2/4 w-full h-12 text-white font-bold rounded-xl active:border-2'>Continue</button> :
-            <button type='submit' disabled className='bg-slate-400 md:w-2/4 w-full h-12 font-bold rounded-xl'>Continue</button>}
+            {(pin.length === 6) ?
+            <button type='submit' className='bg-primary md:w-2/4 w-full h-12 text-white font-bold rounded-xl active:border-2'>Change PIN</button> :
+            <button type='submit' disabled className='bg-slate-400 md:w-2/4 w-full h-12 font-bold rounded-xl'>Change PIN</button>}
           </div>
+          {alertSuccess &&
+            <div className='text-center absolute bottom-0'>
+              <p className='text-green-500'>{message}</p>
+              <p onClick={()=> router.push('/profile')} className='text-blue-500 hover:font-bold cursor-pointer'>Back to profile</p>
+            </div> }
+            {alertFailed &&
+            <div className='text-center absolute bottom-5'>
+              <p className='text-red-500'>{message}</p>
+            </div> }
         </form>
       </div>
     </section>
@@ -100,4 +109,4 @@ const ChangePIN = () => {
   )
 }
 
-export default ChangePIN
+export default ChangeNewPIN
