@@ -1,13 +1,33 @@
 import React from 'react'
 import Head from "next/head"
-import Image from "next/image"
 import { useRouter } from "next/router"
 import Header from "../assets/components/Header"
 import Footer from "../assets/components/Footer"
 import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, X } from "react-feather"
+import { useSelector } from 'react-redux'
+import http from '../helper/http'
 
 const TopUp = () => {
   const router = useRouter()
+  const token = useSelector((state) => state?.auth?.token?.token)
+  const [message, setMessage] = React.useState('')
+  const [alertSuccessTopup, setAlertSuccessTopup] = React.useState(false)
+
+  // Top Up
+  const [amount, setAmount] = React.useState(null)
+
+  const topUp = async () => {
+    try {
+      const response = await http(token).post('/transactions/topup', {amount})
+      setMessage(response?.data?.message)
+      setAlertSuccessTopup(true)
+      setTimeout(() => {
+        router.replace('/home')
+      }, 5000)
+    } catch(error) {
+      console.log(error)
+    }
+  }
 
   return(
     <div className="bg-orange-100 relative">
@@ -15,7 +35,7 @@ const TopUp = () => {
       <title>Top Up | FazzPay</title>
     </Head>
 
-    <Header />
+    <Header token={token}/>
 
     <section className="px-5 pb-5 pt-10 bg-primary rounded-b-3xl font-primary md:hidden">
       <div onClick={() => router.push('/home')} className="flex items-center gap-5 text-white mb-5">
@@ -139,6 +159,7 @@ const TopUp = () => {
     {/* Top Up */}
     <section className='hidden md:block font-primary absolute top-0 h-full w-screen bg-slate-300/80'>
       <div className='sticky bg-white w-[90%] md:w-[30%] p-8 rounded-xl left-6 inset-y-1/4 md:inset-x-1/3 md:inset-y-1/4'>
+        {alertSuccessTopup && <p className='text-center text-green-500'>{message}</p>}
         <div className='relative'>
           <p className='font-bold mb-5'>Topup</p>
           <p>Enter the amount of money, and click submit</p>
@@ -148,12 +169,12 @@ const TopUp = () => {
         </div>
         <div className='py-10'>
           <div className='border-2 rounded-lg pb-1 pt-2 text-center'>
-            <input type='number' name='top-up' className='border-b-2 focus:outline-none'/>
+            <input onChange={(e)=> setAmount(Number(e.target.value)) & setAlertSuccessTopup(false)} type='number' name='top-up' className='border-b-2 focus:outline-none text-center'/>
           </div>
         </div>
         <div className="hidden md:flex justify-end">
           <div className="flex justify-center items-center bg-primary rounded-xl w-32 h-10 active:border-2 cursor-pointer">
-            <button className="text-white font-bold">Submit</button>
+            <button onClick={topUp} className="text-white font-bold">Submit</button>
           </div>
         </div>
       </div>
