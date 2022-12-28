@@ -5,13 +5,46 @@ import { useRouter } from "next/router"
 import Header from "../assets/components/Header"
 import Footer from "../assets/components/Footer"
 import { ArrowUp, Grid, Plus, User, LogOut, X, Check, Download } from "react-feather"
-import PinInput from "react-pin-input"
+import { useSelector } from 'react-redux'
+import http from '../helper/http'
 
 const TransferStatus = () => {
   const router = useRouter()
-  const [pin, setPin] = React.useState(null)
-  const [showEnterPIN, setShowEnterPIN] = React.useState(false)
+  const token = useSelector((state) => state?.auth?.token?.token)
   const [statusSuccess, seStatusSuccess] = React.useState(true)
+  const recipientId = useSelector((state) => state.transfer.recipientId)
+  const amount = useSelector((state) => state.transfer.amount)
+  const notes = useSelector((state) => state.transfer.notes)
+  const date = useSelector((state) => state.transfer.date)
+  const time = useSelector((state) => state.transfer.time)
+
+    // Get Recipient
+    const [recipient, setRecipient] = React.useState({})
+    React.useEffect(()=>{
+      getRecipient()
+    }, [])
+    const getRecipient = async () => {
+      try {
+        const response = await http(token).get(`/transactions/recipient/${recipientId}`)
+        setRecipient(response?.data?.results)
+      } catch(error) {
+        console.log(error)
+      }
+    }
+
+    // Get User
+    const [user, setUser] = React.useState({})
+    React.useEffect(()=>{
+      getUser()
+    }, [])
+    const getUser = async () => {
+      try {
+        const response = await http(token).get('/profile')
+        setUser(response?.data?.results)
+      } catch(error) {
+        console.log(error)
+      }
+    }
 
   return(
     <div className="bg-orange-100 relative">
@@ -19,7 +52,7 @@ const TransferStatus = () => {
       <title>Transfer Status | FazzPay</title>
     </Head>
 
-    <Header />
+    <Header token={token} />
 
     <section className="bg-primary rounded-b-3xl font-primary md:hidden">
       <div className="flex justify-center text-white py-10">
@@ -79,27 +112,27 @@ const TransferStatus = () => {
         <div className='grid grid-cols-2 md:flex md:flex-col gap-5 p-5'>
           <div className="bg-white shadow rounded p-3">
             <p>Amount</p>
-            <p className="font-bold">Rp100.000</p>
+            <p className="font-bold">Rp{new Intl.NumberFormat('en-DE').format(amount)}</p>
           </div>
           <div className="bg-white shadow rounded p-3">
             <p>Balance Left</p>
-            <p className="font-bold">Rp20.000</p>
+            <p className="font-bold">Rp{new Intl.NumberFormat('en-DE').format(user.balance - amount)}</p>
           </div>
           <div className="hidden md:block bg-white shadow rounded p-3">
             <p>Date & Time</p>
-            <p className="font-bold">May 11, 2020 - 12.20</p>
+            <p className="font-bold">{`${date} - ${time}`}</p>
           </div>
           <div className="md:hidden bg-white shadow rounded p-3">
             <p>Date</p>
-            <p className="font-bold">May 11, 2020</p>
+            <p className="font-bold">{date}</p>
           </div>
           <div className="md:hidden bg-white shadow rounded p-3">
             <p>Time</p>
-            <p className="font-bold">12.20</p>
+            <p className="font-bold">{time}</p>
           </div>
           <div className="col-span-2 bg-white shadow rounded p-3">
             <p>Notes</p>
-            <p className="font-bold">For buying some socks</p>
+            <p className="font-bold">{notes}</p>
           </div>
         </div>
         <div className='md:hidden p-5'>
@@ -109,8 +142,8 @@ const TransferStatus = () => {
             <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
           </div>
           <div className="flex-1">
-            <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap font-bold">Robert Chandler</p>
-            <p>+62 813-9387-7946</p>
+            <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap font-bold">{`${user.firstName} ${user.lastName}`}</p>
+            <p>{user.phoneNumber ? user.phoneNumber : '-'}</p>
           </div>
         </div>
         </div>
@@ -121,8 +154,8 @@ const TransferStatus = () => {
             <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
           </div>
           <div className="flex-1">
-            <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap font-bold">Samuel Suhi</p>
-            <p>+62 813-8492-9994</p>
+            <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap font-bold">{`${recipient.firstName} ${recipient.lastName}`}</p>
+            <p>{recipient.phoneNumber}</p>
           </div>
         </div>
         </div>
@@ -145,44 +178,6 @@ const TransferStatus = () => {
         }
       </div>
     </section>
-
-    {showEnterPIN ?
-    <section className='absolute top-0 h-full w-screen bg-slate-300/80'>
-      <div className='sticky bg-white w-[90%] md:w-[30%] p-8 rounded-xl left-6 inset-y-1/4 md:inset-x-1/3 md:inset-y-1/4'>
-        <div className='relative'>
-          <p className='font-bold mb-5'>Enter PIN to Transfer</p>
-          <p>Enter your 6 digits PIN for confirmation to continue transferring money. </p>
-          <div onClick={() => setShowEnterPIN(false)} className='absolute top-0 right-0'>
-            <button><X /></button>
-          </div>
-        </div>
-        <div className='py-10'>
-          <PinInput
-              length={6}
-              initialValue=""
-              onChange={(value, index) => {setPin(value)}}
-              type="numeric"
-              inputMode="number"
-              style={{}}
-              inputStyle={{borderColor: '#3A3D42', borderRadius: '10px', fontWeight: 'bold', margin: '0.25rem', width: '45px'}}
-              inputFocusStyle={{borderColor: '#FF5F00'}}
-              onComplete={(value, index) => {}}
-              autoSelect={true}
-              regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
-            />
-        </div>
-        <div className="hidden md:flex justify-end">
-          <div className="flex justify-center items-center w-28 h-12">
-            <button className="bg-primary px-5 py-3 rounded-xl text-white font-bold active:text-sm active:px-4 active:py-2">Continue</button>
-          </div>
-        </div>
-        <div className=" md:hidden flex justify-end">
-          <div className="flex justify-center items-center w-full h-12">
-            <button className="bg-primary w-full px-5 py-3 rounded-xl text-white font-bold active:text-sm active:px-3 active:py-2">Transfer Now</button>
-          </div>
-        </div>
-      </div>
-    </section> : false}
 
     <Footer />
     </div>

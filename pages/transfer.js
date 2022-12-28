@@ -4,10 +4,42 @@ import Image from "next/image"
 import { useRouter } from "next/router"
 import Header from "../assets/components/Header"
 import Footer from "../assets/components/Footer"
-import { ArrowDown, ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Search } from "react-feather"
+import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Search, ChevronRight, ChevronLeft } from "react-feather"
+import { useSelector } from 'react-redux'
+import http from '../helper/http'
 
 const Transfer = () => {
   const router = useRouter()
+  const token = useSelector((state) => state?.auth?.token?.token)
+
+  // Get Recipients
+  const [recipients, setRecipients] = React.useState([])
+  const [page, setPage] = React.useState(1);
+  React.useEffect(() => {
+    getRecipients().then((response)=> {
+      setRecipients(response?.data?.results)
+    })
+  }, [page])
+  const getRecipients = async () => {
+    const response = await http(token).get(`/transactions/recipient?page=1&limit=5`)
+    return response
+  }
+
+  // Pagination
+  const nextPage = () => {
+    if (page <= (recipients.length / 5)) {
+      setPage(page+1)
+    } else {
+      setPage(page)
+    }
+  }
+  const prevPage = () => {
+    if (page >= 1) {
+      setPage(page-1)
+    } else {
+      setPage(page)
+    }
+  }
 
   return(
     <div className="bg-orange-100">
@@ -15,7 +47,7 @@ const Transfer = () => {
       <title>Transfer | FazzPay</title>
     </Head>
 
-    <Header />
+    <Header token={token} />
 
     <section className="px-5 pb-5 pt-10 bg-primary rounded-b-3xl font-primary md:hidden">
       <div onClick={() => router.push('/home')} className="flex items-center gap-5 text-white mb-5">
@@ -71,42 +103,26 @@ const Transfer = () => {
             <input type='text' name='receiver' placeholder='Search receiver here' className="bg-slate-300 w-full h-12 rounded-xl p-2 focus:outline-none pl-12" />
           </div>
         </div>
-        <div onClick={() => router.push('transfer-money')} className="flex items-center bg-white shadow p-3 rounded cursor-pointer mb-3 md:mb-0">
-          <div className="bg-slate-300 w-10 h-10 rounded mr-3">
-            <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
+        {recipients?.map((recipient, index) => {
+          return(<div key={Number(index)} onClick={() => router.push(`/transfer-money/${recipient?.id}`, recipient)} className="flex items-center bg-white shadow p-3 rounded cursor-pointer mb-3 md:mb-0">
+            <div className="bg-slate-300 w-10 h-10 rounded mr-3">
+              <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
+            </div>
+            <div className="flex-1">
+              <p className="w-[115px] md:w-full text-ellipsis overflow-hidden whitespace-nowrap font-bold">{`${recipient?.firstName} ${recipient?.lastName}`}</p>
+              <p>+62 813-8492-9994</p>
+            </div>
+          </div>)
+        })}
+        <div className='flex justify-center gap-5 items-center'>
+          <div onClick={prevPage} className='flex justify-center items-center text-white bg-primary rounded shadow w-8 h-8 cursor-pointer active:border-2'><ChevronLeft /></div>
+          <div>
+            <p className='font-bold'>{page}</p>
           </div>
-          <div className="flex-1">
-            <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap font-bold">Samuel Suhi</p>
-            <p>+62 813-8492-9994</p>
-          </div>
+          <div onClick={nextPage} className='flex justify-center items-center text-white bg-primary rounded shadow w-8 h-8 cursor-pointer active:border-2'><ChevronRight /></div>
         </div>
-        <div onClick={() => router.push('transfer-money')} className="flex items-center bg-white shadow p-3 rounded cursor-pointer mb-3 md:mb-0">
-          <div className="bg-slate-300 w-10 h-10 rounded mr-3">
-            <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
-          </div>
-          <div className="flex-1">
-            <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap font-bold">Samuel Suhi</p>
-            <p>+62 813-8492-9994</p>
-          </div>
-        </div>
-        <div onClick={() => router.push('transfer-money')} className="flex items-center bg-white shadow p-3 rounded cursor-pointer mb-3 md:mb-0">
-          <div className="bg-slate-300 w-10 h-10 rounded mr-3">
-            <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
-          </div>
-          <div className="flex-1">
-            <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap font-bold">Samuel Suhi</p>
-            <p>+62 813-8492-9994</p>
-          </div>
-        </div>
-        <div onClick={() => router.push('transfer-money')} className="flex items-center bg-white shadow p-3 rounded cursor-pointer mb-3 md:mb-0">
-          <div className="bg-slate-300 w-10 h-10 rounded mr-3">
-            <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
-          </div>
-          <div className="flex-1">
-            <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap font-bold">Samuel Suhi</p>
-            <p>+62 813-8492-9994</p>
-          </div>
-        </div>
+
+
       </div>
     </section>
 

@@ -43,7 +43,7 @@ const Home = () => {
   }
 
   return(
-    <div className="bg-orange-100">
+    <div className="bg-orange-100 relative">
     <Head>
       <title>Home | Fazzpay</title>
     </Head>

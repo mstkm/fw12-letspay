@@ -7,6 +7,29 @@ import { useRouter } from "next/router"
 import http from '../helper/http'
 import {useDispatch} from 'react-redux'
 import { loginUser } from '../redux/reducers/auth'
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+import YupPassword from 'yup-password'
+YupPassword(Yup)
+
+const SignupSchema = Yup.object().shape({
+  firstName: Yup.string()
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
+  lastName: Yup.string()
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
+  email: Yup.string().email('Invalid email').required('Required'),
+  password: Yup.string()
+    .password()
+    .min(8, 'Min length 8')
+    .minLowercase(1, 'Lowercase 1')
+    .minUppercase(1, 'Uppercase 1')
+    .minSymbols(1, 'Symbols 1')
+    .minNumbers(1, 'Numbers 1'),
+});
 
 const SignUp = () => {
   const router = useRouter()
@@ -61,28 +84,47 @@ const SignUp = () => {
           <h2 className="font-bold text-xl mb-5">Start Accessing Banking Needs With All Devices and All Platforms With 30.000+ Users</h2>
           <p>Transfering money is eassier than ever, you can access FazzPay wherever you are. Desktop, laptop, mobile phone? we cover all of that for you!</p>
         </div>
-        <form onSubmit={register}>
-          <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${firstName ? ' border-primary' : ''}`}>
-            <User className={firstName ? 'text-primary' : 'text-slate-300'} />
-            <input onChange={(e)=> setFirstName(e.target.value)} type='text' name='firstName' placeholder='Enter your firtsname' className="flex-1 bg-transparent focus:outline-none"/>
-          </div>
-          <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${lastName ? ' border-primary' : ''}`}>
-            <User className={lastName ? 'text-primary' : 'text-slate-300'} />
-            <input onChange={(e)=> setLastName(e.target.value)} type='text' name='lastName' placeholder='Enter your lastsname' className="flex-1 bg-transparent focus:outline-none"/>
-          </div>
-          <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${email ? ' border-primary' : ''}`}>
-            <Mail className={email ? 'text-primary' : 'text-slate-300'} />
-            <input onChange={(e)=> setEmail(e.target.value)} type='text' name='email' placeholder='Enter your email' className="flex-1 bg-transparent focus:outline-none"/>
-          </div>
-          <div className={`flex gap-5 mb-16 pb-3 border-b-2 ${password ? ' border-primary' : ''}`}>
-            <Lock className={password ? 'text-primary' : 'text-slate-300'}  />
-            <input onChange={(e)=> setPassword(e.target.value)} type={eyePassword ? 'password' : 'text'} name='password' placeholder='Enter your password' className="flex-1 bg-transparent focus:outline-none"/>
-            {eyePassword ? <Eye onClick={() => setEyePassword(false)} className={password ? 'text-primary' : 'text-slate-300'}  /> : <EyeOff onClick={() => setEyePassword(true)} className={password ? 'text-primary' : 'text-slate-300'}  />}
-          </div>
-          <div className="flex justify-center items-center w-full h-8 mb-10">
-            <button disabled={!email || !password || !firstName || !lastName} className={`w-full ${email && password ? ' bg-primary' : ' bg-slate-300'} ${email && password ? ' text-white' : ' text-secondary'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm text-white`}>Sign Up</button>
-          </div>
-        </form>
+        <Formik initialValues={{
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: ''
+        }}
+        validationSchema={SignupSchema}
+        onSubmit={(value) => console.log(value)}>
+          {({errors, touched}) => (
+          <Form >
+            <div className={`flex gap-5 pb-3 border-b-2 ${firstName ? ' border-primary' : ''}`}>
+              <User className={firstName ? 'text-primary' : 'text-slate-300'} />
+              <Field type='text' name='firstName' placeholder='Enter your firtsname' className="flex-1 bg-transparent focus:outline-none"/>
+            </div>
+            {errors.firstName && touched.firstName ? (
+             <div className='text-red-500 text-sm'>{errors.firstName}</div>
+           ) : null}
+            <div className={`flex gap-5 pb-3 mt-8 border-b-2 ${lastName ? ' border-primary' : ''}`}>
+              <User className={lastName ? 'text-primary' : 'text-slate-300'} />
+              <Field type='text' name='lastName' placeholder='Enter your lastsname' className="flex-1 bg-transparent focus:outline-none"/>
+            </div>
+            {errors.lastName && touched.lastName ? (
+             <div className='text-red-500 text-sm'>{errors.lastName}</div>
+            ) : null}
+            <div className={`flex gap-5 pb-3 mt-8 border-b-2 ${email ? ' border-primary' : ''}`}>
+              <Mail className={email ? 'text-primary' : 'text-slate-300'} />
+              <Field type='text' name='email' placeholder='Enter your email' className="flex-1 bg-transparent focus:outline-none"/>
+            </div>
+            {errors.email && touched.email ? <div className='text-red-500 text-sm'>{errors.email}</div> : null}
+            <div className={`flex gap-5 pb-3 mt-8 border-b-2 ${password ? ' border-primary' : ''}`}>
+              <Lock className={password ? 'text-primary' : 'text-slate-300'}  />
+              <Field type={eyePassword ? 'password' : 'text'} name='password' placeholder='Enter your password' className="flex-1 bg-transparent focus:outline-none"/>
+              {eyePassword ? <Eye onClick={() => setEyePassword(false)} className={password ? 'text-primary' : 'text-slate-300'}  /> : <EyeOff onClick={() => setEyePassword(true)} className={password ? 'text-primary' : 'text-slate-300'}  />}
+            </div>
+            {errors.password && touched.password ? <div className='text-red-500 text-sm'>{errors.password}</div> : null}
+            <div className="flex justify-center items-center w-full h-8 py-14">
+              <button type='button' className={`w-full bg-primary text-white font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm text-white`}>Sign Up</button>
+            </div>
+          </Form>
+          )}
+        </Formik>
         <div className="text-center">
           <p>Already have an account? Let&apos;s <Link href='/login' className="text-primary cursor-pointer hover:font-bold">Login</Link></p>
         </div>

@@ -6,11 +6,68 @@ import Header from "../assets/components/Header"
 import Footer from "../assets/components/Footer"
 import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Search, X } from "react-feather"
 import PinInput from "react-pin-input"
+import { useSelector, useDispatch } from 'react-redux'
+import http from '../helper/http'
+import {transfer} from '../redux/reducers/transfer'
 
 const Confirmation = () => {
   const router = useRouter()
+  const dispatch = useDispatch()
+  const token = useSelector((state) => state.auth.token.token)
+  const recipientId = useSelector((state) => state.transfer.recipientId)
+  const amount = useSelector((state) => state.transfer.amount)
+  const notes = useSelector((state) => state.transfer.notes)
   const [pin, setPin] = React.useState(null)
   const [showEnterPIN, setShowEnterPIN] = React.useState(false)
+
+  // Get Recipient
+  const [recipient, setRecipient] = React.useState({})
+  React.useEffect(()=>{
+    getRecipient()
+  }, [])
+  const getRecipient = async () => {
+    try {
+      const response = await http(token).get(`/transactions/recipient/${recipientId}`)
+      setRecipient(response?.data?.results)
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  // Get User
+  const [user, setUser] = React.useState({})
+  React.useEffect(()=>{
+    getUser()
+  }, [])
+  const getUser = async () => {
+    try {
+      const response = await http(token).get('/profile')
+      setUser(response?.data?.results)
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  // Date and Time
+  const dateTime = new Date()
+  const dateTimeArr = String(dateTime).split(' ')
+  const date = dateTimeArr[1] + ' ' + dateTimeArr[2] + ', ' + dateTimeArr[3]
+  const timeArr = dateTimeArr[4].split(':')
+  const time = timeArr[0] + ':' + timeArr[1]
+
+  // Transfer
+  const [messageError, setMessageError] = React.useState('')
+  const transferTo = async () => {
+    dispatch(transfer({date, time}))
+    try {
+      const response = await http(token).post('/transactions/transfer', {amount, notes, recipientId, pin})
+      router.push('/transfer-status')
+      return response
+    } catch(error) {
+      setMessageError(error?.response?.data?.message)
+      console.log(error)
+    }
+  }
 
   return(
     <div className="bg-orange-100 relative">
@@ -18,7 +75,7 @@ const Confirmation = () => {
       <title>Confirmation | FazzPay</title>
     </Head>
 
-    <Header />
+    <Header token={token} />
 
     <section className="px-5 pb-5 pt-10 bg-primary rounded-b-3xl font-primary md:hidden">
       <div onClick={() => router.push('/home')} className="flex items-center gap-5 text-white mb-5">
@@ -30,8 +87,8 @@ const Confirmation = () => {
           <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
         </div>
         <div className="flex-1">
-          <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap font-bold">Samuel Suhi</p>
-          <p>+62 813-8492-9994</p>
+          <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap font-bold">{`${recipient?.firstName} ${recipient?.lastName}`}</p>
+          <p>{recipient?.phoneNumber}</p>
         </div>
       </div>
     </section>
@@ -76,35 +133,35 @@ const Confirmation = () => {
             <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
           </div>
           <div className="flex-1">
-            <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap font-bold">Samuel Suhi</p>
-            <p>+62 813-8492-9994</p>
+            <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap font-bold">{`${recipient.firstName} ${recipient.lastName}`}</p>
+            <p>{recipient.phoneNumber ? recipient.phoneNumber : '-'}</p>
           </div>
         </div>
         <div className='grid grid-cols-2 md:flex md:flex-col gap-5 p-5'>
           <h3 className="hidden md:block font-bold">Details</h3>
           <div className="bg-white shadow rounded p-3">
             <p>Amount</p>
-            <p className="font-bold">Rp100.000</p>
+            <p className="font-bold">Rp{new Intl.NumberFormat('en-DE').format(amount)}</p>
           </div>
           <div className="bg-white shadow rounded p-3">
             <p>Balance Left</p>
-            <p className="font-bold">Rp20.000</p>
+            <p className="font-bold">Rp{new Intl.NumberFormat('en-DE').format(user.balance - amount)}</p>
           </div>
           <div className="hidden md:block bg-white shadow rounded p-3">
             <p>Date & Time</p>
-            <p className="font-bold">May 11, 2020 - 12.20</p>
+            <p className="font-bold">{`${date} - ${time}`}</p>
           </div>
           <div className="md:hidden bg-white shadow rounded p-3">
             <p>Date</p>
-            <p className="font-bold">May 11, 2020</p>
+            <p className="font-bold">{date}</p>
           </div>
           <div className="md:hidden bg-white shadow rounded p-3">
             <p>Time</p>
-            <p className="font-bold">12.20</p>
+            <p className="font-bold">{time}</p>
           </div>
           <div className="col-span-2 bg-white shadow rounded p-3">
             <p>Notes</p>
-            <p className="font-bold">For buying some socks</p>
+            <p className="font-bold">{notes}</p>
           </div>
         </div>
         <div className="flex md:justify-end p-5">
@@ -118,9 +175,10 @@ const Confirmation = () => {
     {showEnterPIN ?
     <section className='absolute top-0 h-full w-screen bg-slate-300/80'>
       <div className='sticky bg-white w-[90%] md:w-[30%] p-8 rounded-xl left-6 inset-y-1/4 md:inset-x-1/3 md:inset-y-1/4'>
+        {messageError && <p className='text-red-500 text-center py-3'>{messageError}</p>}
         <div className='relative'>
           <p className='font-bold mb-5'>Enter PIN to Transfer</p>
-          <p>Enter your 6 digits PIN for confirmation to continue transferring money. </p>
+          <p>Enter your 6 digits PIN for confirmation to continue transfering money. </p>
           <div onClick={() => setShowEnterPIN(false)} className='absolute top-0 right-0'>
             <button><X /></button>
           </div>
@@ -129,7 +187,7 @@ const Confirmation = () => {
           <PinInput
               length={6}
               initialValue=""
-              onChange={(value, index) => {setPin(value)}}
+              onChange={(value, index) => {setPin(value) & setMessageError(false)}}
               type="numeric"
               inputMode="number"
               style={{}}
@@ -141,12 +199,12 @@ const Confirmation = () => {
             />
         </div>
         <div className="hidden md:flex justify-end">
-          <div onClick={() => router.push('/transfer-status')} className="flex justify-center items-center w-28 h-12">
-            <button className="bg-primary px-5 py-3 rounded-xl text-white font-bold active:text-sm active:px-4 active:py-2">Continue</button>
+          <div onClick={transferTo} className="flex justify-center items-center w-28 h-12">
+            <button className="bg-primary px-5 py-3 rounded-xl text-white font-bold active:text-sm active:px-4 active:py-2">Transfer Now</button>
           </div>
         </div>
         <div className=" md:hidden flex justify-end">
-          <div onClick={() => router.push('/transfer-status')} className="flex justify-center items-center w-full h-12">
+          <div onClick={transferTo} className="flex justify-center items-center w-full h-12">
             <button className="bg-primary w-full px-5 py-3 rounded-xl text-white font-bold active:text-sm active:px-3 active:py-2">Transfer Now</button>
           </div>
         </div>
