@@ -36,7 +36,7 @@ const Profile = () => {
       console.log(errorMessage)
     }
   }
-  const fullName = `${user.firstName} ${user.lastName}`
+  const fullName = `${user?.firstName} ${user?.lastName}`
 
   return(
     <div className="bg-orange-100 relative">
@@ -87,7 +87,7 @@ const Profile = () => {
               <p className='text-sm'>Edit</p>
             </div>
             <h3 className='font-bold py-2'>{fullName}</h3>
-            <p>{user.phoneNumber}</p>
+            <p>{user?.phoneNumber}</p>
           </div>
           <div onClick={() => router.push('/personal-information')} className='flex items-center px-3 w-full md:w-3/5 h-12 bg-slate-300 rounded-lg cursor-pointer active:border-2'>
             <p className='flex-1 font-bold'>Personal Information</p>

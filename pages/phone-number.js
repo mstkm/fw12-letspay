@@ -11,13 +11,12 @@ const PhoneNumber = () => {
   const router = useRouter()
   const token = useSelector((state) => state?.auth?.token?.token)
   const [newPhoneNumber, setNewPhoneNumber] = React.useState(null)
-  const phoneNumber = `0${newPhoneNumber}`
 
   // Update phone number
   const createPhoneNumber = async (e) => {
     if (e && e.preventDefault) { e.preventDefault(); }
     try {
-      const {data} = await http(token).post('/profile/phone-number', {phoneNumber})
+      const {data} = await http(token).post('/profile/phone-number', {phoneNumber: newPhoneNumber})
       router.push('/pin')
       return data?.results
     } catch (error) {
@@ -62,7 +61,7 @@ const PhoneNumber = () => {
             <select className='appearance-none bg-transparent focus:outline-none font-bold'>
               <option>+62</option>
             </select>
-            <input onChange={(e) => setNewPhoneNumber(e.target.value)} type='number' name='phoneNumber' placeholder='Enter your phone number' className='pl-3 py-10 bg-transparent focus:outline-none'/>
+            <input onChange={(e) => setNewPhoneNumber('0'+e.target.value)} type='number' name='phoneNumber' placeholder='Enter your phone number' className='pl-3 py-10 bg-transparent focus:outline-none'/>
           </div>
           </div>
           <div className="flex justify-center items-center w-full h-8 mb-10">
