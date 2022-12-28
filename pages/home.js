@@ -95,8 +95,8 @@ const Home = () => {
         <div className="hidden md:flex items-center bg-primary shadow p-5 rounded-xl">
           <div className="flex-1 text-white">
             <p>Balance</p>
-            <p className="text-4xl font-bold py-2">Rp120.000</p>
-            <p>{user.phoneNumber}</p>
+            <p className="text-4xl font-bold py-2">{'Rp'+new Intl.NumberFormat('en-DE').format(user?.balance)}</p>
+            <p>{user?.phoneNumber}</p>
           </div>
           <div className="flex flex-col gap-3">
             <div onClick={() => router.push('/transfer')} className="h-10 w-32 flex items-center justify-center  cursor-pointer">
