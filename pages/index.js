@@ -26,7 +26,7 @@ const LandingPage = () => {
   return(
     <>
     <Head>
-      <title>FazzPay</title>
+      <title>LetsPay</title>
     </Head>
     <div className="font-primary">
       {/* Navbar and Jumbotron */}
@@ -34,7 +34,7 @@ const LandingPage = () => {
         {/* Navbar */}
         <div className="flex flex-col md:flex-row gap-3 items-center">
           <div className="flex-1">
-            <h1 className="font-bold text-primary text-3xl">FazzPay</h1>
+            <h1 className="font-bold text-primary text-3xl">LetsPay</h1>
           </div>
           <Link href='/login' className="flex justify-center items-center w-28 h-8">
             <button className="text-primary font-bold bg-white border-[1px] border-primary py-1 w-24 rounded-lg hover:bg-primary hover:text-white active:py-0 active:w-20 active:h-6 active:text-xs md:active:text-sm text-sm md:text-base">Login</button>
@@ -115,10 +115,10 @@ const LandingPage = () => {
           <Image src={bannerDua} alt='banner' className="hidden md:block w-84" />
         </div>
         <div className="flex-1 md:pr-10">
-          <h1 className="font-bold md:text-6xl mb-5 md:mb-12 text-center md:text-left">All the <span className="text-primary">Great</span> Fazzpay Features.</h1>
+          <h1 className="font-bold md:text-6xl mb-5 md:mb-12 text-center md:text-left">All the <span className="text-primary">Great</span> LetsPay Features.</h1>
           <div className='bg-white border-none rounded-3xl p-3 md:p-5 md:mb-5 mb-3 text-sm md:text-base'>
             <p className='font-bold mb-3'><span className='text-primary mr-3'>1.</span> <span>Small Fee</span></p>
-            <p>We only charge 5% of every success transaction done in FazzPay app.</p>
+            <p>We only charge 5% of every success transaction done in LetsPay app.</p>
           </div>
           <div className='bg-white border-none rounded-3xl p-3 md:p-5 md:mb-5 mb-3 text-sm md:text-base'>
             <p className='font-bold mb-3'><span className='text-primary mr-3'>2.</span> <span>Data Secured</span></p>
@@ -126,7 +126,7 @@ const LandingPage = () => {
           </div>
           <div className='bg-white border-none rounded-3xl p-3 md:p-5 text-sm md:text-base'>
             <p className='font-bold mb-3'><span className='text-primary mr-3 mb-3'>3.</span> <span>User Friendly</span></p>
-            <p>FazzPay come up with modern and sleek design and not complicated.</p>
+            <p>LetsPay come up with modern and sleek design and not complicated.</p>
           </div>
         </div>
       </div>
@@ -152,14 +152,14 @@ const LandingPage = () => {
       {/* Footer */}
       <div className='bg-primary p-5 md:px-28 md:py-10 text-white'>
         <div>
-          <h1 className='font-bold md:text-3xl mb-5 md:mb-10'>FAzzPay</h1>
+          <h1 className='font-bold md:text-3xl mb-5 md:mb-10'>LetsPay</h1>
           <p className='text-sm md:text-base md:w-64 mb-5 md:mb-10'>Simplify financial needs and saving much time in banking needs with one single app.</p>
         </div>
         <hr className='mb-5 md:mb-10'/>
         <div className='flex flex-col md:flex-row gap-1 md:gap-10'>
-          <p className='text-sm md:text-base flex-1'>2020 FazzPay. All right reserved.</p>
+          <p className='text-sm md:text-base flex-1'>2020 LetsPay. All right reserved.</p>
           <p className='text-sm md:text-base'>+62 5637 8882 9901</p>
-          <p className='text-sm md:text-base'>contact@fazzpay.com</p>
+          <p className='text-sm md:text-base'>contact@LetsPay.com</p>
         </div>
       </div>
 
