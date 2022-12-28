@@ -6,22 +6,25 @@ import { Check } from "react-feather"
 import {useSelector} from 'react-redux'
 import http from '../helper/http'
 import { useRouter } from "next/router"
+import jwt_decode from 'jwt-decode'
 
 const Pin = () => {
   const router = useRouter()
   const token = useSelector((state) => state?.auth?.token?.token)
+  const {id: userId} = jwt_decode(token)
+  console.log(userId)
   const [newPin, setNewPin] = React.useState(null)
   const [confirmSubmit, setConfirmSubmit] = React.useState(true)
 
-  // Update PIN
+  // Create PIN
   const createPin = async (e) => {
     if (e && e.preventDefault) { e.preventDefault(); }
     try {
-      const {data} = await http(token).post('/profile/change-pin', {newPin})
+      const {data} = await http(token).post('/auth/set-pin', {userId, pin: newPin})
       setConfirmSubmit(false)
       return data?.results
     } catch (error) {
-      console.log(error?.response?.data?.message)
+      console.log(error)
     }
   }
 
