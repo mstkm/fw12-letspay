@@ -5,11 +5,13 @@ import { useRouter } from "next/router"
 import Header from "../assets/components/Header"
 import Footer from "../assets/components/Footer"
 import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Edit2, ArrowRight } from "react-feather"
+import { useSelector } from 'react-redux'
+import http from '../helper/http'
 
 const Profile = () => {
+  const token = useSelector((state) => state?.auth?.token?.token)
   const router = useRouter()
   const [toggleNotification, setToggleNotification] = React.useState(true)
-
   const clickToggle = () => {
     if (toggleNotification === true) {
       setToggleNotification(false)
@@ -18,13 +20,31 @@ const Profile = () => {
     }
   }
 
+  // Get user
+  const [user, setUser] = React.useState({})
+  React.useEffect(() => {
+    getUser().then((data) => {
+      setUser(data)
+    } )
+  }, [])
+  const getUser = async () => {
+    try {
+      const response = await http(token).get('/profile')
+      return response?.data?.results
+    } catch (error) {
+      const errorMessage = error?.response?.data?.message
+      console.log(errorMessage)
+    }
+  }
+  const fullName = `${user.firstName} ${user.lastName}`
+
   return(
     <div className="bg-orange-100 relative">
     <Head>
       <title>Profile | FazzPay</title>
     </Head>
 
-    <Header />
+    <Header token={token} />
 
     <section className="flex flex-col md:flex-row gap-5 font-primary text-secondary md:px-28 py-5 md:py-10">
       {/* Menu */}
@@ -66,8 +86,8 @@ const Profile = () => {
               <Edit2 className='w-3'/>
               <p className='text-sm'>Edit</p>
             </div>
-            <h3 className='font-bold py-2'>Robert Chandler</h3>
-            <p>+62 813-9387-7946</p>
+            <h3 className='font-bold py-2'>{fullName}</h3>
+            <p>{user.phoneNumber}</p>
           </div>
           <div onClick={() => router.push('/personal-information')} className='flex items-center px-3 w-full md:w-3/5 h-12 bg-slate-300 rounded-lg cursor-pointer active:border-2'>
             <p className='flex-1 font-bold'>Personal Information</p>

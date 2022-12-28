@@ -3,15 +3,26 @@ import Head from "next/head"
 import React from 'react'
 import PinInput from "react-pin-input"
 import { Check } from "react-feather"
+import {useSelector} from 'react-redux'
+import http from '../helper/http'
+import { useRouter } from "next/router"
 
 const Pin = () => {
-  const [pin, setPin] = React.useState(null)
-  const [confirm, setConfirm] = React.useState(false)
+  const router = useRouter()
+  const token = useSelector((state) => state?.auth?.token?.token)
+  const [newPin, setNewPin] = React.useState(null)
   const [confirmSubmit, setConfirmSubmit] = React.useState(true)
 
-  const createPin = (e) => {
-    e.preventDefault()
-    setConfirmSubmit(false)
+  // Update PIN
+  const createPin = async (e) => {
+    if (e && e.preventDefault) { e.preventDefault(); }
+    try {
+      const {data} = await http(token).post('/profile/change-pin', {newPin})
+      setConfirmSubmit(false)
+      return data?.results
+    } catch (error) {
+      console.log(error?.response?.data?.message)
+    }
   }
 
   return(
@@ -29,7 +40,7 @@ const Pin = () => {
       </div>
 
       {/* Right */}
-      <div className="flex-[45%] flex flex-col justify-center h-screen bg-blue-50 md:pl-16 md:pr-36 md:py-10">
+      <div className="flex-[45%] flex flex-col justify-center h-screen bg-orange-50 md:pl-16 md:pr-36 md:py-10">
         <div className="md:hidden text-center p-16">
           <h1 className="font-bold text-4xl text-primary">FazzPay</h1>
         </div>
@@ -47,18 +58,18 @@ const Pin = () => {
           <PinInput
             length={6}
             initialValue=""
-            onChange={(value, index) => {setPin(value)}}
+            onChange={(value, index) => {setNewPin(value)}}
             type="numeric"
             inputMode="number"
             style={{marginBottom: '50px'}}
             inputStyle={{borderColor: '#3A3D42', borderRadius: '10px', fontWeight: 'bold'}}
             inputFocusStyle={{borderColor: '#FF5F00'}}
-            onComplete={(value, index) => {setConfirm(true)}}
+            onComplete={(value, index) => {}}
             autoSelect={true}
             regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
           />
           <div className="flex justify-center items-center w-full h-8 mb-10">
-            {confirm ?
+            {newPin?.length === 6 ?
             <button className='w-full text-white bg-primary font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm'>Confirm</button> :
             <button disabled className='w-full bg-slate-300 font-bold py-3 border rounded-xl'>Confirm</button>}
           </div>
@@ -78,7 +89,7 @@ const Pin = () => {
           <h2 className="font-bold text-xl mb-5">Your PIN Was Successfully Created.</h2>
           <p>Your PIN was successfully created and you can now access all the features in FazzPay.</p>
         </div>
-        <div className="flex justify-center items-center w-full h-8 mb-10">
+        <div onClick={() => router.push('/home')} className="flex justify-center items-center w-full h-8 mb-10">
           <button className='w-full text-white bg-primary font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm'>Go To Dashboard</button>
         </div>
         </div>}

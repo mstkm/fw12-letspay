@@ -1,13 +1,33 @@
 import React from 'react'
 import Head from "next/head"
-import Image from "next/image"
 import { useRouter } from "next/router"
 import Header from "../assets/components/Header"
 import Footer from "../assets/components/Footer"
 import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut } from "react-feather"
+import http from '../helper/http'
+import { useSelector } from 'react-redux'
 
 const PersonalInformation = () => {
   const router = useRouter()
+  const token = useSelector((state) => state?.auth?.token?.token)
+
+  // Get user
+  const [user, setUser] = React.useState({})
+  React.useEffect(() => {
+    getUser().then((data) => {
+      setUser(data)
+    } )
+  }, [])
+  const getUser = async () => {
+    try {
+      const response = await http(token).get('/profile')
+      return response?.data?.results
+    } catch (error) {
+      const errorMessage = error?.response?.data?.message
+      console.log(errorMessage)
+    }
+  }
+  const fullName = `${user.firstName} ${user.lastName}`
 
   return(
     <div className="bg-orange-100 relative">
@@ -15,7 +35,7 @@ const PersonalInformation = () => {
       <title>Personal Information | FazzPay</title>
     </Head>
 
-    <Header />
+    <Header token={token} />
 
     <section className="flex flex-col md:flex-row gap-5 font-primary text-secondary md:px-28 py-5 md:py-10">
       {/* Menu */}
@@ -54,20 +74,20 @@ const PersonalInformation = () => {
         <p>We got your personal information from the sign up proccess. If you want to make changes on your information, contact our support.</p>
         <div className='bg-white shadow p-4 rounded'>
           <p className='mb-1'>First Name</p>
-          <p className='font-bold text-lg'>Robert</p>
+          <p className='font-bold text-lg'>{user.firstName}</p>
         </div>
         <div className='bg-white shadow p-4 rounded'>
           <p className='mb-1'>Last Name</p>
-          <p className='font-bold text-lg'>Chandler</p>
+          <p className='font-bold text-lg'>{user.lastName}</p>
         </div>
         <div className='bg-white shadow p-4 rounded'>
           <p className='mb-1'>Verified E-mail</p>
-          <p className='font-bold text-lg'>pewdiepie1@gmail.com</p>
+          <p className='font-bold text-lg'>{user.email}</p>
         </div>
         <div className='flex items-center bg-white shadow p-4 rounded'>
           <div className='flex-1'>
             <p className='mb-1'>Phone Number</p>
-            <p className='font-bold text-lg'>+62 813-9387-7946</p>
+            <p className='font-bold text-lg'>{user.phoneNumber}</p>
           </div>
           <div>
             <p onClick={() => router.push('/manage-phone-number')} className='text-primary cursor-pointer font-bold active:font-medium'>Manage</p>

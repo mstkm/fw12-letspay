@@ -4,35 +4,40 @@ import { useRouter } from "next/router"
 import Header from "../assets/components/Header"
 import Footer from "../assets/components/Footer"
 import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Lock, Eye, EyeOff } from "react-feather"
+import { useSelector } from 'react-redux'
+import http from '../helper/http'
 
 const ChangePassword = () => {
   const router = useRouter()
+  const token = useSelector((state) => state?.auth?.token?.token)
   const [showPassword, setShowPassword] = React.useState.apply(false)
-  const [filledPassword, setFilledPassword] = React.useState(false)
-  const [filledNewPassword, setFilledNewPassword] = React.useState(false)
-  const [filledReapetNewPassword, setFilledReapetNewPassword] = React.useState(false)
+  const [showNewPassword, setShowNewPassword] = React.useState.apply(false)
+  const [showReapeatNewPassword, setShowReapeatNewPassword] = React.useState.apply(false)
+  const [password, setPassword] = React.useState('')
+  const [newPassword, setNewPassword] = React.useState('')
+  const [repeatNewPassword, setRepeatNewPassword] = React.useState('')
+  const [message, setMessage] = React.useState('')
+  const [alertSuccess, setAlerSuccess] = React.useState(false)
+  const [alertFailed, setAlerFailed] = React.useState(false)
 
-  const checkValuePassword = (value) => {
-    if (value) {
-      setFilledPassword(true)
-    } else {
-      setFilledPassword(false)
+  // Update password
+  const updatePassword = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await http(token).post('/profile/change-password', {
+        currentPassword: password,
+        newPassword,
+        confirmPassword: repeatNewPassword
+      })
+      setMessage(response?.data?.message)
+      setAlerSuccess(true)
+      return response
+    } catch(error) {
+      setMessage(error?.response?.data?.message)
+      setAlerFailed(true)
     }
   }
-  const checkValueNewPassword = (value) => {
-    if (value) {
-      setFilledNewPassword(true)
-    } else {
-      setFilledNewPassword(false)
-    }
-  }
-  const checkValueRepeatNewPassword = (value) => {
-    if (value) {
-      setFilledReapetNewPassword(true)
-    } else {
-      setFilledReapetNewPassword(false)
-    }
-  }
+
 
   return(
     <div className="bg-orange-100">
@@ -40,7 +45,7 @@ const ChangePassword = () => {
       <title>Change Password | FazzPay</title>
     </Head>
 
-    <Header />
+    <Header token={token} />
 
     <section className="flex flex-col md:flex-row gap-5 font-primary text-secondary md:px-28 py-5 md:py-10">
       {/* Menu */}
@@ -77,27 +82,36 @@ const ChangePassword = () => {
           <h3 className='font-bold'>Change Password</h3>
         </div>
         <p>You must enter your current password and then type your new password twice.</p>
-        <form className='flex flex-col items-center gap-8 py-10'>
-          <div className={`flex border-b-2 md:w-2/4 w-full pb-2 ${filledPassword ? 'border-primary' : ''}`}>
-            <Lock className={`${filledPassword ? 'text-primary' : ''}`}/>
-            <input onChange={(e) => checkValuePassword(e.target.value)} type={showPassword ? 'text' : 'password'} name='currentPassword' placeholder='Current password' className='flex-1 px-3 focus:outline-none bg-transparent'/>
-            {showPassword ? <EyeOff onClick={() => setShowPassword(false)} className={`cursor-pointer ${filledPassword ? 'text-primary' : ''}`} /> : <Eye onClick={() => setShowPassword(true)} className={`cursor-pointer ${filledPassword ? 'text-primary' : ''}`} />}
+        <form onSubmit={updatePassword} className='relative flex flex-col items-center gap-8 py-10'>
+          <div className={`flex border-b-2 md:w-2/4 w-full pb-2 ${password ? 'border-primary' : ''}`}>
+            <Lock className={`${password ? 'text-primary' : ''}`}/>
+            <input onChange={(e) => setPassword(e.target.value) & setAlerFailed(false) & setAlerSuccess(false)} type={showPassword ? 'text' : 'password'} name='currentPassword' placeholder='Current password' className='flex-1 px-3 focus:outline-none bg-transparent'/>
+            {showPassword ? <EyeOff onClick={() => setShowPassword(false)} className={`cursor-pointer ${password ? 'text-primary' : ''}`} /> : <Eye onClick={() => setShowPassword(true)} className={`cursor-pointer ${password ? 'text-primary' : ''}`} />}
           </div>
-          <div className={`flex border-b-2 md:w-2/4 w-full pb-2 ${filledNewPassword ? 'border-primary' : ''}`}>
-            <Lock className={`${filledNewPassword ? 'text-primary' : ''}`}/>
-            <input onChange={(e) => checkValueNewPassword(e.target.value)} type={showPassword ? 'text' : 'password'} name='newPassword' placeholder='New password' className='flex-1 px-3 focus:outline-none bg-transparent'/>
-            {showPassword ? <EyeOff onClick={() => setShowPassword(false)} className={`cursor-pointer ${filledNewPassword ? 'text-primary' : ''}`} /> : <Eye onClick={() => setShowPassword(true)} className={`cursor-pointer ${filledNewPassword ? 'text-primary' : ''}`} />}
+          <div className={`flex border-b-2 md:w-2/4 w-full pb-2 ${newPassword ? 'border-primary' : ''}`}>
+            <Lock className={`${newPassword ? 'text-primary' : ''}`}/>
+            <input onChange={(e) => setNewPassword(e.target.value) & setAlerFailed(false) & setAlerSuccess(false)} type={showNewPassword ? 'text' : 'password'} name='newPassword' placeholder='New password' className='flex-1 px-3 focus:outline-none bg-transparent'/>
+            {showNewPassword ? <EyeOff onClick={() => setShowNewPassword(false)} className={`cursor-pointer ${newPassword ? 'text-primary' : ''}`} /> : <Eye onClick={() => setShowNewPassword(true)} className={`cursor-pointer ${newPassword ? 'text-primary' : ''}`} />}
           </div>
-          <div className={`flex border-b-2 md:w-2/4 w-full pb-2 ${filledReapetNewPassword ? 'border-primary' : ''}`}>
-            <Lock className={`${filledReapetNewPassword ? 'text-primary' : ''}`}/>
-            <input onChange={(e) => checkValueRepeatNewPassword(e.target.value)} type={showPassword ? 'text' : 'password'} name='repeatNewPassword' placeholder='Repeat password' className='flex-1 px-3 focus:outline-none bg-transparent'/>
-            {showPassword ? <EyeOff onClick={() => setShowPassword(false)} className={`cursor-pointer ${filledReapetNewPassword ? 'text-primary' : ''}`} /> : <Eye onClick={() => setShowPassword(true)} className={`cursor-pointer ${filledPassword ? 'text-primary' : ''}`} />}
+          <div className={`flex border-b-2 md:w-2/4 w-full pb-2 ${repeatNewPassword ? 'border-primary' : ''}`}>
+            <Lock className={`${repeatNewPassword ? 'text-primary' : ''}`}/>
+            <input onChange={(e) => setRepeatNewPassword(e.target.value) & setAlerFailed(false) & setAlerSuccess(false)} type={showReapeatNewPassword ? 'text' : 'password'} name='repeatNewPassword' placeholder='Repeat password' className='flex-1 px-3 focus:outline-none bg-transparent'/>
+            {showReapeatNewPassword ? <EyeOff onClick={() => setShowReapeatNewPassword(false)} className={`cursor-pointer ${repeatNewPassword ? 'text-primary' : ''}`} /> : <Eye onClick={() => setShowReapeatNewPassword(true)} className={`cursor-pointer ${password ? 'text-primary' : ''}`} />}
           </div>
           <div className='flex-1 flex justify-center w-full py-5'>
-            {filledPassword && filledNewPassword && filledReapetNewPassword ?
+            {password.length && newPassword.length && repeatNewPassword.length ?
             <button className='bg-primary md:w-2/4 w-full h-12 text-white font-bold rounded-xl active:border-2'>Change Password</button>
             :
             <button disabled className='bg-slate-400 md:w-2/4 w-full h-12 font-bold rounded-xl'>Change Password</button>}
+            {alertSuccess &&
+            <div className='text-center absolute bottom-0'>
+              <p className='text-green-500'>{message}</p>
+              <p onClick={()=> router.push('/profile')} className='text-blue-500 hover:font-bold cursor-pointer'>Back to profile</p>
+            </div> }
+            {alertFailed &&
+            <div className='text-center absolute bottom-5'>
+              <p className='text-red-500'>{message}</p>
+            </div> }
           </div>
         </form>
       </div>

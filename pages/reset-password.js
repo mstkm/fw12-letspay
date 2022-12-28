@@ -35,7 +35,7 @@ const Login = () => {
       </div>
 
       {/* Right */}
-      <div className="flex-[45%] bg-blue-50 md:pl-16 md:pr-36 md:py-10">
+      <div className="flex-[45%] bg-orange-50 md:pl-16 md:pr-36 md:py-10">
         <div className="md:hidden text-center p-16">
           <h1 className="font-bold text-2xl text-primary">FazzPay</h1>
         </div>

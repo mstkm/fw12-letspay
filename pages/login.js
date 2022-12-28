@@ -3,25 +3,37 @@ import Head from "next/head"
 import Link from "next/link"
 import React from 'react'
 import {Mail, Lock, Eye, EyeOff} from 'react-feather'
+import { useRouter } from "next/router"
+import http from "../helper/http"
+import { loginUser } from "../redux/reducers/auth"
+import {useDispatch} from 'react-redux'
 
 const Login = () => {
-  const [filledEmail, setFilledEmail] = React.useState(false)
-  const [filledPassword, setFilledPassword] = React.useState(false)
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const [email, setEmail] = React.useState(false)
+  const [password, setPassword] = React.useState(false)
   const [eyePassword, setEyePassword] = React.useState(true)
-  const checkEmailValue = (value) => {
-    if (value) {
-      setFilledEmail(true)
-    } else {
-      setFilledEmail(false)
+  const [errorMessage, setErrorMessage] = React.useState(null)
+
+  const cb = () => {
+    router.push('/home')
+  }
+
+  const checkLogin = async (e) => {
+    e.preventDefault()
+    try {
+      const {data} = await http().post('/auth/login', {email, password})
+      const token = data?.results?.token
+      dispatch(loginUser({token}))
+      cb()
+    } catch (error) {
+      const errorMessage = error?.response?.data?.message
+      setErrorMessage(errorMessage)
     }
   }
-  const checkPasswordValue = (value) => {
-    if (value) {
-      setFilledPassword(true)
-    } else {
-      setFilledPassword(false)
-    }
-  }
+
+  console.log(errorMessage)
 
   return(
     <>
@@ -38,7 +50,7 @@ const Login = () => {
       </div>
 
       {/* Right */}
-      <div className="flex-[45%] bg-blue-50 md:pl-16 md:pr-36 md:py-10">
+      <div className="flex-[45%] bg-orange-50 md:pl-16 md:pr-36 md:py-10">
         <div className="md:hidden text-center p-16">
           <h1 className="font-bold text-4xl text-primary">FazzPay</h1>
         </div>
@@ -51,21 +63,22 @@ const Login = () => {
           <h2 className="font-bold text-xl mb-5">Start Accessing Banking Needs With All Devices and All Platforms With 30.000+ Users</h2>
           <p>Transfering money is eassier than ever, you can access FazzPay wherever you are. Desktop, laptop, mobile phone? we cover all of that for you!</p>
         </div>
-        <form>
-          <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${filledEmail ? ' border-primary' : ''}`}>
-            <Mail className={filledEmail ? 'text-primary' : 'text-slate-300'} />
-            <input onChange={(e)=> checkEmailValue(e.target.value)} type='text' name='email' placeholder='Enter your email' className="flex-1 bg-transparent focus:outline-none"/>
+        <form onSubmit={checkLogin}>
+          <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${email ? ' border-primary' : ''}`}>
+            <Mail className={email ? 'text-primary' : 'text-slate-300'} />
+            <input onChange={(e)=> setEmail(e.target.value)} type='text' name='email' placeholder='Enter your email' className="flex-1 bg-transparent focus:outline-none"/>
           </div>
-          <div className={`flex gap-5 mb-1 pb-3 border-b-2 ${filledPassword ? ' border-primary' : ''}`}>
-            <Lock className={filledPassword ? 'text-primary' : 'text-slate-300'}  />
-            <input onChange={(e)=> checkPasswordValue(e.target.value)} type={eyePassword ? 'password' : 'text'} name='password' placeholder='Enter your password' className="flex-1 bg-transparent focus:outline-none"/>
-            {eyePassword ? <Eye onClick={() => {setEyePassword(false)}} className={filledPassword ? 'text-primary' : 'text-slate-300'}  /> : <EyeOff onClick={() => {setEyePassword(true)}} className={filledPassword ? 'text-primary' : 'text-slate-300'}  />}
+          <div className={`flex gap-5 mb-1 pb-3 border-b-2 ${password ? ' border-primary' : ''}`}>
+            <Lock className={password ? 'text-primary' : 'text-slate-300'}  />
+            <input onChange={(e)=> setPassword(e.target.value)} type={eyePassword ? 'password' : 'text'} name='password' placeholder='Enter your password' className="flex-1 bg-transparent focus:outline-none"/>
+            {eyePassword ? <Eye onClick={() => {setEyePassword(false)}} className={password ? 'text-primary' : 'text-slate-300'}  /> : <EyeOff onClick={() => {setEyePassword(true)}} className={password ? 'text-primary' : 'text-slate-300'}  />}
           </div>
           <div className="flex justify-end mb-10 text-end">
-            <p className="cursor-pointer w-fit hover:font-bold">Forgot password?</p>
+            <p onClick={() => router.push('/reset-password')} className="cursor-pointer w-fit hover:font-bold">Forgot password?</p>
           </div>
-          <div className="flex justify-center items-center w-full h-8 mb-10">
-            <button disabled={!filledEmail || !filledPassword} className={`w-full ${filledEmail && filledPassword ? ' bg-primary' : ' bg-slate-300'} ${filledEmail && filledPassword ? ' text-white' : ' text-secondary'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm`}>Login</button>
+          <div className="flex flex-col gap-3 justify-center items-center w-full h-8 mb-10">
+            <button disabled={!email || !password} className={`w-full ${email && password ? ' bg-primary' : ' bg-slate-300'} ${email && password ? ' text-white' : ' text-secondary'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm`}>Login</button>
+            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
           </div>
         </form>
         <div className="text-center">

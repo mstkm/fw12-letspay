@@ -5,10 +5,28 @@ import Header from "../assets/components/Header"
 import Footer from "../assets/components/Footer"
 import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut } from "react-feather"
 import PinInput from 'react-pin-input'
+import { useSelector } from 'react-redux'
+import http from '../helper/http'
 
 const ChangePIN = () => {
   const router = useRouter()
+  const token = useSelector((state) => state?.auth?.token?.token)
   const [pin, setPin] = React.useState('')
+  const [message, setMessage] =  React.useState('')
+  const [alertSuccess, setAlertSuccess] = React.useState(false)
+  const [alertFailed, setAlertFailed] = React.useState(false)
+
+  const updatePIN = async (e) => {
+    if (e && e.preventDefault) { e.preventDefault(); }
+    try {
+      const response = await http(token).post('/profile/change-pin', {newPin: pin})
+      setMessage(response?.data?.message)
+      setAlertSuccess(true)
+    } catch(error) {
+      setMessage(error?.response?.data?.message)
+      setAlertFailed(true)
+    }
+  }
 
   return(
     <div className="bg-orange-100">
@@ -16,7 +34,7 @@ const ChangePIN = () => {
       <title>Change PIN | FazzPay</title>
     </Head>
 
-    <Header />
+    <Header token={token} />
 
     <section className="flex flex-col md:flex-row gap-5 font-primary text-secondary md:px-28 py-5 md:py-10">
       {/* Menu */}
@@ -53,7 +71,7 @@ const ChangePIN = () => {
           <h3 className='font-bold'>Change PIN</h3>
         </div>
         <p>Enter your current 6 digits Fazzpay PIN below to continue to the next steps.</p>
-        <form className='flex flex-col items-center gap-8 py-10'>
+        <form onSubmit={updatePIN} className='flex relative flex-col items-center gap-8 py-10'>
           <PinInput
               length={6}
               name='pin'
@@ -70,9 +88,18 @@ const ChangePIN = () => {
             />
           <div className='flex-1 flex justify-center w-full py-5'>
             {(pin.length === 6) ?
-            <button className='bg-primary md:w-2/4 w-full h-12 text-white font-bold rounded-xl active:border-2'>Continue</button> :
-            <button className='bg-slate-400 md:w-2/4 w-full h-12 font-bold rounded-xl'>Continue</button>}
+            <button type='submit' className='bg-primary md:w-2/4 w-full h-12 text-white font-bold rounded-xl active:border-2'>Continue</button> :
+            <button type='submit' className='bg-slate-400 md:w-2/4 w-full h-12 font-bold rounded-xl'>Continue</button>}
           </div>
+          {alertSuccess &&
+            <div className='text-center absolute bottom-0'>
+              <p className='text-green-500'>{message}</p>
+              <p onClick={()=> router.push('/profile')} className='text-blue-500 hover:font-bold cursor-pointer'>Back to profile</p>
+            </div> }
+            {alertFailed &&
+            <div className='text-center absolute bottom-5'>
+              <p className='text-red-500'>{message}</p>
+            </div> }
         </form>
       </div>
     </section>

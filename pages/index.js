@@ -12,8 +12,17 @@ import hdanm from "../assets/images/hdanm.png"
 import airbnb from "../assets/images/airbnb.png"
 import canon from "../assets/images/canon.png"
 import dell from "../assets/images/dell.png"
+import { useSelector } from 'react-redux'
+import { useRouter } from 'next/router'
 
 const LandingPage = () => {
+  const token = useSelector((state) => state?.auth?.token?.token)
+  const router = useRouter()
+
+  if (token) {
+    router.push('/home')
+  }
+
   return(
     <>
     <Head>
@@ -30,9 +39,9 @@ const LandingPage = () => {
           <Link href='/login' className="flex justify-center items-center w-28 h-8">
             <button className="text-primary font-bold bg-white border-[1px] border-primary py-1 w-24 rounded-lg hover:bg-primary hover:text-white active:py-0 active:w-20 active:h-6 active:text-xs md:active:text-sm text-sm md:text-base">Login</button>
           </Link>
-          <div className="flex justify-center items-center w-28 h-8">
+          <Link href='/sign-up' className="flex justify-center items-center w-28 h-8">
             <button className="text-primary font-bold bg-white border-[1px] border-primary py-1 w-24 rounded-lg hover:bg-primary hover:text-white active:py-0 active:w-20 active:h-6 active:text-xs md:active:text-sm text-sm md:text-base">Sign Up</button>
-          </div>
+          </Link>
         </div>
 
         {/* Jumbotron */}

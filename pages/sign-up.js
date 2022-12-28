@@ -1,41 +1,35 @@
+import React from 'react'
 import Image from "next/image"
 import Head from "next/head"
 import Link from "next/link"
-import React from 'react'
 import {User, Mail, Lock, Eye, EyeOff} from 'react-feather'
+import { useRouter } from "next/router"
+import http from '../helper/http'
+import {useDispatch} from 'react-redux'
+import { loginUser } from '../redux/reducers/auth'
 
 const SignUp = () => {
-  const [filledFirstName, setFilledFirstName] = React.useState(false)
-  const [filledLastName, setfilledLastName] = React.useState(false)
-  const [filledEmail, setFilledEmail] = React.useState(false)
-  const [filledPassword, setFilledPassword] = React.useState(false)
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const [firstName, setFirstName] = React.useState(null)
+  const [lastName, setLastName] = React.useState(null)
+  const [email, setEmail] = React.useState(null)
+  const [password, setPassword] = React.useState(null)
   const [eyePassword, setEyePassword] = React.useState(true)
-  const checkFirstNameValue = (value) => {
-    if (value) {
-      setFilledFirstName(true)
-    } else {
-      setFilledFirstName(false)
-    }
+
+  const cb = () => {
+    router.push('/phone-number')
   }
-  const checkLastNameValue = (value) => {
-    if (value) {
-      setfilledLastName(true)
-    } else {
-      setfilledLastName(false)
-    }
-  }
-  const checkEmailValue = (value) => {
-    if (value) {
-      setFilledEmail(true)
-    } else {
-      setFilledEmail(false)
-    }
-  }
-  const checkPasswordValue = (value) => {
-    if (value) {
-      setFilledPassword(true)
-    } else {
-      setFilledPassword(false)
+
+  const register = async (e) => {
+    if (e && e.preventDefault) { e.preventDefault(); }
+    try {
+      const {data} = await http().post('/auth/register', {firstName, lastName, email, password})
+      const token = data?.results?.token
+      dispatch(loginUser({token}))
+      cb()
+    } catch(error) {
+      console.log(error)
     }
   }
 
@@ -54,7 +48,7 @@ const SignUp = () => {
       </div>
 
       {/* Right */}
-      <div className="flex-[45%] bg-blue-50 md:pl-16 md:pr-36 md:py-10 overflow-y-scroll h-screen">
+      <div className="flex-[45%] bg-orange-50 md:pl-16 md:pr-36 md:py-10 overflow-y-scroll h-screen">
         <div className="md:hidden text-center p-16">
           <h1 className="font-bold text-4xl text-primary">FazzPay</h1>
         </div>
@@ -67,26 +61,26 @@ const SignUp = () => {
           <h2 className="font-bold text-xl mb-5">Start Accessing Banking Needs With All Devices and All Platforms With 30.000+ Users</h2>
           <p>Transfering money is eassier than ever, you can access FazzPay wherever you are. Desktop, laptop, mobile phone? we cover all of that for you!</p>
         </div>
-        <form>
-          <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${filledFirstName ? ' border-primary' : ''}`}>
-            <User className={filledFirstName ? 'text-primary' : 'text-slate-300'} />
-            <input onChange={(e)=> checkFirstNameValue(e.target.value)} type='text' name='firstName' placeholder='Enter your firtsname' className="flex-1 bg-transparent focus:outline-none"/>
+        <form onSubmit={register}>
+          <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${firstName ? ' border-primary' : ''}`}>
+            <User className={firstName ? 'text-primary' : 'text-slate-300'} />
+            <input onChange={(e)=> setFirstName(e.target.value)} type='text' name='firstName' placeholder='Enter your firtsname' className="flex-1 bg-transparent focus:outline-none"/>
           </div>
-          <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${filledLastName ? ' border-primary' : ''}`}>
-            <User className={filledLastName ? 'text-primary' : 'text-slate-300'} />
-            <input onChange={(e)=> checkLastNameValue(e.target.value)} type='text' name='lastName' placeholder='Enter your lastsname' className="flex-1 bg-transparent focus:outline-none"/>
+          <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${lastName ? ' border-primary' : ''}`}>
+            <User className={lastName ? 'text-primary' : 'text-slate-300'} />
+            <input onChange={(e)=> setLastName(e.target.value)} type='text' name='lastName' placeholder='Enter your lastsname' className="flex-1 bg-transparent focus:outline-none"/>
           </div>
-          <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${filledEmail ? ' border-primary' : ''}`}>
-            <Mail className={filledEmail ? 'text-primary' : 'text-slate-300'} />
-            <input onChange={(e)=> checkEmailValue(e.target.value)} type='text' name='email' placeholder='Enter your email' className="flex-1 bg-transparent focus:outline-none"/>
+          <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${email ? ' border-primary' : ''}`}>
+            <Mail className={email ? 'text-primary' : 'text-slate-300'} />
+            <input onChange={(e)=> setEmail(e.target.value)} type='text' name='email' placeholder='Enter your email' className="flex-1 bg-transparent focus:outline-none"/>
           </div>
-          <div className={`flex gap-5 mb-16 pb-3 border-b-2 ${filledPassword ? ' border-primary' : ''}`}>
-            <Lock className={filledPassword ? 'text-primary' : 'text-slate-300'}  />
-            <input onChange={(e)=> checkPasswordValue(e.target.value)} type={eyePassword ? 'password' : 'text'} name='password' placeholder='Enter your password' className="flex-1 bg-transparent focus:outline-none"/>
-            {eyePassword ? <Eye onClick={() => setEyePassword(false)} className={filledPassword ? 'text-primary' : 'text-slate-300'}  /> : <EyeOff onClick={() => setEyePassword(true)} className={filledPassword ? 'text-primary' : 'text-slate-300'}  />}
+          <div className={`flex gap-5 mb-16 pb-3 border-b-2 ${password ? ' border-primary' : ''}`}>
+            <Lock className={password ? 'text-primary' : 'text-slate-300'}  />
+            <input onChange={(e)=> setPassword(e.target.value)} type={eyePassword ? 'password' : 'text'} name='password' placeholder='Enter your password' className="flex-1 bg-transparent focus:outline-none"/>
+            {eyePassword ? <Eye onClick={() => setEyePassword(false)} className={password ? 'text-primary' : 'text-slate-300'}  /> : <EyeOff onClick={() => setEyePassword(true)} className={password ? 'text-primary' : 'text-slate-300'}  />}
           </div>
           <div className="flex justify-center items-center w-full h-8 mb-10">
-            <button disabled={!filledEmail || !filledPassword || !filledFirstName || !filledLastName} className={`w-full ${filledEmail && filledPassword ? ' bg-primary' : ' bg-slate-300'} ${filledEmail && filledPassword ? ' text-white' : ' text-secondary'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm text-white`}>Sign Up</button>
+            <button disabled={!email || !password || !firstName || !lastName} className={`w-full ${email && password ? ' bg-primary' : ' bg-slate-300'} ${email && password ? ' text-white' : ' text-secondary'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm text-white`}>Sign Up</button>
           </div>
         </form>
         <div className="text-center">

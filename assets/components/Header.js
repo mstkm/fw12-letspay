@@ -1,10 +1,32 @@
+import React from 'react'
 import Image from 'next/image'
 import { Bell } from 'react-feather'
 import User from '../images/user.png'
 import { useRouter } from 'next/router'
+import http from '../../helper/http'
 
-const Header = () => {
+const Header = (token) => {
   const router = useRouter()
+  const userToken = token?.token
+  console.log()
+  const [user, setUser] = React.useState({})
+  React.useEffect(()=> {
+    getUser().then((data)=> {
+      setUser(data)
+    })
+  }, [])
+
+  const getUser = async () => {
+    try {
+      const {data} = await http(userToken).get('/profile')
+      setUser(data?.results)
+      return data?.results
+    } catch (error) {
+      console.log(error?.response?.data?.message)
+    }
+  }
+  const fullName = `${user?.firstName} ${user?.lastName}`
+
 
   return(
     <section className="hidden md:flex items-center bg-primary md:bg-white rounded-b-3xl drop-shadow-md font-primary px-5 md:px-28 py-8">
@@ -15,8 +37,8 @@ const Header = () => {
         <Image src={User} className='w-8' alt='photo-profile'/>
       </div>
       <div>
-        <h5 className='font-bold'>Robert Chandler</h5>
-        <p>+62 8139 3877 7946</p>
+        <h5 className='font-bold'>{fullName}</h5>
+        <p>{user?.phoneNumber}</p>
       </div>
       <div className="ml-8">
         <Bell className="text-white md:text-secondary"/>

@@ -5,9 +5,42 @@ import Link from "next/link"
 import Header from "../assets/components/Header"
 import Footer from "../assets/components/Footer"
 import { useRouter } from "next/router"
+import {useSelector, useDispatch} from 'react-redux'
+import { logoutUser } from "../redux/reducers/auth"
+import jwt_decode from "jwt-decode"
+import http from "../helper/http"
+import React from "react"
+
 
 const Home = () => {
   const router = useRouter()
+  const dispatch = useDispatch()
+  const token = useSelector((state) => state?.auth?.token?.token)
+  if (token === null) {
+    router.push('login')
+  }
+
+  // Get User
+  const [user, setUser] = React.useState({})
+  React.useEffect(()=> {
+    getUser().then((data)=> {
+      setUser(data)
+    })
+  }, [])
+
+  const getUser = async () => {
+    try {
+      const {data} = await http(token).get('/profile')
+      return data?.results
+    } catch (error) {
+      console.log(error?.response?.data?.message)
+    }
+  }
+
+  const logout = () => {
+    dispatch(logoutUser())
+    router.push('/login')
+  }
 
   return(
     <div className="bg-orange-100">
@@ -15,7 +48,7 @@ const Home = () => {
       <title>Home | Fazzpay</title>
     </Head>
 
-    <Header />
+    <Header token={token} />
     <section className="md:hidden flex items-center bg-primary md:bg-white rounded-b-3xl drop-shadow-md font-primary px-5 md:px-32 py-8">
       <div className="md:hidden mr-3 bg-slate-300 p-2 rounded">
         <Image src={require('../assets/images/user.png')} className='w-8' alt='photo-profile'/>
@@ -51,7 +84,7 @@ const Home = () => {
           </div>
         </div>
         <div>
-          <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer">
+          <div onClick={logout} className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer">
             <LogOut />
             <p>Logout</p>
           </div>
@@ -63,7 +96,7 @@ const Home = () => {
           <div className="flex-1 text-white">
             <p>Balance</p>
             <p className="text-4xl font-bold py-2">Rp120.000</p>
-            <p>+62 813-9387-7946</p>
+            <p>{user.phoneNumber}</p>
           </div>
           <div className="flex flex-col gap-3">
             <div onClick={() => router.push('/transfer')} className="h-10 w-32 flex items-center justify-center  cursor-pointer">
