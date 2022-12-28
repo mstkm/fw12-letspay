@@ -22,7 +22,7 @@ const Header = (token) => {
       setUser(data?.results)
       return data?.results
     } catch (error) {
-      console.log(error?.response?.data?.message)
+      console.log(error)
     }
   }
   const fullName = `${user?.firstName} ${user?.lastName}`
