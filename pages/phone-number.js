@@ -11,6 +11,7 @@ const PhoneNumber = () => {
   const router = useRouter()
   const token = useSelector((state) => state?.auth?.token?.token)
   const [newPhoneNumber, setNewPhoneNumber] = React.useState(null)
+  const [errorMessage, setErrorMessage] = React.useState(false)
 
   // Update phone number
   const createPhoneNumber = async (e) => {
@@ -21,6 +22,7 @@ const PhoneNumber = () => {
       return data?.results
     } catch (error) {
       console.log(error?.response?.data?.message)
+      setErrorMessage(true)
     }
   }
 
@@ -53,6 +55,7 @@ const PhoneNumber = () => {
           <p>Add at least one phone number for the transfer ID so you can start transfering your money to another user.</p>
         </div>
         <form onSubmit={createPhoneNumber} className='flex flex-col items-center'>
+          {errorMessage && <p className="text-red-500">Phone number already exists</p>}
         <div className={`flex items-center gap-5 border-b-2 ${newPhoneNumber?.length ? 'border-primary' : ''} pb-2`}>
           <div>
             <Phone className={`${newPhoneNumber?.length ? 'text-primary' : ''}`}/>
