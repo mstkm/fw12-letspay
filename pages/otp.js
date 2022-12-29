@@ -29,7 +29,7 @@ const Otp = () => {
       </div>
 
       {/* Right */}
-      <div className="flex-[45%] flex flex-col justify-center h-screen bg-blue-50 md:pl-16 md:pr-36 md:py-10">
+      <div className="flex-[45%] flex flex-col justify-center h-screen bg-orange-50 md:pl-16 md:pr-36 md:py-10">
         <div className="md:hidden text-center p-16">
           <h1 className="font-bold text-4xl text-primary">LetsPay</h1>
         </div>
@@ -59,7 +59,7 @@ const Otp = () => {
           <div className="flex justify-center items-center w-full h-8 mb-10">
             {confirm ?
             <button className='w-full text-white bg-primary font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm'>Confirm</button> :
-            <button disabled className='w-full bg-slate-300 font-bold py-3 border rounded-xl'>Confirm</button>}
+            <button disabled className='w-full bg-gray-200 text-gray-300 font-bold py-3 border rounded-xl'>Confirm</button>}
           </div>
         </form>
         </div>

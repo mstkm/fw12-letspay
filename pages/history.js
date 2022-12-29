@@ -2,11 +2,12 @@ import React from 'react'
 import Head from "next/head"
 import Image from "next/image"
 import { useRouter } from "next/router"
-import Header from "../assets/components/Header"
-import Footer from "../assets/components/Footer"
+import Header from "../components/Header"
+import Footer from "../components/Footer"
 import { ArrowDown, ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, ChevronLeft, ChevronRight } from "react-feather"
 import { useSelector } from "react-redux"
 import http from '../helper/http'
+import withAuth from '../components/hoc/withAuth'
 
 const History = () => {
   const router = useRouter()
@@ -121,8 +122,8 @@ const History = () => {
                   {transaction.sendername === fullName ? <p className="text-sm">Transfer</p> : false}
               </div>
               <div className="flex-2">
-                {transaction.sendername === ' ' ? <p className="text-green-500 font-bold">Rp{new Intl.NumberFormat('en-DE').format(transaction.amount)}</p> : false}
-                {transaction.sendername === fullName ? <p className="text-red-500 font-bold">-{new Intl.NumberFormat('en-DE').format(transaction.amount)}</p> : false}
+                {transaction.sendername === ' ' ? <p className="text-green-500 font-bold">+Rp{new Intl.NumberFormat('en-DE').format(transaction.amount)}</p> : false}
+                {transaction.sendername === fullName ? <p className="text-red-500 font-bold">-Rp{new Intl.NumberFormat('en-DE').format(transaction.amount)}</p> : false}
               </div>
             </div>
           )
@@ -224,4 +225,4 @@ const History = () => {
   )
 }
 
-export default History
+export default withAuth(History)

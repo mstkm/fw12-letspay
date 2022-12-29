@@ -1,11 +1,12 @@
 import React from 'react'
 import Head from "next/head"
 import { useRouter } from "next/router"
-import Header from "../assets/components/Header"
-import Footer from "../assets/components/Footer"
+import Header from "../components/Header"
+import Footer from "../components/Footer"
 import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, X } from "react-feather"
 import { useSelector } from 'react-redux'
 import http from '../helper/http'
+import withAuth from '../components/hoc/withAuth'
 
 const TopUp = () => {
   const router = useRouter()
@@ -22,12 +23,15 @@ const TopUp = () => {
       setMessage(response?.data?.message)
       setAlertSuccessTopup(true)
       setTimeout(() => {
-        router.replace('/home')
-      }, 5000)
+        router.push('/home')
+      }, 3000)
     } catch(error) {
       console.log(error)
     }
   }
+
+  // Mobile: Show Input Top Up
+  const [inputTopup, setInputTopup] = React.useState(false)
 
   return(
     <div className="bg-orange-100 relative">
@@ -82,6 +86,7 @@ const TopUp = () => {
         </div>
       </div>
 
+      {/* Mobile: Top Up Steps */}
       <div className="flex-[70%] md:flex flex-col gap-5 md:bg-white md:shadow rounded-xl p-5">
         <div className="flex flex-col gap-5">
           <div className='mb-5'>
@@ -152,12 +157,14 @@ const TopUp = () => {
             <p>You can see your money in Zwallet within 3 hours.</p>
           </div>
         </div>
-
+        <div onClick={() => setInputTopup(true)} className='flex justify-center items-center mb-3 md:mb-0'>
+          <button className='bg-primary w-full h-12 rounded text-white font-bold active:border-2'>Top Up</button>
+        </div>
       </div>
     </section>
 
     {/* Top Up */}
-    <section className='hidden md:block font-primary absolute top-0 h-full w-screen bg-slate-300/80'>
+    <section className={`${inputTopup ? 'block' : 'hidden'} md:block font-primary absolute top-0 h-full w-screen bg-slate-300/80`}>
       <div className='sticky bg-white w-[90%] md:w-[30%] p-8 rounded-xl left-6 inset-y-1/4 md:inset-x-1/3 md:inset-y-1/4'>
         {alertSuccessTopup && <p className='text-center text-green-500'>{message}</p>}
         <div className='relative'>
@@ -172,7 +179,7 @@ const TopUp = () => {
             <input onChange={(e)=> setAmount(Number(e.target.value)) & setAlertSuccessTopup(false)} type='number' name='top-up' className='border-b-2 focus:outline-none text-center'/>
           </div>
         </div>
-        <div className="hidden md:flex justify-end">
+        <div className="flex justify-end">
           <div className="flex justify-center items-center bg-primary rounded-xl w-32 h-10 active:border-2 cursor-pointer">
             <button onClick={topUp} className="text-white font-bold">Submit</button>
           </div>
@@ -185,4 +192,4 @@ const TopUp = () => {
   )
 }
 
-export default TopUp
+export default withAuth(TopUp)

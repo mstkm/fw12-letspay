@@ -2,16 +2,16 @@ import Head from "next/head"
 import Image from "next/image"
 import { Bell, Grid, ArrowUp, Plus, User, LogOut, ArrowDown } from "react-feather"
 import Link from "next/link"
-import Header from "../assets/components/Header"
-import Footer from "../assets/components/Footer"
+import Header from '../components/Header'
+import Footer from "../components/Footer"
 import { useRouter } from "next/router"
 import {useSelector, useDispatch} from 'react-redux'
 import { logoutUser } from "../redux/reducers/auth"
 import { transferLogout } from "../redux/reducers/transfer"
-import jwt_decode from "jwt-decode"
 import http from "../helper/http"
 import React from "react"
-import withAuth from "../assets/components/hoc/withAuth"
+import withAuth from "../components/hoc/withAuth"
+import ListNotifications from "../components/ListNotifications"
 
 
 const Home = () => {
@@ -46,6 +46,17 @@ const Home = () => {
     setTransactions(response?.data?.results)
   }
 
+  // Show Notification
+  const [showNotification, setShowNotification] = React.useState(false)
+  const showNotificationHandle = () => {
+    if (showNotification === false) {
+      setShowNotification(true)
+    } else {
+      setShowNotification(false)
+    }
+  }
+
+
   const logout = () => {
     dispatch(logoutUser())
     dispatch(transferLogout())
@@ -53,7 +64,7 @@ const Home = () => {
   }
 
   return(
-    <div className="bg-orange-100 relative">
+    <div className="bg-orange-100 relative h-screen md:h-full">
     <Head>
       <title>Home | LetsPay</title>
     </Head>
@@ -67,9 +78,15 @@ const Home = () => {
         <p className="text-sm text-slate-500">Balance</p>
         <h5 className="font-bold text-lg text-white md:text-secondary">Rp120.000</h5>
       </div>
-      <div className="ml-8 md:hidden">
+      <div onClick={showNotificationHandle} className="ml-8 md:hidden">
         <Bell className="text-white md:text-secondary"/>
       </div>
+      {showNotification ?
+      <div className="absolute px-5 right-0 top-24">
+      <div className="flex flex-col gap-2 bg-white p-3 rounded shadow">
+        <ListNotifications />
+      </div>
+    </div> : false}
     </section>
 
     <section className="flex gap-5 font-primary md:px-28 md:py-10 text-secondary">
@@ -175,8 +192,8 @@ const Home = () => {
                       {transaction.sendername === fullName ? <p className="text-sm">Transfer</p> : false}
                     </div>
                     <div className="flex-2">
-                      {transaction.sendername === ' ' ? <p className="text-green-500 font-bold">Rp{new Intl.NumberFormat('en-DE').format(transaction.amount)}</p> : false}
-                      {transaction.sendername === fullName ? <p className="text-red-500 font-bold">-{new Intl.NumberFormat('en-DE').format(transaction.amount)}</p> : false}
+                      {transaction.sendername === ' ' ? <p className="text-green-500 font-bold">+Rp{new Intl.NumberFormat('en-DE').format(transaction.amount)}</p> : false}
+                      {transaction.sendername === fullName ? <p className="text-red-500 font-bold">-Rp{new Intl.NumberFormat('en-DE').format(transaction.amount)}</p> : false}
                     </div>
                   </div>
                 )

@@ -2,11 +2,12 @@ import React from 'react'
 import Head from "next/head"
 import Image from "next/image"
 import { useRouter } from "next/router"
-import Header from "../assets/components/Header"
-import Footer from "../assets/components/Footer"
+import Header from "../components/Header"
+import Footer from "../components/Footer"
 import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Edit2, ArrowRight } from "react-feather"
 import { useSelector } from 'react-redux'
 import http from '../helper/http'
+import withAuth from '../components/hoc/withAuth'
 
 const Profile = () => {
   const token = useSelector((state) => state?.auth?.token?.token)
@@ -119,4 +120,4 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export default withAuth(Profile)

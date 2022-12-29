@@ -46,7 +46,6 @@ const SignUp = () => {
 
   const register = async (value) => {
     try {
-      console.log(value)
       const {data} = await http().post('/auth/register', value)
       const token = data?.results?.token
       dispatch(loginUser({token}))

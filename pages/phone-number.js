@@ -55,8 +55,8 @@ const PhoneNumber = () => {
           <p>Add at least one phone number for the transfer ID so you can start transfering your money to another user.</p>
         </div>
         <form onSubmit={createPhoneNumber} className='flex flex-col items-center'>
-          {errorMessage && <p className="text-red-500">Phone number already exists</p>}
-        <div className={`flex items-center gap-5 border-b-2 ${newPhoneNumber?.length ? 'border-primary' : ''} pb-2`}>
+          {errorMessage && <p className="text-red-500 pt-2">Phone number already exists</p>}
+          <div className={`flex items-center gap-5 border-b-2 ${newPhoneNumber?.length ? 'border-primary' : ''} pb-2`}>
           <div>
             <Phone className={`${newPhoneNumber?.length ? 'text-primary' : ''}`}/>
           </div>
@@ -64,13 +64,13 @@ const PhoneNumber = () => {
             <select className='appearance-none bg-transparent focus:outline-none font-bold'>
               <option>+62</option>
             </select>
-            <input onChange={(e) => setNewPhoneNumber('0'+e.target.value)} type='number' name='phoneNumber' placeholder='Enter your phone number' className='pl-3 py-10 bg-transparent focus:outline-none'/>
+            <input onChange={(e) => setNewPhoneNumber('0'+e.target.value) & setErrorMessage(false)} type='number' name='phoneNumber' placeholder='Enter your phone number' className='pl-3 py-10 bg-transparent focus:outline-none'/>
           </div>
           </div>
           <div className="flex justify-center items-center w-full h-8 mb-10">
-            {(newPhoneNumber?.length) ?
+            {(newPhoneNumber?.length > 10) ?
             <button className='w-full text-white bg-primary font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm'>Confirm</button> :
-            <button disabled className='w-full bg-slate-300 font-bold py-3 border rounded-xl'>Next</button>}
+            <button disabled className='w-full bg-gray-200 text-gray-300 font-bold py-3 border rounded-xl'>Confirm</button>}
           </div>
         </form>
         </div>

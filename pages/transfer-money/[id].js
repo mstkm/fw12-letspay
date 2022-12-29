@@ -2,13 +2,14 @@ import React from 'react'
 import Head from 'next/head'
 import Image from "next/image"
 import { useRouter } from "next/router"
-import Header from '../../assets/components/Header'
-import Footer from "../../assets/components/Footer"
+import Header from '../../components/Header'
+import Footer from "../../components/Footer"
 import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Edit2 } from "react-feather"
 import UserPNG from '../../assets/images/user.png'
 import { useSelector, useDispatch } from 'react-redux'
 import {transfer} from '../../redux/reducers/transfer'
 import http from '../../helper/http'
+import CurrencyInput from 'react-currency-input-field'
 
 const TransferMoney = () => {
   const router = useRouter()
@@ -117,6 +118,7 @@ const TransferMoney = () => {
         </div>
       </div>
 
+    {/* Transfer */}
       <div className="flex-[70%] md:flex flex-col gap-8 md:bg-white md:shadow rounded-xl p-5">
         <div className="hidden md:flex flex-col gap-5">
           <div className="flex-1">
@@ -138,7 +140,18 @@ const TransferMoney = () => {
         <div className="relative flex flex-col items-center gap-5 md:py-10 mb-10 md:mb-0">
           {alertAmount && <p className='absolute top-0 text-red-500'>The amount is out of bounds</p>}
           <div>
-            <input onChange={(e) => setAmount(e.target.value) & setAlertAmount(false)} type='number' name='amount' placeholder='0.00' className="text-center bg-transparent text-primary text-3xl font-bold focus:outline-none "/>
+          <CurrencyInput
+            id="input-example"
+            name="input-name"
+            placeholder="0.00"
+            decimalSeparator=','
+            groupSeparator='.'
+            defaultValue=''
+            decimalsLimit={2}
+            onValueChange={(value, name) => setAmount(Number(value))}
+            className="text-center bg-transparent text-primary text-3xl font-bold focus:outline-none"
+          />;
+            {/* <input onChange={(e) => setAmount(e.target.value) & setAlertAmount(false)} type='number' name='amount' placeholder='0.00' className="text-center bg-transparent text-primary text-3xl font-bold focus:outline-none "/> */}
           </div>
           <p className="font-bold py-5">Rp{new Intl.NumberFormat('en-DE').format(user?.balance)} Available</p>
           <div className={`relative border-b-2 ${notes?.length ? 'border-primary' : ''} py-2`}>

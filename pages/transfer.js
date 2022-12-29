@@ -2,11 +2,12 @@ import React from 'react'
 import Head from "next/head"
 import Image from "next/image"
 import { useRouter } from "next/router"
-import Header from "../assets/components/Header"
-import Footer from "../assets/components/Footer"
+import Header from "../components/Header"
+import Footer from "../components/Footer"
 import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Search, ChevronRight, ChevronLeft } from "react-feather"
 import { useSelector } from 'react-redux'
 import http from '../helper/http'
+import withAuth from '../components/hoc/withAuth'
 
 const Transfer = () => {
   const router = useRouter()
@@ -85,14 +86,14 @@ const Transfer = () => {
         </div>
       </div>
 
-      <div className="flex-[70%] md:flex flex-col gap-5 md:bg-white md:shadow rounded-xl md:p-5">
+      <div className="flex-[70%] md:flex flex-col gap-3 md:bg-white md:shadow rounded-xl md:p-5">
         <div className="flex flex-col gap-5">
           <div className="hidden md:block flex-1">
             <h3 className="font-bold">Search Receiver</h3>
           </div>
           <div className='px-5 mb-5 md:hidden'>
             <h3 className='font-bold'>Contacts</h3>
-            <p className='text-sm'>17 Contacts Found</p>
+            {/* <p className='text-sm'>17 Contacts Found</p> */}
           </div>
           <div className="relative hidden md:block">
             <Search className="absolute top-3 left-3" />
@@ -110,7 +111,7 @@ const Transfer = () => {
             </div>
           </div>)
         })}
-        <div className='flex justify-center gap-5 items-center'>
+        <div className='flex justify-center gap-5 py-5 items-center'>
           <div onClick={prevPage} className='flex justify-center items-center text-white bg-primary rounded shadow w-8 h-8 cursor-pointer active:border-2'><ChevronLeft /></div>
           <div>
             <p className='font-bold'>{page}</p>
@@ -125,4 +126,4 @@ const Transfer = () => {
   )
 }
 
-export default Transfer
+export default withAuth(Transfer)

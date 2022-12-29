@@ -12,7 +12,6 @@ const Pin = () => {
   const router = useRouter()
   const token = useSelector((state) => state?.auth?.token?.token)
   const {id: userId} = jwt_decode(token)
-  console.log(userId)
   const [newPin, setNewPin] = React.useState(null)
   const [confirmSubmit, setConfirmSubmit] = React.useState(true)
 
@@ -74,7 +73,7 @@ const Pin = () => {
           <div className="flex justify-center items-center w-full h-8 mb-10">
             {newPin?.length === 6 ?
             <button className='w-full text-white bg-primary font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm'>Confirm</button> :
-            <button disabled className='w-full bg-slate-300 font-bold py-3 border rounded-xl'>Confirm</button>}
+            <button disabled className='w-full bg-gray-200 text-gray-300 font-bold py-3 border rounded-xl'>Confirm</button>}
           </div>
         </form>
         </div>

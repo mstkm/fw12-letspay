@@ -1,11 +1,12 @@
 import React from 'react'
 import Head from "next/head"
 import { useRouter } from "next/router"
-import Header from "../assets/components/Header"
-import Footer from "../assets/components/Footer"
+import Header from "../components/Header"
+import Footer from "../components/Footer"
 import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut } from "react-feather"
 import http from '../helper/http'
 import { useSelector } from 'react-redux'
+import withAuth from '../components/hoc/withAuth'
 
 const PersonalInformation = () => {
   const router = useRouter()
@@ -101,4 +102,4 @@ const PersonalInformation = () => {
   )
 }
 
-export default PersonalInformation
+export default withAuth(PersonalInformation)

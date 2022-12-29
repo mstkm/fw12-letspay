@@ -1,12 +1,13 @@
 import React from 'react'
 import Head from "next/head"
 import { useRouter } from "next/router"
-import Header from "../assets/components/Header"
-import Footer from "../assets/components/Footer"
+import Header from "../components/Header"
+import Footer from "../components/Footer"
 import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut } from "react-feather"
 import PinInput from 'react-pin-input'
 import { useSelector } from 'react-redux'
 import http from '../helper/http'
+import withAuth from '../components/hoc/withAuth'
 
 const ChangeNewPIN = () => {
   const router = useRouter()
@@ -89,7 +90,7 @@ const ChangeNewPIN = () => {
           <div className='flex-1 flex justify-center w-full py-5'>
             {(pin.length === 6) ?
             <button type='submit' className='bg-primary md:w-2/4 w-full h-12 text-white font-bold rounded-xl active:border-2'>Change PIN</button> :
-            <button type='submit' disabled className='bg-slate-400 md:w-2/4 w-full h-12 font-bold rounded-xl'>Change PIN</button>}
+            <button type='submit' disabled className='bg-gray-200 text-gray-300 md:w-2/4 w-full h-12 font-bold rounded-xl'>Change PIN</button>}
           </div>
           {alertSuccess &&
             <div className='text-center absolute bottom-0'>
@@ -109,4 +110,4 @@ const ChangeNewPIN = () => {
   )
 }
 
-export default ChangeNewPIN
+export default withAuth(ChangeNewPIN)

@@ -1,12 +1,12 @@
 import React from 'react'
 import Head from "next/head"
 import { useRouter } from "next/router"
-import Header from "../assets/components/Header"
-import Footer from "../assets/components/Footer"
-import Link from 'next/link'
+import Header from "../components/Header"
+import Footer from "../components/Footer"
 import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Phone } from "react-feather"
 import { useSelector } from 'react-redux'
 import http from '../helper/http'
+import withAuth from '../components/hoc/withAuth'
 
 const UpdatePhoneNumber = () => {
   const router = useRouter()
@@ -91,9 +91,9 @@ const UpdatePhoneNumber = () => {
             </div>
           </div>
           <div className='flex-1 flex flex-col items-center gap-3 w-full py-5'>
-            {phoneNumber.length ?
+            {phoneNumber?.length ?
             <button type='submit' className='bg-primary md:w-2/4 w-full h-12 text-white font-bold rounded-xl active:border-2'>Edit Phone Number</button> :
-            <button type='submit' disabled className='bg-slate-400 md:w-2/4 w-full h-12 font-bold rounded-xl'>Edit Phone Number</button>}
+            <button type='submit' disabled className='bg-gray-200 text-gray-300 md:w-2/4 w-full h-12 font-bold rounded-xl'>Edit Phone Number</button>}
             {alertEditPhoneNumber &&
             <div className='text-center absolute bottom-0'>
               <p className='text-green-500'>{user?.data?.message}</p>
@@ -109,4 +109,4 @@ const UpdatePhoneNumber = () => {
   )
 }
 
-export default UpdatePhoneNumber
+export default withAuth(UpdatePhoneNumber)

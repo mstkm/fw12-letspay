@@ -1,12 +1,13 @@
 import React from 'react'
 import Head from "next/head"
 import { useRouter } from "next/router"
-import Header from "../assets/components/Header"
-import Footer from "../assets/components/Footer"
+import Header from "../components/Header"
+import Footer from "../components/Footer"
 import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut } from "react-feather"
 import PinInput from 'react-pin-input'
 import { useSelector } from 'react-redux'
 import http from '../helper/http'
+import withAuth from '../components/hoc/withAuth'
 
 const ChangePIN = () => {
   const router = useRouter()
@@ -16,19 +17,24 @@ const ChangePIN = () => {
   const [errorMessage, setErrorMessage] = React.useState(false)
 
   // Get User
-  const getUser = async (e) => {
-    if (e && e.preventDefault) { e.preventDefault(); }
+  React.useEffect(() => {
+    getUser()
+  }, [])
+  const getUser = async () => {
     try {
-      console.log(user?.pin === pin)
       const response = await http(token).get('/profile')
       setUser(response?.data?.results)
-      if (user?.pin === pin) {
-        router.push('/change-new-pin')
-      } else {
-        setErrorMessage(true)
-      }
     } catch(error) {
       console.log(error)
+    }
+  }
+
+  const confirmPIN = (e) => {
+    e.preventDefault()
+    if (user?.pin === pin) {
+      router.push('/change-new-pin')
+    } else {
+      setErrorMessage(true)
     }
   }
 
@@ -75,13 +81,13 @@ const ChangePIN = () => {
           <h3 className='font-bold'>Change PIN</h3>
         </div>
         <p>Enter your current 6 digits LetsPay PIN below to continue to the next steps.</p>
-        <form onSubmit={getUser} className='flex relative flex-col items-center gap-8 py-10'>
+        <form onSubmit={confirmPIN} className='flex relative flex-col items-center gap-8 py-10'>
           {errorMessage ? <p className='text-red-500'>Wrong PIN</p> : false}
           <PinInput
               length={6}
               name='pin'
               initialValue=""
-              onChange={(value, index) => setPin(value)}
+              onChange={(value, index) => setPin(value) & setErrorMessage(false)}
               type="numeric"
               inputMode="number"
               style={{}}
@@ -94,7 +100,7 @@ const ChangePIN = () => {
           <div className='flex-1 flex justify-center w-full py-5'>
             {(pin?.length === 6) ?
             <button type='submit' className='bg-primary md:w-2/4 w-full h-12 text-white font-bold rounded-xl active:border-2'>Continue</button> :
-            <button type='submit' disabled className='bg-slate-400 md:w-2/4 w-full h-12 font-bold rounded-xl'>Continue</button>}
+            <button type='submit' disabled className='bg-gray-200 text-gray-300 md:w-2/4 w-full h-12 font-bold rounded-xl'>Continue</button>}
           </div>
         </form>
       </div>
@@ -105,4 +111,4 @@ const ChangePIN = () => {
   )
 }
 
-export default ChangePIN
+export default withAuth(ChangePIN)

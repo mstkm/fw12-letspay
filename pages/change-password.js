@@ -1,11 +1,12 @@
 import React from 'react'
 import Head from "next/head"
 import { useRouter } from "next/router"
-import Header from "../assets/components/Header"
-import Footer from "../assets/components/Footer"
+import Header from "../components/Header"
+import Footer from "../components/Footer"
 import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Lock, Eye, EyeOff } from "react-feather"
 import { useSelector } from 'react-redux'
 import http from '../helper/http'
+import withAuth from '../components/hoc/withAuth'
 
 const ChangePassword = () => {
   const router = useRouter()
@@ -96,13 +97,13 @@ const ChangePassword = () => {
           <div className={`flex border-b-2 md:w-2/4 w-full pb-2 ${repeatNewPassword ? 'border-primary' : ''}`}>
             <Lock className={`${repeatNewPassword ? 'text-primary' : ''}`}/>
             <input onChange={(e) => setRepeatNewPassword(e.target.value) & setAlerFailed(false) & setAlerSuccess(false)} type={showReapeatNewPassword ? 'text' : 'password'} name='repeatNewPassword' placeholder='Repeat password' className='flex-1 px-3 focus:outline-none bg-transparent'/>
-            {showReapeatNewPassword ? <EyeOff onClick={() => setShowReapeatNewPassword(false)} className={`cursor-pointer ${repeatNewPassword ? 'text-primary' : ''}`} /> : <Eye onClick={() => setShowReapeatNewPassword(true)} className={`cursor-pointer ${password ? 'text-primary' : ''}`} />}
+            {showReapeatNewPassword ? <EyeOff onClick={() => setShowReapeatNewPassword(false)} className={`cursor-pointer ${repeatNewPassword ? 'text-primary' : ''}`} /> : <Eye onClick={() => setShowReapeatNewPassword(true)} className={`cursor-pointer ${repeatNewPassword ? 'text-primary' : ''}`} />}
           </div>
           <div className='flex-1 flex justify-center w-full py-5'>
             {password.length && newPassword.length && repeatNewPassword.length ?
             <button className='bg-primary md:w-2/4 w-full h-12 text-white font-bold rounded-xl active:border-2'>Change Password</button>
             :
-            <button disabled className='bg-slate-400 md:w-2/4 w-full h-12 font-bold rounded-xl'>Change Password</button>}
+            <button disabled className='bg-gray-200 text-gray-300 md:w-2/4 w-full h-12 font-bold rounded-xl'>Change Password</button>}
             {alertSuccess &&
             <div className='text-center absolute bottom-0'>
               <p className='text-green-500'>{message}</p>
@@ -122,4 +123,4 @@ const ChangePassword = () => {
   )
 }
 
-export default ChangePassword
+export default withAuth(ChangePassword)

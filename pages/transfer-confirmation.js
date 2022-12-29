@@ -2,13 +2,14 @@ import React from 'react'
 import Head from "next/head"
 import Image from "next/image"
 import { useRouter } from "next/router"
-import Header from "../assets/components/Header"
-import Footer from "../assets/components/Footer"
+import Header from "../components/Header"
+import Footer from "../components/Footer"
 import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Search, X } from "react-feather"
 import PinInput from "react-pin-input"
 import { useSelector, useDispatch } from 'react-redux'
 import http from '../helper/http'
 import {transfer} from '../redux/reducers/transfer'
+import withAuth from '../components/hoc/withAuth'
 
 const Confirmation = () => {
   const router = useRouter()
@@ -58,8 +59,8 @@ const Confirmation = () => {
   // Transfer
   const [messageError, setMessageError] = React.useState('')
   const transferTo = async () => {
-    dispatch(transfer({amount, notes, recipientId, date, time}))
     try {
+      dispatch(transfer({amount, notes, recipientId, date, time}))
       const response = await http(token).post('/transactions/transfer', {amount, notes, recipientId, pin})
       router.push('/transfer-status')
       return response
@@ -216,4 +217,4 @@ const Confirmation = () => {
   )
 }
 
-export default Confirmation
+export default withAuth(Confirmation)
