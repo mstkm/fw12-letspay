@@ -18,9 +18,6 @@ const Home = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const token = useSelector((state) => state?.auth?.token?.token)
-  if (token === null) {
-    router.push('login')
-  }
 
   // Get User
   const [user, setUser] = React.useState({})

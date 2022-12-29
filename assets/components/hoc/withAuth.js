@@ -11,7 +11,9 @@ const withAuth = (Components) => {
         router.replace('/login')
       }
     }, [token])
-    return <Components {...props} />
+    if(token) {
+      return <Components {...props} />
+    }
   }
 }
 
