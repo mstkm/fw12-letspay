@@ -13,10 +13,12 @@ const UpdatePhoneNumber = () => {
   const token = useSelector((state) => state?.auth?.token?.token)
   const [phoneNumber, setPhoneNumber] = React.useState('')
   const [alertEditPhoneNumber, setAlertEditPhoneNumber] = React.useState(false)
+  const [alertErrorPhoneNumber, setAlertErrorPhoneNumber] = React.useState(false)
 
   // Update phone number
   const [user, setUser] = React.useState.apply({})
-  React.useEffect(() => {
+  React.useEffect((update) => {
+    update()
     updatePhoneNumber().then((response) => {
       setUser(response)
     })
@@ -29,9 +31,11 @@ const UpdatePhoneNumber = () => {
       if (phoneNumber) {
         setAlertEditPhoneNumber(true)
       }
+      setUser(response)
       return response
     } catch(error) {
       console.log(error)
+      setAlertErrorPhoneNumber(true)
     }
   }
 
@@ -79,6 +83,7 @@ const UpdatePhoneNumber = () => {
         </div>
         <p>Add at least one phone number for the transfer ID so you can start transfering your money to another user.</p>
         <form onSubmit={updatePhoneNumber} className='relative flex flex-col items-center gap-8 py-10'>
+          {alertErrorPhoneNumber ? <p className='absolute top-0 text-red-500'>Phone number already exist</p> : false}
           <div className={`flex items-center gap-5 border-b-2 ${phoneNumber.length ? 'border-primary' : ''} pb-2`}>
             <div>
               <Phone className={`${phoneNumber.length ? 'text-primary' : ''}`}/>
@@ -87,7 +92,7 @@ const UpdatePhoneNumber = () => {
               <select className='appearance-none bg-transparent focus:outline-none font-bold'>
                 <option>+62</option>
               </select>
-              <input onChange={(e) => setPhoneNumber('0'+e.target.value) & setAlertEditPhoneNumber(false)} type='text' name='phoneNumber' placeholder='Enter your phone number' className='pl-3 bg-transparent focus:outline-none'/>
+              <input onChange={(e) => setPhoneNumber('0'+e.target.value) & setAlertErrorPhoneNumber(false)} type='text' name='phoneNumber' placeholder='Enter your phone number' className='pl-3 bg-transparent focus:outline-none'/>
             </div>
           </div>
           <div className='flex-1 flex flex-col items-center gap-3 w-full py-5'>
