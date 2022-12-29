@@ -31,7 +31,7 @@ const ChangeNewPIN = () => {
   return(
     <div className="bg-orange-100">
     <Head>
-      <title>Change PIN | FazzPay</title>
+      <title>Change PIN | LetsPay</title>
     </Head>
 
     <Header token={token} />
@@ -70,7 +70,7 @@ const ChangeNewPIN = () => {
           <ArrowLeft onClick={() => router.push('/profile')} className='md:hidden'/>
           <h3 className='font-bold'>Change PIN</h3>
         </div>
-        <p>Type your new 6 digits security PIN to use in Fazzpay.</p>
+        <p>Type your new 6 digits security PIN to use in LetsPay.</p>
         <form onSubmit={updatePIN} className='flex relative flex-col items-center gap-8 py-10'>
           <PinInput
               length={6}

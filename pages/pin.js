@@ -31,31 +31,31 @@ const Pin = () => {
   return(
     <>
     <Head>
-      <title>Create PIN | FazzPay</title>
+      <title>Create PIN | LetsPay</title>
     </Head>
     <div className="flex font-primary">
       {/* Left */}
       <div className="hidden md:block flex-[55%] bg-[url('../assets/images/authbackground.png')] h-screen px-28 py-5">
-        <h1 className="font-bold text-4xl text-white mb-10">FazzPay</h1>
+        <h1 className="font-bold text-4xl text-white mb-10">LetsPay</h1>
         <Image src={require('../assets/images/doublebanner.png')} alt='banner' className='w-3/5 mb-5'/>
         <h2 className="font-bold text-xl text-white mb-5">App that Covering Banking Needs.</h2>
-        <p className="text-white text-sm">FazzPay is an application that focussing in banking needs for all users in the world. Always updated and always following world trends. 5000+ users registered in FazzPay everyday with worldwide users coverage.</p>
+        <p className="text-white text-sm">LetsPay is an application that focussing in banking needs for all users in the world. Always updated and always following world trends. 5000+ users registered in LetsPay everyday with worldwide users coverage.</p>
       </div>
 
       {/* Right */}
       <div className="flex-[45%] flex flex-col justify-center h-screen bg-orange-50 md:pl-16 md:pr-36 md:py-10">
         <div className="md:hidden text-center p-16">
-          <h1 className="font-bold text-4xl text-primary">FazzPay</h1>
+          <h1 className="font-bold text-4xl text-primary">LetsPay</h1>
         </div>
         {confirmSubmit ?
         <div className="bg-white md:bg-transparent p-10 md:p-0 border-none rounded-t-3xl">
         <div className="md:hidden text-center mb-10">
           <h3 className="font-bold text-xl mb-3">Create Security PIN</h3>
-          <p>Create a PIN that&apos;s contain 6 digits number for security purpose in FazzPay.</p>
+          <p>Create a PIN that&apos;s contain 6 digits number for security purpose in LetsPay.</p>
         </div>
         <div className="hidden md:block mb-10">
           <h2 className="font-bold text-xl mb-5">Secure Your Account, Your Wallet, and Your Data With 6 Digits PIN That You Created Yourself.</h2>
-          <p>Create 6 digits pin to secure all your money and your data in FazzPay app. Keep it secret and don&apos;t tell anyone about your FazzPay account password and the PIN.</p>
+          <p>Create 6 digits pin to secure all your money and your data in LetsPay app. Keep it secret and don&apos;t tell anyone about your LetsPay account password and the PIN.</p>
         </div>
         <form onSubmit={createPin} className='flex flex-col items-center'>
           <PinInput
@@ -86,11 +86,11 @@ const Pin = () => {
         </div>
         <div className="md:hidden text-center mb-10">
           <h3 className="font-bold text-xl mb-3">Your PIN Was Successfully Created.</h3>
-          <p>Your PIN was successfully created and you can now access all the features in FazzPay.</p>
+          <p>Your PIN was successfully created and you can now access all the features in LetsPay.</p>
         </div>
         <div className="hidden md:block mb-10">
           <h2 className="font-bold text-xl mb-5">Your PIN Was Successfully Created.</h2>
-          <p>Your PIN was successfully created and you can now access all the features in FazzPay.</p>
+          <p>Your PIN was successfully created and you can now access all the features in LetsPay.</p>
         </div>
         <div onClick={() => router.push('/home')} className="flex justify-center items-center w-full h-8 mb-10">
           <button className='w-full text-white bg-primary font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm'>Go To Dashboard</button>

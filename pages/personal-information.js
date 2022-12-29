@@ -32,7 +32,7 @@ const PersonalInformation = () => {
   return(
     <div className="bg-orange-100 relative">
     <Head>
-      <title>Personal Information | FazzPay</title>
+      <title>Personal Information | LetsPay</title>
     </Head>
 
     <Header token={token} />

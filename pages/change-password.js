@@ -42,7 +42,7 @@ const ChangePassword = () => {
   return(
     <div className="bg-orange-100">
     <Head>
-      <title>Change Password | FazzPay</title>
+      <title>Change Password | LetsPay</title>
     </Head>
 
     <Header token={token} />

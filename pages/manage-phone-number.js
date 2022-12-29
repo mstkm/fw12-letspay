@@ -38,7 +38,7 @@ const UpdatePhoneNumber = () => {
   return(
     <div className="bg-orange-100 h-full">
     <Head>
-      <title>Manage Phone Number | FazzPay</title>
+      <title>Manage Phone Number | LetsPay</title>
     </Head>
 
     <Header token={token} />

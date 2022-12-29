@@ -33,21 +33,21 @@ const CreateNewPassword = () => {
   return(
     <>
     <Head>
-      <title>Reset Password | FazzPay</title>
+      <title>Reset Password | LetsPay</title>
     </Head>
     <div className="flex font-primary">
       {/* Left */}
       <div className="hidden md:block flex-[55%] bg-[url('../assets/images/authbackground.png')] h-screen px-28 py-5">
-        <h1 className="font-bold text-4xl text-white mb-10">FazzPay</h1>
+        <h1 className="font-bold text-4xl text-white mb-10">LetsPay</h1>
         <Image src={require('../assets/images/doublebanner.png')} alt='banner' className='w-3/5 mb-5'/>
         <h2 className="font-bold text-xl text-white mb-5">App that Covering Banking Needs.</h2>
-        <p className="text-white text-sm">FazzPay is an application that focussing in banking needs for all users in the world. Always updated and always following world trends. 5000+ users registered in FazzPay everyday with worldwide users coverage.</p>
+        <p className="text-white text-sm">LetsPay is an application that focussing in banking needs for all users in the world. Always updated and always following world trends. 5000+ users registered in LetsPay everyday with worldwide users coverage.</p>
       </div>
 
       {/* Right */}
       <div className="flex-[45%] bg-orange-50 md:pl-16 md:pr-36 md:py-10">
         <div className="md:hidden text-center p-16">
-          <h1 className="font-bold text-4xl text-primary">FazzPay</h1>
+          <h1 className="font-bold text-4xl text-primary">LetsPay</h1>
         </div>
         <div className="bg-white md:flex flex-col md:h-full justify-center md:bg-transparent p-10 md:p-0 border-none rounded-t-3xl">
         <div className="md:hidden text-center mb-10">
@@ -56,7 +56,7 @@ const CreateNewPassword = () => {
         </div>
         <div className="hidden md:block mb-10">
           <h2 className="font-bold text-xl mb-5">Did You Forgot Your Password? Don&apos;t Worry, You Can Reset Your Password In a Minutes.</h2>
-          <p>Now you can create a new password for your FazzPay account. Type your password twice so we can confirm your new passsword.</p>
+          <p>Now you can create a new password for your LetsPay account. Type your password twice so we can confirm your new passsword.</p>
         </div>
 
         <form onSubmit={createNewPassword}>

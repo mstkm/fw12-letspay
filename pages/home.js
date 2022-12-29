@@ -7,9 +7,11 @@ import Footer from "../assets/components/Footer"
 import { useRouter } from "next/router"
 import {useSelector, useDispatch} from 'react-redux'
 import { logoutUser } from "../redux/reducers/auth"
+import { transferLogout } from "../redux/reducers/transfer"
 import jwt_decode from "jwt-decode"
 import http from "../helper/http"
 import React from "react"
+import withAuth from "../assets/components/hoc/withAuth"
 
 
 const Home = () => {
@@ -27,7 +29,6 @@ const Home = () => {
       setUser(data)
     })
   }, [])
-
   const getUser = async () => {
     try {
       const {data} = await http(token).get('/profile')
@@ -36,16 +37,28 @@ const Home = () => {
       console.log(error?.response?.data?.message)
     }
   }
+  const fullName = `${user.firstName} ${user.lastName}`
+
+  // Get List Transctions
+  const [transactions, setTransactions] = React.useState([])
+  React.useEffect(() => {
+    getTransactions()
+  }, [])
+  const getTransactions = async () => {
+    const response = await http(token).get('/transactions?page=1&limit=5')
+    setTransactions(response?.data?.results)
+  }
 
   const logout = () => {
     dispatch(logoutUser())
+    dispatch(transferLogout())
     router.push('/login')
   }
 
   return(
     <div className="bg-orange-100 relative">
     <Head>
-      <title>Home | Fazzpay</title>
+      <title>Home | LetsPay</title>
     </Head>
 
     <Header token={token} />
@@ -119,12 +132,12 @@ const Home = () => {
               <div className="flex-1">
                 <ArrowDown className="text-green-500" />
                 <p>Income</p>
-                <p className="font-bold">Rp2.120.000</p>
+                <p className="font-bold">No Available</p>
               </div>
               <div>
                 <ArrowUp className="text-red-500"/>
                 <p>Expense</p>
-                <p className="font-bold">Rp1.560.000</p>
+                <p className="font-bold">No Available</p>
               </div>
             </div>
             <div className="flex justify-center">
@@ -145,60 +158,32 @@ const Home = () => {
               </button>
             </div>
           </div>
+
+          {/* Transactions History */}
           <div className="md:flex-[45%] md:bg-white md:shadow md:p-5 md:rounded-xl">
             <div className="flex items-center mb-8 px-5 md:px-0 mt-5 md:mt-0">
               <p className="flex-1 font-bold">Transaction History</p>
               <Link href='/history' className="text-sm font-bold text-primary hover:underline">See All</Link>
             </div>
             <div className="flex flex-col gap-3 md:gap-5 pb-10 md:pb-0">
-              <div className="flex items-center bg-white shadow md:bg-transparent md:shadow-none p-5 md:p-0 rounded-lg md:rounded-0">
-                <div className="bg-slate-300 w-10 h-10 rounded mr-2">
-                  <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
-                </div>
-                <div className="flex-1">
-                  <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap">Samuel Suhi</p>
-                  <p className="text-sm">Accept</p>
-                </div>
-                <div className="flex-2">
-                  <p className="text-green-500 font-bold">+Rp50.000</p>
-                </div>
-              </div>
-              <div className="flex items-center bg-white shadow md:bg-transparent md:shadow-none p-5 md:p-0 rounded-lg md:rounded-0">
-                <div className="bg-slate-300 w-10 h-10 rounded mr-2">
-                  <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
-                </div>
-                <div className="flex-1">
-                  <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap">Netflix</p>
-                  <p className="text-sm">Transfer</p>
-                </div>
-                <div className="flex-2">
-                  <p className="text-red-500 font-bold">-Rp149.000</p>
-                </div>
-              </div>
-              <div className="flex items-center bg-white shadow md:bg-transparent md:shadow-none p-5 md:p-0 rounded-lg md:rounded-0">
-                <div className="bg-slate-300 w-10 h-10 rounded mr-2">
-                  <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
-                </div>
-                <div className="flex-1">
-                  <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap">Christine Marhaban Marhaban</p>
-                  <p className="text-sm">Accept</p>
-                </div>
-                <div className="flex-2">
-                  <p className="text-green-500 font-bold">+Rp150.000</p>
-                </div>
-              </div>
-              <div className="flex items-center bg-white shadow md:bg-transparent md:shadow-none p-5 md:p-0 rounded-lg md:rounded-0">
-                <div className="bg-slate-300 w-10 h-10 rounded mr-2">
-                  <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
-                </div>
-                <div className="flex-1">
-                  <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap">Netflix</p>
-                  <p className="text-sm">Transfer</p>
-                </div>
-                <div className="flex-2">
-                  <p className="text-red-500 font-bold">-Rp249.000</p>
-                </div>
-              </div>
+              {transactions?.map((transaction, index) => {
+                return(
+                  <div key={Number(index)} className="flex items-center bg-white shadow md:bg-transparent md:shadow-none p-5 md:p-0 rounded-lg md:rounded-0">
+                    <div className="bg-slate-300 w-10 h-10 rounded mr-2">
+                      <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap">{transaction.recipientname}</p>
+                      {transaction.sendername === ' ' ? <p className="text-sm">Top Up</p> : false}
+                      {transaction.sendername === fullName ? <p className="text-sm">Transfer</p> : false}
+                    </div>
+                    <div className="flex-2">
+                      {transaction.sendername === ' ' ? <p className="text-green-500 font-bold">Rp{new Intl.NumberFormat('en-DE').format(transaction.amount)}</p> : false}
+                      {transaction.sendername === fullName ? <p className="text-red-500 font-bold">-{new Intl.NumberFormat('en-DE').format(transaction.amount)}</p> : false}
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
@@ -211,4 +196,4 @@ const Home = () => {
 }
 
 
-export default Home
+export default withAuth(Home)

@@ -38,30 +38,30 @@ const Login = () => {
   return(
     <>
     <Head>
-      <title>Login | FazzPay</title>
+      <title>Login | LetsPay</title>
     </Head>
     <div className="flex font-primary">
       {/* Left */}
       <div className="hidden md:block flex-[55%] bg-[url('../assets/images/authbackground.png')] h-screen px-28 py-5">
-        <h1 className="font-bold text-4xl text-white mb-10">FazzPay</h1>
+        <h1 className="font-bold text-4xl text-white mb-10">LetsPay</h1>
         <Image src={require('../assets/images/doublebanner.png')} alt='banner' className='w-3/5 mb-5'/>
         <h2 className="font-bold text-xl text-white mb-5">App that Covering Banking Needs.</h2>
-        <p className="text-white text-sm">FazzPay is an application that focussing in banking needs for all users in the world. Always updated and always following world trends. 5000+ users registered in FazzPay everyday with worldwide users coverage.</p>
+        <p className="text-white text-sm">LetsPay is an application that focussing in banking needs for all users in the world. Always updated and always following world trends. 5000+ users registered in LetsPay everyday with worldwide users coverage.</p>
       </div>
 
       {/* Right */}
       <div className="flex-[45%] bg-orange-50 md:pl-16 md:pr-36 md:py-10">
         <div className="md:hidden text-center p-16">
-          <h1 className="font-bold text-4xl text-primary">FazzPay</h1>
+          <h1 className="font-bold text-4xl text-primary">LetsPay</h1>
         </div>
         <div className="bg-white md:bg-transparent p-10 md:p-0 border-none rounded-t-3xl">
         <div className="md:hidden text-center mb-10">
           <h3 className="font-bold text-xl mb-3">Login</h3>
-          <p>Login to your existing account to access all the features in FazzPay.</p>
+          <p>Login to your existing account to access all the features in LetsPay.</p>
         </div>
         <div className="hidden md:block mb-10">
           <h2 className="font-bold text-xl mb-5">Start Accessing Banking Needs With All Devices and All Platforms With 30.000+ Users</h2>
-          <p>Transfering money is eassier than ever, you can access FazzPay wherever you are. Desktop, laptop, mobile phone? we cover all of that for you!</p>
+          <p>Transfering money is eassier than ever, you can access LetsPay wherever you are. Desktop, laptop, mobile phone? we cover all of that for you!</p>
         </div>
         <form onSubmit={checkLogin}>
           <div className={`flex gap-5 mb-8 pb-3 border-b-2 ${email ? ' border-primary' : ''}`}>

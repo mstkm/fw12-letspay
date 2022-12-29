@@ -9,7 +9,7 @@ const authConfig = {
   storage
 }
 const transferConfig = {
-  key: 'auth',
+  key: 'transfer',
   storage
 }
 

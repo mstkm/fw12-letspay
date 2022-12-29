@@ -21,20 +21,16 @@ const Transfer = () => {
     })
   }, [page])
   const getRecipients = async () => {
-    const response = await http(token).get(`/transactions/recipient?page=1&limit=5`)
+    const response = await http(token).get(`/transactions/recipient?page=${page}&limit=5`)
     return response
   }
 
   // Pagination
   const nextPage = () => {
-    if (page <= (recipients.length / 5)) {
       setPage(page+1)
-    } else {
-      setPage(page)
-    }
   }
   const prevPage = () => {
-    if (page >= 1) {
+    if (page > 1) {
       setPage(page-1)
     } else {
       setPage(page)
@@ -44,7 +40,7 @@ const Transfer = () => {
   return(
     <div className="bg-orange-100">
     <Head>
-      <title>Transfer | FazzPay</title>
+      <title>Transfer | LetsPay</title>
     </Head>
 
     <Header token={token} />
@@ -104,7 +100,7 @@ const Transfer = () => {
           </div>
         </div>
         {recipients?.map((recipient, index) => {
-          return(<div key={Number(index)} onClick={() => router.push(`/transfer-money/${recipient?.id}`, recipient)} className="flex items-center bg-white shadow p-3 rounded cursor-pointer mb-3 md:mb-0">
+          return(<div key={Number(index)} onClick={() => router.push(`/transfer-money/${recipient?.id}`)} className="flex items-center bg-white shadow p-3 rounded cursor-pointer mb-3 md:mb-0">
             <div className="bg-slate-300 w-10 h-10 rounded mr-3">
               <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
             </div>
@@ -121,8 +117,6 @@ const Transfer = () => {
           </div>
           <div onClick={nextPage} className='flex justify-center items-center text-white bg-primary rounded shadow w-8 h-8 cursor-pointer active:border-2'><ChevronRight /></div>
         </div>
-
-
       </div>
     </section>
 

@@ -41,7 +41,7 @@ const Profile = () => {
   return(
     <div className="bg-orange-100 relative">
     <Head>
-      <title>Profile | FazzPay</title>
+      <title>Profile | LetsPay</title>
     </Head>
 
     <Header token={token} />

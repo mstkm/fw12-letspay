@@ -12,11 +12,11 @@ const TransferStatus = () => {
   const router = useRouter()
   const token = useSelector((state) => state?.auth?.token?.token)
   const [statusSuccess, seStatusSuccess] = React.useState(true)
-  const recipientId = useSelector((state) => state.transfer.recipientId)
-  const amount = useSelector((state) => state.transfer.amount)
-  const notes = useSelector((state) => state.transfer.notes)
-  const date = useSelector((state) => state.transfer.date)
-  const time = useSelector((state) => state.transfer.time)
+  const recipientId = useSelector((state) => state?.transfer?.recipientId)
+  const amount = useSelector((state) => state?.transfer?.amount)
+  const notes = useSelector((state) => state?.transfer?.notes)
+  const date = useSelector((state) => state?.transfer?.date)
+  const time = useSelector((state) => state?.transfer?.time)
 
     // Get Recipient
     const [recipient, setRecipient] = React.useState({})
@@ -49,7 +49,7 @@ const TransferStatus = () => {
   return(
     <div className="bg-orange-100 relative">
     <Head>
-      <title>Transfer Status | FazzPay</title>
+      <title>Transfer Status | LetsPay</title>
     </Head>
 
     <Header token={token} />

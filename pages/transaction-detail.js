@@ -7,7 +7,7 @@ const TransactionDetail = () => {
   return(
     <div className="bg-orange-100 md:hidden">
     <Head>
-      <title>Transaction Detail | FazzPay</title>
+      <title>Transaction Detail | LetsPay</title>
     </Head>
 
     {/* Header */}

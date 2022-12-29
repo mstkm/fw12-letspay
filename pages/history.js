@@ -1,20 +1,64 @@
+import React from 'react'
 import Head from "next/head"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import Header from "../assets/components/Header"
 import Footer from "../assets/components/Footer"
-import { ArrowDown, ArrowLeft, ArrowUp, Grid, Plus, User, LogOut } from "react-feather"
+import { ArrowDown, ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, ChevronLeft, ChevronRight } from "react-feather"
+import { useSelector } from "react-redux"
+import http from '../helper/http'
 
 const History = () => {
   const router = useRouter()
+  const token = useSelector((state) => state?.auth?.token?.token)
+  const [page, setPage] = React.useState(1)
+
+  // Get User
+  const [user, setUser] = React.useState({})
+  React.useEffect(()=> {
+    getUser().then((data)=> {
+      setUser(data)
+    })
+  }, [])
+  const getUser = async () => {
+    try {
+      const {data} = await http(token).get('/profile')
+      return data?.results
+    } catch (error) {
+      console.log(error?.response?.data?.message)
+    }
+  }
+  const fullName = `${user.firstName} ${user.lastName}`
+
+  // Get List Transctions
+  const [transactions, setTransactions] = React.useState([])
+  React.useEffect(() => {
+    getTransactions()
+  }, [page])
+  const getTransactions = async () => {
+    const response = await http(token).get(`/transactions?page=${page}&limit=5`)
+    setTransactions(response?.data?.results)
+  }
+
+  // Pagination
+  const nextPage = () => {
+    setPage(page+1)
+  }
+  const prevPage = () => {
+    if (page > 1) {
+      setPage(page-1)
+    } else {
+      setPage(page)
+    }
+  }
 
   return(
     <div className="bg-orange-100">
     <Head>
-      <title>History | FazzPay</title>
+      <title>History | LetsPay</title>
     </Head>
 
-    <Header />
+    <Header token={token}/>
 
     <section className="px-5 py-10 bg-primary rounded-b-3xl font-primary md:hidden">
       <div onClick={() => router.push('/home')} className="flex items-center gap-5 text-white">
@@ -35,11 +79,11 @@ const History = () => {
             <ArrowUp />
             <p>Transfer</p>
           </div>
-          <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
+          <div onClick={() => router.push('/top-up')} className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
             <Plus />
             <p>Top Up</p>
           </div>
-          <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
+          <div onClick={() => router.push('/profile')} className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer mb-8">
             <User />
             <p>Profile</p>
           </div>
@@ -65,77 +109,30 @@ const History = () => {
           </div>
         </div>
 
-        <div className="flex items-center md:bg-transparent p-5 md:p-0 rounded-lg md:rounded-0">
-          <div className="bg-slate-300 w-10 h-10 rounded mr-2">
-            <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
+        {transactions?.map((transaction, index) => {
+          return(
+            <div key={Number(index)} className="flex items-center md:bg-transparent p-5 md:p-0 rounded-lg md:rounded-0">
+              <div className="bg-slate-300 w-10 h-10 rounded mr-2">
+                <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
+              </div>
+              <div className="flex-1">
+                <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap">{transaction.recipientname}</p>
+                  {transaction.sendername === ' ' ? <p className="text-sm">Top Up</p> : false}
+                  {transaction.sendername === fullName ? <p className="text-sm">Transfer</p> : false}
+              </div>
+              <div className="flex-2">
+                {transaction.sendername === ' ' ? <p className="text-green-500 font-bold">Rp{new Intl.NumberFormat('en-DE').format(transaction.amount)}</p> : false}
+                {transaction.sendername === fullName ? <p className="text-red-500 font-bold">-{new Intl.NumberFormat('en-DE').format(transaction.amount)}</p> : false}
+              </div>
+            </div>
+          )
+        })}
+        <div className='flex justify-center gap-5 items-center'>
+          <div onClick={prevPage} className='flex justify-center items-center text-white bg-primary rounded shadow w-8 h-8 cursor-pointer active:border-2'><ChevronLeft /></div>
+          <div>
+            <p className='font-bold'>{page}</p>
           </div>
-          <div className="flex-1">
-            <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap">Samuel Suhi</p>
-            <p className="text-sm">Accept</p>
-          </div>
-          <div className="flex-2">
-            <p className="text-green-500 font-bold">+Rp50.000</p>
-          </div>
-        </div>
-        <div className="flex items-center md:bg-transparent p-5 md:p-0 rounded-lg md:rounded-0">
-          <div className="bg-slate-300 w-10 h-10 rounded mr-2">
-            <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
-          </div>
-          <div className="flex-1">
-            <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap">Netflix</p>
-            <p className="text-sm">Transfer</p>
-          </div>
-          <div className="flex-2">
-            <p className="text-red-500 font-bold">-Rp149.000</p>
-          </div>
-        </div>
-        <div className="flex items-center md:bg-transparent p-5 md:p-0 rounded-lg md:rounded-0">
-          <div className="bg-slate-300 w-10 h-10 rounded mr-2">
-            <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
-          </div>
-          <div className="flex-1">
-            <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap">Samuel Suhi</p>
-            <p className="text-sm">Accept</p>
-          </div>
-          <div className="flex-2">
-            <p className="text-green-500 font-bold">+Rp50.000</p>
-          </div>
-        </div>
-        <div className="flex items-center md:bg-transparent p-5 md:p-0 rounded-lg md:rounded-0">
-          <div className="bg-slate-300 w-10 h-10 rounded mr-2">
-            <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
-          </div>
-          <div className="flex-1">
-            <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap">Netflix</p>
-            <p className="text-sm">Transfer</p>
-          </div>
-          <div className="flex-2">
-            <p className="text-red-500 font-bold">-Rp149.000</p>
-          </div>
-        </div>
-        <div className="flex items-center md:bg-transparent p-5 md:p-0 rounded-lg md:rounded-0">
-          <div className="bg-slate-300 w-10 h-10 rounded mr-2">
-            <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
-          </div>
-          <div className="flex-1">
-            <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap">Samuel Suhi</p>
-            <p className="text-sm">Accept</p>
-          </div>
-          <div className="flex-2">
-            <p className="text-green-500 font-bold">+Rp50.000</p>
-          </div>
-        </div>
-        <div className="flex items-center md:bg-transparent p-5 md:p-0 rounded-lg md:rounded-0">
-          <div className="bg-slate-300 w-10 h-10 rounded mr-2">
-            <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
-          </div>
-          <div className="flex-1">
-            <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap">Netflix</p>
-            <p className="text-sm">Transfer</p>
-          </div>
-          <div className="flex-2">
-            <p className="text-red-500 font-bold">-Rp149.000</p>
-          </div>
+          <div onClick={nextPage} className='flex justify-center items-center text-white bg-primary rounded shadow w-8 h-8 cursor-pointer active:border-2'><ChevronRight /></div>
         </div>
       </div>
 

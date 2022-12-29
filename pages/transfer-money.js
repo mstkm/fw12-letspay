@@ -13,7 +13,7 @@ const TransferMoney = () => {
   return(
     <div className="bg-orange-100 h-full">
     <Head>
-      <title>Transfer | FazzPay</title>
+      <title>Transfer | LetsPay</title>
     </Head>
 
     <Header />

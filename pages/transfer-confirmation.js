@@ -13,10 +13,10 @@ import {transfer} from '../redux/reducers/transfer'
 const Confirmation = () => {
   const router = useRouter()
   const dispatch = useDispatch()
-  const token = useSelector((state) => state.auth.token.token)
-  const recipientId = useSelector((state) => state.transfer.recipientId)
-  const amount = useSelector((state) => state.transfer.amount)
-  const notes = useSelector((state) => state.transfer.notes)
+  const token = useSelector((state) => state?.auth?.token?.token)
+  const recipientId = useSelector((state) => state?.transfer?.recipientId)
+  const amount = useSelector((state) => state?.transfer?.amount)
+  const notes = useSelector((state) => state?.transfer?.notes)
   const [pin, setPin] = React.useState(null)
   const [showEnterPIN, setShowEnterPIN] = React.useState(false)
 
@@ -58,7 +58,7 @@ const Confirmation = () => {
   // Transfer
   const [messageError, setMessageError] = React.useState('')
   const transferTo = async () => {
-    dispatch(transfer({date, time}))
+    dispatch(transfer({amount, notes, recipientId, date, time}))
     try {
       const response = await http(token).post('/transactions/transfer', {amount, notes, recipientId, pin})
       router.push('/transfer-status')
@@ -72,7 +72,7 @@ const Confirmation = () => {
   return(
     <div className="bg-orange-100 relative">
     <Head>
-      <title>Confirmation | FazzPay</title>
+      <title>Confirmation | LetsPay</title>
     </Head>
 
     <Header token={token} />
