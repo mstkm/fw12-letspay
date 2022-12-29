@@ -106,7 +106,7 @@ const Transfer = () => {
             </div>
             <div className="flex-1">
               <p className="w-[115px] md:w-full text-ellipsis overflow-hidden whitespace-nowrap font-bold">{`${recipient?.firstName} ${recipient?.lastName}`}</p>
-              <p>+62 813-8492-9994</p>
+              <p>{recipient.phoneNumber}</p>
             </div>
           </div>)
         })}

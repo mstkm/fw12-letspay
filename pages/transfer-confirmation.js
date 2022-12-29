@@ -134,7 +134,7 @@ const Confirmation = () => {
           </div>
           <div className="flex-1">
             <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap font-bold">{`${recipient.firstName} ${recipient.lastName}`}</p>
-            <p>{recipient.phoneNumber ? recipient.phoneNumber : '-'}</p>
+            <p>{recipient.phoneNumber}</p>
           </div>
         </div>
         <div className='grid grid-cols-2 md:flex md:flex-col gap-5 p-5'>
