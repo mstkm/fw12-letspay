@@ -17,8 +17,7 @@ const UpdatePhoneNumber = () => {
 
   // Update phone number
   const [user, setUser] = React.useState.apply({})
-  React.useEffect((update) => {
-    update()
+  React.useEffect(() => {
     updatePhoneNumber().then((response) => {
       setUser(response)
     })
