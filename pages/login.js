@@ -7,6 +7,7 @@ import { useRouter } from "next/router"
 import http from "../helper/http"
 import { loginUser } from "../redux/reducers/auth"
 import {useDispatch} from 'react-redux'
+import authPrivate from '../components/hoc/authPrivate'
 
 const Login = () => {
   const router = useRouter()
@@ -91,4 +92,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default authPrivate(Login)

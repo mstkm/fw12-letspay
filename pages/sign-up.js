@@ -10,6 +10,7 @@ import { loginUser } from '../redux/reducers/auth'
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import YupPassword from 'yup-password'
+import authPrivate from '../components/hoc/authPrivate'
 YupPassword(Yup)
 
 const SignupSchema = Yup.object().shape({
@@ -134,4 +135,4 @@ const SignUp = () => {
   )
 }
 
-export default SignUp
+export default authPrivate(SignUp)

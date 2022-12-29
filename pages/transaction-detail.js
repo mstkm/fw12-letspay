@@ -2,6 +2,7 @@ import Image from "next/image"
 import Head from "next/head"
 import Link from "next/link"
 import { ArrowLeft, ArrowDown, ArrowUp } from "react-feather"
+import withAuth from "../components/hoc/withAuth"
 
 const TransactionDetail = () => {
   return(
@@ -108,4 +109,4 @@ const TransactionDetail = () => {
   )
 }
 
-export default TransactionDetail
+export default withAuth(TransactionDetail)

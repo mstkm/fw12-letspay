@@ -3,6 +3,7 @@ import Head from "next/head"
 import React from 'react'
 import {Lock, Eye, EyeOff } from 'react-feather'
 import { useRouter } from "next/router"
+import authPrivate from "../components/hoc/authPrivate"
 
 const CreateNewPassword = () => {
   const router = useRouter()
@@ -85,4 +86,4 @@ const CreateNewPassword = () => {
   )
 }
 
-export default CreateNewPassword
+export default authPrivate(CreateNewPassword)

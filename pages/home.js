@@ -22,29 +22,31 @@ const Home = () => {
   // Get User
   const [user, setUser] = React.useState({})
   React.useEffect(()=> {
+    const getUser = async () => {
+      try {
+        const {data} = await http(token).get('/profile')
+        return data?.results
+      } catch (error) {
+        console.log(error?.response?.data?.message)
+      }
+    }
     getUser().then((data)=> {
       setUser(data)
     })
-  }, [])
-  const getUser = async () => {
-    try {
-      const {data} = await http(token).get('/profile')
-      return data?.results
-    } catch (error) {
-      console.log(error?.response?.data?.message)
-    }
-  }
+  }, [setUser, token])
+
   const fullName = `${user.firstName} ${user.lastName}`
 
   // Get List Transctions
   const [transactions, setTransactions] = React.useState([])
   React.useEffect(() => {
+    const getTransactions = async () => {
+      const response = await http(token).get('/transactions?page=1&limit=5')
+      setTransactions(response?.data?.results)
+    }
     getTransactions()
-  }, [])
-  const getTransactions = async () => {
-    const response = await http(token).get('/transactions?page=1&limit=5')
-    setTransactions(response?.data?.results)
-  }
+  }, [token])
+
 
   // Show Notification
   const [showNotification, setShowNotification] = React.useState(false)

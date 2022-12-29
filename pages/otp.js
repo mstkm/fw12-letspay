@@ -2,7 +2,7 @@ import Image from "next/image"
 import Head from "next/head"
 import React from 'react'
 import PinInput from "react-pin-input"
-import { Check } from "react-feather"
+import authPrivate from '../components/hoc/authPrivate'
 
 const Otp = () => {
   const [otp, setOtp] = React.useState(null)
@@ -69,4 +69,4 @@ const Otp = () => {
   )
 }
 
-export default Otp
+export default authPrivate(Otp)

@@ -2,10 +2,10 @@ import Image from "next/image"
 import Head from "next/head"
 import React from 'react'
 import { Phone } from "react-feather"
-import { Check } from "react-feather"
 import {useSelector} from 'react-redux'
 import http from '../helper/http'
 import { useRouter } from "next/router"
+import authPrivate from '../components/hoc/authPrivate'
 
 const PhoneNumber = () => {
   const router = useRouter()
@@ -80,4 +80,4 @@ const PhoneNumber = () => {
   )
 }
 
-export default PhoneNumber
+export default authPrivate(PhoneNumber)

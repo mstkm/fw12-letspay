@@ -7,6 +7,7 @@ import {useSelector} from 'react-redux'
 import http from '../helper/http'
 import { useRouter } from "next/router"
 import jwt_decode from 'jwt-decode'
+import authPrivate from "../components/hoc/authPrivate"
 
 const Pin = () => {
   const router = useRouter()
@@ -101,4 +102,4 @@ const Pin = () => {
   )
 }
 
-export default Pin
+export default authPrivate(Pin)

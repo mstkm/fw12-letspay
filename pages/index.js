@@ -19,10 +19,6 @@ const LandingPage = () => {
   const token = useSelector((state) => state?.auth?.token?.token)
   const router = useRouter()
 
-  if (token) {
-    router.push('/home')
-  }
-
   return(
     <>
     <Head>
