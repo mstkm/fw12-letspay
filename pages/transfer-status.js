@@ -116,7 +116,7 @@ const TransferStatus = () => {
           </div>
           <div className="bg-white shadow rounded p-3">
             <p>Balance Left</p>
-            <p className="font-bold">Rp{new Intl.NumberFormat('en-DE').format(user.balance - amount)}</p>
+            <p className="font-bold">Rp{new Intl.NumberFormat('en-DE').format(user.balance)}</p>
           </div>
           <div className="hidden md:block bg-white shadow rounded p-3">
             <p>Date & Time</p>

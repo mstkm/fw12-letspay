@@ -13,15 +13,19 @@ const ChangePIN = () => {
   const token = useSelector((state) => state?.auth?.token?.token)
   const [pin, setPin] = React.useState(null)
   const [user, setUser] = React.useState({})
+  const [errorMessage, setErrorMessage] = React.useState(false)
 
   // Get User
   const getUser = async (e) => {
     if (e && e.preventDefault) { e.preventDefault(); }
     try {
+      console.log(user?.pin === pin)
       const response = await http(token).get('/profile')
       setUser(response?.data?.results)
       if (user?.pin === pin) {
         router.push('/change-new-pin')
+      } else {
+        setErrorMessage(true)
       }
     } catch(error) {
       console.log(error)
@@ -72,6 +76,7 @@ const ChangePIN = () => {
         </div>
         <p>Enter your current 6 digits LetsPay PIN below to continue to the next steps.</p>
         <form onSubmit={getUser} className='flex relative flex-col items-center gap-8 py-10'>
+          {errorMessage ? <p className='text-red-500'>Wrong PIN</p> : false}
           <PinInput
               length={6}
               name='pin'
