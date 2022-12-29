@@ -30,7 +30,7 @@ const LandingPage = () => {
     </Head>
     <div className="font-primary">
       {/* Navbar and Jumbotron */}
-      <div className="bg-blue-100 px-5 md:px-28 py-5">
+      <div className="bg-orange-100 px-5 md:px-28 py-5">
         {/* Navbar */}
         <div className="flex flex-col md:flex-row gap-3 items-center">
           <div className="flex-1">
@@ -87,7 +87,7 @@ const LandingPage = () => {
       </div>
 
       {/* About */}
-      <div className="bg-blue-100 flex flex-col justify-center items-center p-5 md:px-28 md:py-12 text-secondary">
+      <div className="bg-orange-100 flex flex-col justify-center items-center p-5 md:px-28 md:py-12 text-secondary">
         <h1 className="md:text-6xl font-bold text-center mb-3 md:mb-10"><span className="text-primary">About</span> the Application.</h1>
         <p className="text-sm md:text-lg md:w-7/12 text-center mb-3 md:mb-10">We have some great features from the application and it&apos;s totally free to use by all users around the world.</p>
         <div className='grid md:grid-cols-3 gap-3 md:gap-5'>
@@ -132,7 +132,7 @@ const LandingPage = () => {
       </div>
 
       {/* Testimony */}
-      <div className="bg-blue-100 flex flex-col justify-center items-center p-5 md:px-28 md:py-12 text-secondary">
+      <div className="bg-orange-100 flex flex-col justify-center items-center p-5 md:px-28 md:py-12 text-secondary">
         <h1 className="md:text-6xl font-bold text-center mb-3 md:mb-10">What Users are <span className="text-primary">Saying.</span></h1>
         <p className="text-sm md:text-lg md:w-7/12 text-center mb-3 md:mb-10">We have some great features from the application and it&apos;s totally free to use by all users around the world.</p>
         <div className='flex items-center gap-2 md:gap-5'>
