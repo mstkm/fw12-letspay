@@ -87,17 +87,17 @@ const LandingPage = () => {
         <h1 className="md:text-6xl font-bold text-center mb-3 md:mb-10"><span className="text-primary">About</span> the Application.</h1>
         <p className="text-sm md:text-lg md:w-7/12 text-center mb-3 md:mb-10">We have some great features from the application and it&apos;s totally free to use by all users around the world.</p>
         <div className='grid md:grid-cols-3 gap-3 md:gap-5'>
-          <div className='flex flex-col items-center justify-center border hover:bg-white hover:rounded-xl p-5 md:px-8 md:py-12'>
+          <div className='flex flex-col items-center justify-center hover:bg-white hover:rounded-xl p-5 md:px-8 md:py-12'>
             <div className='bg-slate-300 flex justify-center items-center w-12 h-12 rounded-full mb-3 md:mb-6'><Phone className='text-primary'/></div>
             <h3 className='md:text-xl font-bold mb-5 md:mb-12'>24/7 Support</h3>
             <p className='text-center text-sm md:text-base'>We have 24/7 contact support so you can contact us whenever you want and we will respond it.</p>
           </div>
-          <div className='flex flex-col items-center justify-center border hover:bg-white hover:rounded-xl p-5 md:px-8 md:py-12'>
+          <div className='flex flex-col items-center justify-center hover:bg-white hover:rounded-xl p-5 md:px-8 md:py-12'>
             <div className='bg-slate-300 flex justify-center items-center w-12 h-12 rounded-full mb-3 md:mb-6'><Lock className='text-primary'/></div>
             <h3 className='md:text-xl font-bold mb-5 md:mb-12'>Data Privacy</h3>
             <p className='text-center text-sm md:text-base'>We make sure your data is safe in our database and we will encrypt any data you submitted to us.</p>
           </div>
-          <div className='flex flex-col items-center justify-center border hover:bg-white hover:rounded-xl p-5 md:px-8 md:py-12'>
+          <div className='flex flex-col items-center justify-center hover:bg-white hover:rounded-xl p-5 md:px-8 md:py-12'>
             <div className='bg-slate-300 flex justify-center items-center w-12 h-12 rounded-full mb-3 md:mb-6'><Download className='text-primary'/></div>
             <h3 className='md:text-xl font-bold mb-5 md:mb-12'>Easy Download</h3>
             <p className='text-center text-sm md:text-base'>Zwallet is 100% totally free to use it&apos;s now available on Google Play Store and App Store.</p>
