@@ -12,6 +12,11 @@
     -moz-appearance: textfield;
   }
 }
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn {
+  text-transform: none;
+}
