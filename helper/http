@@ -6,7 +6,7 @@ const http = (token) => {
     headers.authorization = 'Bearer ' + token
   }
   const instance = axios.create({
-    baseURL: process.env.REACT_APP_BACKEND_URL || "https://68xkph-8888.preview.csb.app",
+    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
     headers
   })
   return instance
