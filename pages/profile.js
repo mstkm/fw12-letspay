@@ -11,6 +11,7 @@ import withAuth from '../components/hoc/withAuth'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { logoutUser as logoutUserAction} from '../redux/reducers/auth'
+import { Oval } from 'react-loader-spinner'
 
 const Profile = () => {
   const dispatch = useDispatch()
@@ -27,8 +28,8 @@ const Profile = () => {
 
   // Get user
   const [user, setUser] = React.useState({})
+  const [userPicture, setUserPicture] = React.useState(null)
   const fullName = `${user?.firstName} ${user?.lastName}`
-  console.log(user?.picture)
   React.useEffect(() => {
     getUser().then((data) => {
       setUser(data)
@@ -37,10 +38,54 @@ const Profile = () => {
   const getUser = async () => {
     try {
       const response = await http(token).get('/profile')
+      setUserPicture(response?.data?.results?.picture)
       return response?.data?.results
     } catch (error) {
       const errorMessage = error?.response?.data?.message
       console.log(errorMessage)
+    }
+  }
+
+  // Upload picture
+  const [showModal, setShowModal] = React.useState(false)
+  const [file, setFile] = React.useState(null)
+  const [loadingUpload, setLoadingUpload] = React.useState(false)
+  const [successUpload, setSuccessUpload] = React.useState(null)
+  const [failedUpload, setFailedUpload] = React.useState(null)
+  const choosePicture = (picture) => {
+    setFile(picture)
+    setSuccessUpload(null)
+    setFailedUpload(null)
+  }
+  const handleUploadPicture = async () => {
+    setLoadingUpload(true)
+    setSuccessUpload(null)
+    setFailedUpload(null)
+    if (file?.size < (5024 * 1024)) {
+      try {
+        const form = new FormData()
+        form.append('picture', file)
+        const response = await http(token).post('/profile', form)
+        console.log(response)
+        setUserPicture(response?.data?.results?.picture)
+        setLoadingUpload(false)
+        setSuccessUpload(response?.data?.message)
+        setTimeout(() => {
+          setSuccessUpload(false)
+          setShowModal(false)
+        }, 3000)
+        return response
+      } catch (error) {
+        console.log(error)
+        setLoadingUpload(false)
+        setFailedUpload(error?.response?.data?.message)
+      }
+    } else if (file) {
+      setLoadingUpload(false)
+      setFailedUpload('File too large. Max 5 MB.')
+    } else {
+      setLoadingUpload(false)
+      setFailedUpload('File not found, Choose file!')
     }
   }
 
@@ -55,11 +100,32 @@ const Profile = () => {
       <title>Profile | LetsPay</title>
     </Head>
 
-    <Header token={token} />
+    <Header picture={userPicture} />
 
-    {false && <div className='bg-black/50 z-10 fixed top-0 h-full w-full flex justify-center items-center'>
+    {showModal && <div className='bg-black/50 z-10 fixed top-0 h-full w-full flex justify-center items-center'>
       <div className='bg-white p-8 rounded-md'>
-        <input onChange={e => console.log(e.target.files[0])} type='file' accept='image/png, image/jpeg, image/jpg' className='file:btn file:bg-primary file:border-primary hover:file:bg-primary hover:file:border-primary file:normal-case' />
+        <input onChange={e => choosePicture(e.target.files[0])} type='file' accept='image/png, image/jpeg, image/jpg' className='file:btn file:bg-primary file:border-primary hover:file:bg-primary hover:file:border-primary file:normal-case' />
+        <div className='my-8 flex justify-center gap-5'>
+          <button onClick={() => setShowModal(false)} className='btn btn-sm'>Cancel</button>
+          <button onClick={handleUploadPicture} className='btn btn-sm bg-primary border-primary hover:bg-primary hover:border-primary'>Upload</button>
+        </div>
+        {loadingUpload &&
+        <div className='flex justify-center'>
+          <Oval
+            height={25}
+            wdivth={25}
+            color="#FF5F00"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+            ariaLabel='oval-loading'
+            secondaryColor="#fACEB6"
+            strokeWidth={5}
+            strokeWidthSecondary={5}
+          />
+        </div>}
+        {successUpload && <p className='text-center text-green-600'>{successUpload}</p>}
+        {failedUpload && <p className='text-center text-red-600'>{failedUpload}</p>}
       </div>
     </div>}
 
@@ -104,8 +170,8 @@ const Profile = () => {
         </div>
         <div className='flex flex-col items-center gap-5'>
           <div className='flex flex-col items-center'>
-            <Image src={user?.picture ? `https://68xkph-8888.preview.csb.app/upload/${user?.picture}` : require('../assets/images/user.png')} alt='profile' className='mb-2 rounded-full w-[100px] h-[100px]' width="100" height="150" />
-            <div className='flex gap-2 items-center cursor-pointer'>
+            <Image src={user?.picture ? `https://68xkph-8888.preview.csb.app/upload/${userPicture}` : require('../assets/images/user.png')} alt='profile' className='mb-2 rounded-full w-[100px] h-[100px]' width="100" height="150" />
+            <div onClick={() => setShowModal(true)} className='flex gap-2 items-center cursor-pointer'>
               <Edit2 className='w-3'/>
               <p className='text-sm'>Edit</p>
             </div>
