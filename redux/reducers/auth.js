@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import {loginAction} from '../actions/auth'
 
 const initialState = {
   token: null
@@ -10,16 +9,11 @@ const authReducer = createSlice({
   initialState,
   reducers: {
     loginUser: (state, {payload}) => {
-      state.token = payload
+      state.token = payload.token
     },
     logoutUser: (state, action) => {
       state.token = null
     }
-  },
-  extraReducers: (build) => {
-    // build.addCase(loginAction.fulfilled, (state, {payload}) => {
-    //   state.token = payload
-    // })
   }
 })
 

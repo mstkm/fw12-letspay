@@ -8,24 +8,34 @@ import PinInput from 'react-pin-input'
 import { useSelector } from 'react-redux'
 import http from '../helper/http'
 import withAuth from '../components/hoc/withAuth'
+import { Oval } from  'react-loader-spinner'
 
 const ChangeNewPIN = () => {
   const router = useRouter()
-  const token = useSelector((state) => state?.auth?.token?.token)
+  const token = useSelector((state) => state?.auth?.token)
   const [pin, setPin] = React.useState('')
   const [message, setMessage] =  React.useState('')
   const [alertSuccess, setAlertSuccess] = React.useState(false)
   const [alertFailed, setAlertFailed] = React.useState(false)
 
+  // Update PIN
+  const [loadingPIN, setLoadingPIN] = React.useState(false)
   const updatePIN = async (e) => {
     if (e && e.preventDefault) { e.preventDefault(); }
-    try {
-      const response = await http(token).post('/profile/change-pin', {newPin: pin})
-      setMessage(response?.data?.message)
-      setAlertSuccess(true)
-    } catch(error) {
-      setMessage(error?.response?.data?.message)
-      setAlertFailed(true)
+    if (pin) {
+      setLoadingPIN(true)
+      setAlertSuccess(false)
+      setAlertFailed(false)
+      try {
+        const response = await http(token).post('/profile/change-pin', {newPin: pin})
+        setLoadingPIN(false)
+        setMessage(response?.data?.message)
+        setAlertSuccess(true)
+      } catch(error) {
+        setLoadingPIN(false)
+        setMessage(error?.response?.data?.message)
+        setAlertFailed(true)
+      }
     }
   }
 
@@ -89,18 +99,33 @@ const ChangeNewPIN = () => {
             />
           <div className='flex-1 flex justify-center w-full py-5'>
             {(pin.length === 6) ?
-            <button type='submit' className='bg-primary md:w-2/4 w-full h-12 text-white font-bold rounded-xl active:border-2'>Change PIN</button> :
+            <button type='submit' className='btn bg-primary border-primary hover:bg-primary hover:border-primary md:w-2/4 w-full h-12 text-white font-bold rounded-xl'>Change PIN</button> :
             <button type='submit' disabled className='bg-gray-200 text-gray-300 md:w-2/4 w-full h-12 font-bold rounded-xl'>Change PIN</button>}
           </div>
           {alertSuccess &&
-            <div className='text-center absolute bottom-0'>
-              <p className='text-green-500'>{message}</p>
-              <p onClick={()=> router.push('/profile')} className='text-blue-500 hover:font-bold cursor-pointer'>Back to profile</p>
-            </div> }
-            {alertFailed &&
-            <div className='text-center absolute bottom-5'>
-              <p className='text-red-500'>{message}</p>
-            </div> }
+          <div className='text-center absolute bottom-0'>
+            <p className='text-green-500'>{message}</p>
+            <p onClick={()=> router.push('/profile')} className='text-blue-500 hover:font-bold cursor-pointer'>Back to profile</p>
+          </div> }
+          {alertFailed &&
+          <div className='text-center absolute bottom-5'>
+            <p className='text-red-500'>{message}</p>
+          </div> }
+          {loadingPIN &&
+            <div className='flex justify-center'>
+              <Oval
+                height={25}
+                wdivth={25}
+                color="#FF5F00"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+                ariaLabel='oval-loading'
+                secondaryColor="#fACEB6"
+                strokeWidth={5}
+                strokeWidthSecondary={5}
+              />
+            </div>}
         </form>
       </div>
     </section>

@@ -5,9 +5,10 @@ import React from 'react'
 import {Mail, Lock, Eye, EyeOff} from 'react-feather'
 import { useRouter } from "next/router"
 import http from "../helper/http"
-import { loginUser } from "../redux/reducers/auth"
+import { loginUser as loginUserAction } from "../redux/reducers/auth"
 import {useDispatch} from 'react-redux'
 import authPrivate from '../components/hoc/authPrivate'
+import { Oval } from  'react-loader-spinner'
 
 const Login = () => {
   const router = useRouter()
@@ -15,26 +16,32 @@ const Login = () => {
   const [email, setEmail] = React.useState(false)
   const [password, setPassword] = React.useState(false)
   const [eyePassword, setEyePassword] = React.useState(true)
-  const [errorMessage, setErrorMessage] = React.useState(null)
 
+  // Login
+  const [loadingLogin, setLoadingLogin] = React.useState(false)
+  const [successLoginMessage, setSuccessLoginMessage] = React.useState(null)
+  const [failedLoginMessage, setFailedLoginMessage] = React.useState(null)
   const cb = () => {
     router.push('/home')
   }
-
   const checkLogin = async (e) => {
     e.preventDefault()
+    setLoadingLogin(true)
+    setFailedLoginMessage(null)
+    setSuccessLoginMessage(null)
     try {
       const {data} = await http().post('/auth/login', {email, password})
       const token = data?.results?.token
-      dispatch(loginUser({token}))
+      dispatch(loginUserAction({token}))
+      setLoadingLogin(false)
+      setSuccessLoginMessage('Login success')
       cb()
     } catch (error) {
-      const errorMessage = error?.response?.data?.message
-      setErrorMessage(errorMessage)
+      console.log(error?.response?.data?.message)
+      setLoadingLogin(false)
+      setFailedLoginMessage(error?.response?.data?.message)
     }
   }
-
-  console.log(errorMessage)
 
   return(
     <>
@@ -80,9 +87,24 @@ const Login = () => {
             <p onClick={() => router.push('/reset-password')} className="cursor-pointer w-fit hover:font-bold">Forgot password?</p>
           </div>
           <div className="flex flex-col gap-3 justify-center items-center w-full h-8 mb-10">
-            <button disabled={!email || !password} className={`w-full ${email && password ? ' bg-primary' : ' bg-slate-300'} ${email && password ? ' text-white' : ' text-secondary'} font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm`}>Login</button>
-            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+            <button disabled={!email || !password} className={`btn w-full ${email && password ? ' bg-primary border-primary hover:bg-primary hover:border-primary' : ' bg-gray-200'} ${email && password ? ' text-white' : ' text-gray-300'} font-bold py-3 border rounded-xl`}>Login</button>
           </div>
+          {loadingLogin && <div className='mb-8 flex justify-center'>
+            <Oval
+              height={25}
+              wdivth={25}
+              color="#FF5F00"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+              ariaLabel='oval-loading'
+              secondaryColor="#fACEB6"
+              strokeWidth={5}
+              strokeWidthSecondary={5}
+            />
+          </div>}
+          {successLoginMessage && <p className='mb-8 text-center text-green-600'>{successLoginMessage}</p>}
+          {failedLoginMessage && <p className='mb-8 text-center text-red-600'>{failedLoginMessage}</p>}
         </form>
         <div className="text-center">
           <p>Don&apos;t have an account? Let&apos;s <Link href='/sign-up' className="text-primary cursor-pointer hover:font-bold">Sign Up</Link></p>

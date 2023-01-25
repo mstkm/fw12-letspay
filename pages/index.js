@@ -33,10 +33,10 @@ const LandingPage = () => {
             <h1 className="font-bold text-primary text-3xl">LetsPay</h1>
           </div>
           <Link href='/login' className="flex justify-center items-center w-28 h-8">
-            <button className="text-primary font-bold bg-white border-[1px] border-primary py-1 w-24 rounded-lg hover:bg-primary hover:text-white active:py-0 active:w-20 active:h-6 active:text-xs md:active:text-sm text-sm md:text-base">Login</button>
+            <button className="btn btn-sm text-primary font-bold bg-white border-[1px] border-primary py-1 w-24 rounded-lg hover:bg-primary hover:border-primary hover:text-white  text-sm md:text-base">Login</button>
           </Link>
           <Link href='/sign-up' className="flex justify-center items-center w-28 h-8">
-            <button className="text-primary font-bold bg-white border-[1px] border-primary py-1 w-24 rounded-lg hover:bg-primary hover:text-white active:py-0 active:w-20 active:h-6 active:text-xs md:active:text-sm text-sm md:text-base">Sign Up</button>
+            <button className="btn btn-sm text-primary font-bold bg-white border-[1px] border-primary py-1 w-24 rounded-lg hover:bg-primary hover:border-primary hover:text-white  text-sm md:text-base">Sign Up</button>
           </Link>
         </div>
 
@@ -48,9 +48,9 @@ const LandingPage = () => {
           <div className="flex-1 md:pr-10 text-secondary">
             <h1 className="font-bold md:text-6xl mb-5 md:mb-10">Awesome App For Saving <span className="text-primary">Time.</span></h1>
             <p className="mb-5 md:mb-10 text-sm md:text-lg">We bring you a mobile app for banking problems that oftenly wasting much of your times.</p>
-            <div className="flex items-center justify-center h-20 w-28">
-              <button className="text-white font-bold bg-primary border-[1px] border-primary py-2 w-28 rounded-lg hover:bg-primary hover:text-white active:py-1 active:w-24 active:text-xs md:active:text-sm md:mb-10 text-sm md:text-base">Try It Free</button>
-            </div>
+            <Link href='/sign-up' className="flex items-center justify-center h-20 w-28">
+              <button className="btn text-white font-bold bg-primary border-[1px] border-primary py-2 w-28 rounded-lg hover:bg-primary hover:border-primary hover:text-white  md:mb-10 text-sm md:text-base">Try It Free</button>
+            </Link>
             <p className="mb-5 text-sm md:text-lg">Available on</p>
             <div className="flex gap-10 items-center">
               <Image src={require('../assets/images/playstore.png')} alt='play store' className="w-5 md:w-10"/>

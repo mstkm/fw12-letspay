@@ -14,7 +14,7 @@ import CurrencyInput from 'react-currency-input-field'
 const TransferMoney = () => {
   const router = useRouter()
   const dispatch = useDispatch()
-  const token = useSelector((state) => state?.auth?.token?.token)
+  const token = useSelector((state) => state?.auth?.token)
   const [amount, setAmount] = React.useState('')
   const [notes, setNotes] = React.useState('')
   const recipientId = router.query['id']
@@ -150,8 +150,7 @@ const TransferMoney = () => {
             decimalsLimit={2}
             onValueChange={(value, name) => setAmount(Number(value))}
             className="text-center bg-transparent text-primary text-3xl font-bold focus:outline-none"
-          />;
-            {/* <input onChange={(e) => setAmount(e.target.value) & setAlertAmount(false)} type='number' name='amount' placeholder='0.00' className="text-center bg-transparent text-primary text-3xl font-bold focus:outline-none "/> */}
+          />
           </div>
           <p className="font-bold py-5">Rp{new Intl.NumberFormat('en-DE').format(user?.balance)} Available</p>
           <div className={`relative border-b-2 ${notes?.length ? 'border-primary' : ''} py-2`}>
@@ -161,7 +160,7 @@ const TransferMoney = () => {
         </div>
         <div className="flex justify-end">
           <div onClick={continueTransfer} className="flex justify-center items-center w-full md:w-32 h-12">
-            <button className="bg-primary w-full h-12 rounded-xl text-white font-bold active:text-sm active:w-9/12 active:h-10">Continue</button>
+            <button className="btn bg-primary border-primary hover:bg-primary hover:border-primary w-full h-12 rounded-xl text-white font-bold">Continue</button>
           </div>
         </div>
       </div>

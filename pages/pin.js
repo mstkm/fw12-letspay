@@ -8,23 +8,34 @@ import http from '../helper/http'
 import { useRouter } from "next/router"
 import jwt_decode from 'jwt-decode'
 import authPrivate from "../components/hoc/authPrivate"
+import { Oval } from  'react-loader-spinner'
 
 const Pin = () => {
   const router = useRouter()
-  const token = useSelector((state) => state?.auth?.token?.token)
+  const token = useSelector((state) => state?.auth?.token)
   const {id: userId} = jwt_decode(token)
   const [newPin, setNewPin] = React.useState(null)
   const [confirmSubmit, setConfirmSubmit] = React.useState(true)
 
   // Create PIN
+  const [loadingPIN, setLoadingPIN] = React.useState(false)
+  const [successPINMessage, setSuccessPINMessage] = React.useState(null)
+  const [failedPINMessage, setFailedPINMessage] = React.useState(null)
   const createPin = async (e) => {
     if (e && e.preventDefault) { e.preventDefault(); }
+    setLoadingPIN(true)
+    setFailedPINMessage(null)
+    setSuccessPINMessage(null)
     try {
       const {data} = await http(token).post('/auth/set-pin', {userId, pin: newPin})
+      setLoadingPIN(false)
+      setSuccessPINMessage('Create phone number success')
       setConfirmSubmit(false)
       return data?.results
     } catch (error) {
-      console.log(error)
+      console.log(error?.response?.data?.message)
+      setLoadingPIN(false)
+      setFailedPINMessage(error?.response?.data?.message)
     }
   }
 
@@ -75,9 +86,25 @@ const Pin = () => {
           />
           <div className="flex justify-center items-center w-full h-8 mb-10">
             {newPin?.length === 6 ?
-            <button className='w-full text-white bg-primary font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm'>Confirm</button> :
+            <button className='btn w-full text-white bg-primary border-primary hover:bg-primary hover:border-primary font-bold py-3 border rounded-xl'>Confirm</button> :
             <button disabled className='w-full bg-gray-200 text-gray-300 font-bold py-3 border rounded-xl'>Confirm</button>}
           </div>
+          {loadingPIN && <div className='mb-8 flex justify-center'>
+            <Oval
+              height={25}
+              wdivth={25}
+              color="#FF5F00"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+              ariaLabel='oval-loading'
+              secondaryColor="#fACEB6"
+              strokeWidth={5}
+              strokeWidthSecondary={5}
+            />
+          </div>}
+          {successPINMessage && <p className='mb-8 text-center text-green-600'>{successPINMessage}</p>}
+          {failedPINMessage && <p className='mb-8 text-center text-red-600'>{failedPINMessage}</p>}
         </form>
         </div>
         :

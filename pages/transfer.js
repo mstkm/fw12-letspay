@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react'
 import Head from "next/head"
 import Image from "next/image"
@@ -5,13 +6,18 @@ import { useRouter } from "next/router"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Search, ChevronRight, ChevronLeft } from "react-feather"
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import http from '../helper/http'
 import withAuth from '../components/hoc/withAuth'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+import { logoutUser } from "../redux/reducers/auth"
+import { transferLogout } from "../redux/reducers/transfer"
 
 const Transfer = () => {
+  const dispatch = useDispatch()
   const router = useRouter()
-  const token = useSelector((state) => state?.auth?.token?.token)
+  const token = useSelector((state) => state?.auth?.token)
 
   // Get Recipients
   const [recipients, setRecipients] = React.useState([])
@@ -22,8 +28,12 @@ const Transfer = () => {
     })
   }, [page])
   const getRecipients = async () => {
-    const response = await http(token).get(`/transactions/recipient?page=${page}&limit=5`)
-    return response
+    try {
+      const response = await http(token).get(`/transactions/recipient?page=${page}&limit=5`)
+      return response
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   // Pagination
@@ -36,6 +46,12 @@ const Transfer = () => {
     } else {
       setPage(page)
     }
+  }
+
+  // Logout
+  const logout = () => {
+    dispatch(logoutUser())
+    dispatch(transferLogout())
   }
 
   return(
@@ -78,7 +94,7 @@ const Transfer = () => {
             <p>Profile</p>
           </div>
         </div>
-        <div>
+        <div onClick={logout}>
           <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer">
             <LogOut />
             <p>Logout</p>
@@ -93,15 +109,19 @@ const Transfer = () => {
           </div>
           <div className='px-5 mb-5 md:hidden'>
             <h3 className='font-bold'>Contacts</h3>
-            {/* <p className='text-sm'>17 Contacts Found</p> */}
           </div>
           <div className="relative hidden md:block">
             <Search className="absolute top-3 left-3" />
             <input type='text' name='receiver' placeholder='Search receiver here' className="bg-slate-300 w-full h-12 rounded-xl p-2 focus:outline-none pl-12" />
           </div>
         </div>
+        {!recipients?.length &&
+        <div>
+          <Skeleton height={500} />
+        </div>}
         {recipients?.map((recipient, index) => {
-          return(<div key={Number(index)} onClick={() => router.push(`/transfer-money/${recipient?.id}`)} className="flex items-center bg-white shadow p-3 rounded cursor-pointer mb-3 md:mb-0">
+          return(
+          <div key={Number(index)} onClick={() => router.push(`/transfer-money/${recipient?.id}`)} className="flex items-center bg-white shadow p-3 rounded cursor-pointer mb-3 md:mb-0">
             <div className="bg-slate-300 w-10 h-10 rounded mr-3">
               <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
             </div>

@@ -7,26 +7,38 @@ import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, X } from "react-feather"
 import { useSelector } from 'react-redux'
 import http from '../helper/http'
 import withAuth from '../components/hoc/withAuth'
+import { Oval } from 'react-loader-spinner'
 
 const TopUp = () => {
   const router = useRouter()
-  const token = useSelector((state) => state?.auth?.token?.token)
-  const [message, setMessage] = React.useState('')
-  const [alertSuccessTopup, setAlertSuccessTopup] = React.useState(false)
+  const token = useSelector((state) => state?.auth?.token)
 
   // Top Up
   const [amount, setAmount] = React.useState(null)
-
+  const [loadingTopup, setLoadingTopup] = React.useState(false)
+  const [successTopup, setSuccessTopup] = React.useState(null)
+  const [failedTopup, setFailedTopup] = React.useState(null)
   const topUp = async () => {
-    try {
-      const response = await http(token).post('/transactions/topup', {amount})
-      setMessage(response?.data?.message)
-      setAlertSuccessTopup(true)
-      setTimeout(() => {
-        router.push('/home')
-      }, 3000)
-    } catch(error) {
-      console.log(error)
+    setLoadingTopup(true)
+    setSuccessTopup(null)
+    setFailedTopup(null)
+    if (amount) {
+      try {
+        const response = await http(token).post('/transactions/topup', {amount})
+        setLoadingTopup(false)
+        setSuccessTopup('Top up success.')
+        setTimeout(() => {
+          router.push('/home')
+        }, 3000)
+        return response
+      } catch(error) {
+        console.log(error)
+        setLoadingTopup(false)
+        setFailedTopup(error?.response?.data?.message)
+      }
+    } else {
+      setLoadingTopup(false)
+      setFailedTopup('Top up failed. Enter the amount.')
     }
   }
 
@@ -158,7 +170,7 @@ const TopUp = () => {
           </div>
         </div>
         <div onClick={() => setInputTopup(true)} className='flex justify-center items-center mb-3 md:mb-0'>
-          <button className='bg-primary w-full h-12 rounded text-white font-bold active:border-2'>Top Up</button>
+          <button className='btn bg-primary border-primary hover:bg-primary hover:border-primary w-full h-12 rounded text-white font-bold active:border-2'>Top Up</button>
         </div>
       </div>
     </section>
@@ -166,7 +178,6 @@ const TopUp = () => {
     {/* Top Up */}
     <section className={`${inputTopup ? 'block' : 'hidden'} md:block font-primary absolute top-0 h-full w-screen bg-slate-300/80`}>
       <div className='sticky bg-white w-[90%] md:w-[30%] p-8 rounded-xl left-6 inset-y-1/4 md:inset-x-1/3 md:inset-y-1/4'>
-        {alertSuccessTopup && <p className='text-center text-green-500'>{message}</p>}
         <div className='relative'>
           <p className='font-bold mb-5'>Topup</p>
           <p>Enter the amount of money, and click submit</p>
@@ -174,14 +185,31 @@ const TopUp = () => {
             <button><X /></button>
           </div>
         </div>
+        {loadingTopup &&
+        <div className='flex justify-center mt-10'>
+          <Oval
+            height={25}
+            wdivth={25}
+            color="#FF5F00"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+            ariaLabel='oval-loading'
+            secondaryColor="#fACEB6"
+            strokeWidth={5}
+            strokeWidthSecondary={5}
+          />
+        </div>}
+        {successTopup && <p className='mt-10 text-center text-green-600'>{successTopup}</p>}
+        {failedTopup && <p className='mt-10 text-center text-red-600'>{failedTopup}</p>}
         <div className='py-10'>
           <div className='border-2 rounded-lg pb-1 pt-2 text-center'>
-            <input onChange={(e)=> setAmount(Number(e.target.value)) & setAlertSuccessTopup(false)} type='number' name='top-up' className='border-b-2 focus:outline-none text-center'/>
+            <input onChange={(e)=> setAmount(Number(e.target.value))} type='number' name='top-up' className='border-b-2 focus:outline-none text-center'/>
           </div>
         </div>
         <div className="flex justify-end">
-          <div className="flex justify-center items-center bg-primary rounded-xl w-32 h-10 active:border-2 cursor-pointer">
-            <button onClick={topUp} className="text-white font-bold">Submit</button>
+          <div>
+            <button onClick={topUp} className="btn text-white flex justify-center items-center bg-primary border-primary hover:bg-primary hover:border-primary rounded-xl w-32 h-10 cursor-pointer font-bold">Submit</button>
           </div>
         </div>
       </div>

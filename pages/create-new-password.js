@@ -76,7 +76,7 @@ const CreateNewPassword = () => {
           <div className="flex justify-center items-center w-full h-8 mb-10">
           {!filledPassword || !filledConfirmPassword ?
           <button disabled className={`w-full bg-gray-200 text-gray-300 font-bold py-3 border rounded-xl`}>Reset Password</button> :
-          <button className={`w-full bg-primary text-white font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm`}>Reset Password</button>
+          <button className={`w-full btn bg-primary border-primary hover:bg-primary hover:border-primary text-white font-bold py-3 border rounded-xl`}>Reset Password</button>
           }
           </div>
         </form>

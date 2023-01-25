@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react'
 import Head from "next/head"
 import { useRouter } from "next/router"
@@ -7,10 +8,12 @@ import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut } from "react-feather"
 import http from '../helper/http'
 import { useSelector } from 'react-redux'
 import withAuth from '../components/hoc/withAuth'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const PersonalInformation = () => {
   const router = useRouter()
-  const token = useSelector((state) => state?.auth?.token?.token)
+  const token = useSelector((state) => state?.auth?.token)
 
   // Get user
   const [user, setUser] = React.useState({})
@@ -28,7 +31,6 @@ const PersonalInformation = () => {
       console.log(errorMessage)
     }
   }
-  const fullName = `${user.firstName} ${user.lastName}`
 
   return(
     <div className="bg-orange-100 relative">
@@ -68,6 +70,10 @@ const PersonalInformation = () => {
       </div>
 
       <div className="flex-[70%] flex flex-col gap-5 md:bg-white md:shadow rounded-xl p-8">
+        {!user?.firstName &&
+        <div>
+          <Skeleton height={480} />
+        </div>}
         <div className='flex gap-5'>
           <ArrowLeft onClick={() => router.push('/profile')} className='md:hidden'/>
           <h3 className='font-bold'>Personal Information</h3>
@@ -75,20 +81,20 @@ const PersonalInformation = () => {
         <p>We got your personal information from the sign up proccess. If you want to make changes on your information, contact our support.</p>
         <div className='bg-white shadow p-4 rounded'>
           <p className='mb-1'>First Name</p>
-          <p className='font-bold text-lg'>{user.firstName}</p>
+          <p className='font-bold text-lg'>{user?.firstName}</p>
         </div>
         <div className='bg-white shadow p-4 rounded'>
           <p className='mb-1'>Last Name</p>
-          <p className='font-bold text-lg'>{user.lastName}</p>
+          <p className='font-bold text-lg'>{user?.lastName}</p>
         </div>
         <div className='bg-white shadow p-4 rounded'>
           <p className='mb-1'>Verified E-mail</p>
-          <p className='font-bold text-lg'>{user.email}</p>
+          <p className='font-bold text-lg'>{user?.email}</p>
         </div>
         <div className='flex items-center bg-white shadow p-4 rounded'>
           <div className='flex-1'>
             <p className='mb-1'>Phone Number</p>
-            <p className='font-bold text-lg'>{user.phoneNumber}</p>
+            <p className='font-bold text-lg'>{user?.phoneNumber}</p>
           </div>
           <div>
             <p onClick={() => router.push('/manage-phone-number')} className='text-primary cursor-pointer font-bold active:font-medium'>Manage</p>

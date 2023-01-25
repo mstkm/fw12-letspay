@@ -7,34 +7,44 @@ import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Phone } from "react-feath
 import { useSelector } from 'react-redux'
 import http from '../helper/http'
 import withAuth from '../components/hoc/withAuth'
+import { Oval } from  'react-loader-spinner'
 
 const UpdatePhoneNumber = () => {
   const router = useRouter()
-  const token = useSelector((state) => state?.auth?.token?.token)
+  const token = useSelector((state) => state?.auth?.token)
   const [phoneNumber, setPhoneNumber] = React.useState('')
   const [alertEditPhoneNumber, setAlertEditPhoneNumber] = React.useState(false)
   const [alertErrorPhoneNumber, setAlertErrorPhoneNumber] = React.useState(false)
 
   // Update phone number
   const [user, setUser] = React.useState.apply({})
+  const [loadingLogin, setLoadingLogin] = React.useState(false)
   React.useEffect(() => {
     updatePhoneNumber().then((response) => {
       setUser(response)
     })
   }, [])
   const updatePhoneNumber = async (e) => {
-    if (e && e.preventDefault) { e.preventDefault(); }
-    try {
-      const response = await http(token).post('/profile/phone-number',
-      {phoneNumber})
-      if (phoneNumber) {
-        setAlertEditPhoneNumber(true)
+    if (e && e.preventDefault) { e.preventDefault() }
+    if (phoneNumber) {
+      setLoadingLogin(true)
+      console.log('Hello')
+      setAlertEditPhoneNumber(false)
+      setAlertErrorPhoneNumber(false)
+      try {
+        const response = await http(token).post('/profile/phone-number',
+        {phoneNumber})
+        if (phoneNumber) {
+          setLoadingLogin(false)
+          setAlertEditPhoneNumber(true)
+        }
+        setUser(response)
+        return response
+      } catch(error) {
+        console.log(error)
+        setLoadingLogin(false)
+        setAlertErrorPhoneNumber(true)
       }
-      setUser(response)
-      return response
-    } catch(error) {
-      console.log(error)
-      setAlertErrorPhoneNumber(true)
     }
   }
 
@@ -81,7 +91,7 @@ const UpdatePhoneNumber = () => {
           <h3 className='font-bold'>Edit Phone Number</h3>
         </div>
         <p>Add at least one phone number for the transfer ID so you can start transfering your money to another user.</p>
-        <form onSubmit={updatePhoneNumber} className='relative flex flex-col items-center gap-8 py-10'>
+        <form onSubmit={e => updatePhoneNumber(e)} className='relative flex flex-col items-center gap-8 py-10'>
           {alertErrorPhoneNumber ? <p className='absolute top-0 text-red-500'>Phone number already exist</p> : false}
           <div className={`flex items-center gap-5 border-b-2 ${phoneNumber.length ? 'border-primary' : ''} pb-2`}>
             <div>
@@ -95,9 +105,23 @@ const UpdatePhoneNumber = () => {
             </div>
           </div>
           <div className='flex-1 flex flex-col items-center gap-3 w-full py-5'>
+            {loadingLogin && <div className='mb-8 flex justify-center'>
+              <Oval
+                height={25}
+                wdivth={25}
+                color="#FF5F00"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+                ariaLabel='oval-loading'
+                secondaryColor="#fACEB6"
+                strokeWidth={5}
+                strokeWidthSecondary={5}
+              />
+            </div>}
             {phoneNumber?.length ?
-            <button type='submit' className='bg-primary md:w-2/4 w-full h-12 text-white font-bold rounded-xl active:border-2'>Edit Phone Number</button> :
-            <button type='submit' disabled className='bg-gray-200 text-gray-300 md:w-2/4 w-full h-12 font-bold rounded-xl'>Edit Phone Number</button>}
+            <button type='submit' className='btn bg-primary border-primary hover:bg-primary hover:border-primary md:w-2/4 w-full h-12 text-white font-bold rounded-xl'>Edit Phone Number</button> :
+            <button disabled className='bg-gray-200 text-gray-300 md:w-2/4 w-full h-12 font-bold rounded-xl'>Edit Phone Number</button>}
             {alertEditPhoneNumber &&
             <div className='text-center absolute bottom-0'>
               <p className='text-green-500'>{user?.data?.message}</p>

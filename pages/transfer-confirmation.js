@@ -14,7 +14,7 @@ import withAuth from '../components/hoc/withAuth'
 const Confirmation = () => {
   const router = useRouter()
   const dispatch = useDispatch()
-  const token = useSelector((state) => state?.auth?.token?.token)
+  const token = useSelector((state) => state?.auth?.token)
   const recipientId = useSelector((state) => state?.transfer?.recipientId)
   const amount = useSelector((state) => state?.transfer?.amount)
   const notes = useSelector((state) => state?.transfer?.notes)
@@ -167,7 +167,7 @@ const Confirmation = () => {
         </div>
         <div className="flex md:justify-end p-5">
           <div onClick={() => setShowEnterPIN(true)} className="flex justify-center items-center w-full md:w-28 h-12">
-            <button className="bg-primary w-full md:w-28 px-5 py-3 rounded-xl text-white font-bold active:text-sm active:px-4 active:py-2">Continue</button>
+            <button className="btn bg-primary border-primary hover:bg-primary hover:border-primary w-full md:w-28 px-5 py-3 rounded-xl text-white font-bold">Continue</button>
           </div>
         </div>
       </div>
@@ -201,12 +201,12 @@ const Confirmation = () => {
         </div>
         <div className="hidden md:flex justify-end">
           <div onClick={transferTo} className="flex justify-center items-center w-28 h-12">
-            <button className="bg-primary px-5 py-3 rounded-xl text-white font-bold active:text-sm active:px-4 active:py-2">Transfer Now</button>
+            <button className="btn bg-primary border-primary hover:bg-primary hover:border-primary px-5 py-3 rounded-xl text-white font-bold">Transfer Now</button>
           </div>
         </div>
         <div className=" md:hidden flex justify-end">
           <div onClick={transferTo} className="flex justify-center items-center w-full h-12">
-            <button className="bg-primary w-full px-5 py-3 rounded-xl text-white font-bold active:text-sm active:px-3 active:py-2">Transfer Now</button>
+            <button className="btn bg-primary border-primary hover:bg-primary hover:border-primary w-full px-5 py-3 rounded-xl text-white font-bold">Transfer Now</button>
           </div>
         </div>
       </div>

@@ -11,7 +11,7 @@ import withAuth from '../components/hoc/withAuth'
 
 const TransferStatus = () => {
   const router = useRouter()
-  const token = useSelector((state) => state?.auth?.token?.token)
+  const token = useSelector((state) => state?.auth?.token)
   const [statusSuccess, seStatusSuccess] = React.useState(true)
   const recipientId = useSelector((state) => state?.transfer?.recipientId)
   const amount = useSelector((state) => state?.transfer?.amount)
@@ -162,12 +162,12 @@ const TransferStatus = () => {
         </div>
         {statusSuccess ?
         <div className='flex justify-end gap-5 py-10 px-5'>
-          <div className="hidden md:flex justify-center items-center w-full md:w-48 h-12 bg-primary rounded-xl cursor-pointer active:border-2 active:border-white">
+          <div className="hidden md:flex justify-center items-center w-full md:w-48 h-12 btn bg-primary border-primary hover:bg-primary hover:border-primary rounded-xl cursor-pointer active:border-2 active:border-white">
             <Download className='text-white mr-3'/>
-            <button className=" text-white font-bold">Download PDF</button>
+            <button className="text-white font-bold">Download PDF</button>
           </div>
-          <div onClick={() => router.push('/home')} className="flex justify-center items-center w-full md:w-48 h-12 bg-primary rounded-xl cursor-pointer active:border-2 active:border-white">
-            <button className=" text-white font-bold">Back to Home</button>
+          <div onClick={() => router.push('/home')} className="flex justify-center items-center w-full md:w-48 h-12 btn bg-primary border-primary hover:bg-primary hover:border-primary rounded-xl cursor-pointer active:border-2 active:border-white">
+            <button className="text-white font-bold">Back to Home</button>
           </div>
         </div>
         :

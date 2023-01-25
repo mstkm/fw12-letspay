@@ -1,10 +1,11 @@
 import React from 'react'
 import Image from 'next/image'
-import { ArrowDown, ArrowUp, Bell } from 'react-feather'
-import User from '../assets/images/user.png'
+import { Bell } from 'react-feather'
 import { useRouter } from 'next/router'
 import http from '../helper/http'
 import ListNotifications from './ListNotifications'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const Header = (token) => {
   const router = useRouter()
@@ -44,13 +45,19 @@ const Header = (token) => {
       <div className="flex-1 cursor-pointer">
         <h1 onClick={() => router.push('/home')} className="font-bold text-3xl text-primary w-fit">LetsPay</h1>
       </div>
-      <div className="mr-3 bg-slate-300 p-2 rounded">
-        <Image src={(user?.picture) ? user?.picture : User} className='w-8 h-8' alt='photo-profile'/>
-      </div>
-      <div>
+      {user?.firstName &&
+      <div className='h-10'>
+        <Skeleton height={48} />
+      </div>}
+      {user?.firstName &&
+      <>
+      <div className="mr-3 rounded">
+        <Image src={user?.picture ? `https://68xkph-8888.preview.csb.app/upload/${user?.picture}` : require('../assets/images/user.png')} className='w-12 h-12 rounded-full' alt='photo-profile' width={80} height={80} />
+      </div><div>
         <h5 className='font-bold'>{fullName}</h5>
         <p>{user?.phoneNumber}</p>
       </div>
+      </>}
       <div className="ml-8">
         <Bell onClick={showNotificationHandle} className="text-white md:text-secondary cursor-pointer"/>
       </div>

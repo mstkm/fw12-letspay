@@ -11,7 +11,7 @@ import withAuth from '../components/hoc/withAuth'
 
 const ChangePIN = () => {
   const router = useRouter()
-  const token = useSelector((state) => state?.auth?.token?.token)
+  const token = useSelector((state) => state?.auth?.token)
   const [pin, setPin] = React.useState(null)
   const [user, setUser] = React.useState({})
   const [errorMessage, setErrorMessage] = React.useState(false)
@@ -99,8 +99,8 @@ const ChangePIN = () => {
             />
           <div className='flex-1 flex justify-center w-full py-5'>
             {(pin?.length === 6) ?
-            <button type='submit' className='bg-primary md:w-2/4 w-full h-12 text-white font-bold rounded-xl active:border-2'>Continue</button> :
-            <button type='submit' disabled className='bg-gray-200 text-gray-300 md:w-2/4 w-full h-12 font-bold rounded-xl'>Continue</button>}
+            <button type='submit' className='btn bg-primary border-primary hover:bg-primary hover:border-primary md:w-2/4 w-full h-12 text-white font-bold rounded-xl'>Continue</button> :
+            <button disabled className='bg-gray-200 text-gray-300 md:w-2/4 w-full h-12 font-bold rounded-xl'>Continue</button>}
           </div>
         </form>
       </div>

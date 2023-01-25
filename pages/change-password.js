@@ -7,10 +7,11 @@ import { ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, Lock, Eye, EyeOff } from 
 import { useSelector } from 'react-redux'
 import http from '../helper/http'
 import withAuth from '../components/hoc/withAuth'
+import { Oval } from  'react-loader-spinner'
 
 const ChangePassword = () => {
   const router = useRouter()
-  const token = useSelector((state) => state?.auth?.token?.token)
+  const token = useSelector((state) => state?.auth?.token)
   const [showPassword, setShowPassword] = React.useState.apply(false)
   const [showNewPassword, setShowNewPassword] = React.useState.apply(false)
   const [showReapeatNewPassword, setShowReapeatNewPassword] = React.useState.apply(false)
@@ -22,18 +23,24 @@ const ChangePassword = () => {
   const [alertFailed, setAlerFailed] = React.useState(false)
 
   // Update password
+  const [loadingPassword, setLoadingPassword] = React.useState(false)
   const updatePassword = async (e) => {
     e.preventDefault()
+    setLoadingPassword(true)
+    setAlerSuccess(false)
+    setAlerFailed(false)
     try {
       const response = await http(token).post('/profile/change-password', {
         currentPassword: password,
         newPassword,
         confirmPassword: repeatNewPassword
       })
+      setLoadingPassword(false)
       setMessage(response?.data?.message)
       setAlerSuccess(true)
       return response
     } catch(error) {
+      setLoadingPassword(false)
       setMessage(error?.response?.data?.message)
       setAlerFailed(true)
     }
@@ -101,7 +108,7 @@ const ChangePassword = () => {
           </div>
           <div className='flex-1 flex justify-center w-full py-5'>
             {password.length && newPassword.length && repeatNewPassword.length ?
-            <button className='bg-primary md:w-2/4 w-full h-12 text-white font-bold rounded-xl active:border-2'>Change Password</button>
+            <button className='btn bg-primary border-primary hover:bg-primary hover:border-primary md:w-2/4 w-full h-12 text-white font-bold rounded-xl'>Change Password</button>
             :
             <button disabled className='bg-gray-200 text-gray-300 md:w-2/4 w-full h-12 font-bold rounded-xl'>Change Password</button>}
             {alertSuccess &&
@@ -114,6 +121,21 @@ const ChangePassword = () => {
               <p className='text-red-500'>{message}</p>
             </div> }
           </div>
+          {loadingPassword &&
+            <div className='flex justify-center'>
+              <Oval
+                height={25}
+                wdivth={25}
+                color="#FF5F00"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+                ariaLabel='oval-loading'
+                secondaryColor="#fACEB6"
+                strokeWidth={5}
+                strokeWidthSecondary={5}
+              />
+            </div>}
         </form>
       </div>
     </section>

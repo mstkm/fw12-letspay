@@ -6,23 +6,32 @@ import {useSelector} from 'react-redux'
 import http from '../helper/http'
 import { useRouter } from "next/router"
 import authPrivate from '../components/hoc/authPrivate'
+import { Oval } from  'react-loader-spinner'
 
 const PhoneNumber = () => {
   const router = useRouter()
-  const token = useSelector((state) => state?.auth?.token?.token)
+  const token = useSelector((state) => state?.auth?.token)
   const [newPhoneNumber, setNewPhoneNumber] = React.useState(null)
-  const [errorMessage, setErrorMessage] = React.useState(false)
 
   // Update phone number
+  const [loadingRegister, setLoadingRegister] = React.useState(false)
+  const [successRegisterMessage, setSuccessRegisterMessage] = React.useState(null)
+  const [failedRegisterMessage, setFailedRegisterMessage] = React.useState(null)
   const createPhoneNumber = async (e) => {
     if (e && e.preventDefault) { e.preventDefault(); }
+    setLoadingRegister(true)
+    setFailedRegisterMessage(null)
+    setSuccessRegisterMessage(null)
     try {
       const {data} = await http(token).post('/profile/phone-number', {phoneNumber: newPhoneNumber})
+      setLoadingRegister(false)
+      setSuccessRegisterMessage('Create phone number success')
       router.push('/pin')
       return data?.results
     } catch (error) {
       console.log(error?.response?.data?.message)
-      setErrorMessage(true)
+      setLoadingRegister(false)
+      setFailedRegisterMessage(error?.response?.data?.message)
     }
   }
 
@@ -57,7 +66,6 @@ const PhoneNumber = () => {
           <p>Add at least one phone number for the transfer ID so you can start transfering your money to another user.</p>
         </div>
         <form onSubmit={createPhoneNumber} className='flex flex-col items-center'>
-          {errorMessage && <p className="text-red-500 pt-2">Phone number already exists</p>}
           <div className={`flex items-center gap-5 border-b-2 ${newPhoneNumber?.length ? 'border-primary' : ''} pb-2`}>
           <div>
             <Phone className={`${newPhoneNumber?.length ? 'text-primary' : ''}`}/>
@@ -66,14 +74,30 @@ const PhoneNumber = () => {
             <select className='appearance-none bg-transparent focus:outline-none font-bold'>
               <option>+62</option>
             </select>
-            <input onChange={(e) => setNewPhoneNumber('0'+e.target.value) & setErrorMessage(false)} type='number' name='phoneNumber' placeholder='Enter your phone number' className='pl-3 py-10 bg-transparent focus:outline-none'/>
+            <input onChange={(e) => setNewPhoneNumber('0'+e.target.value)} type='number' name='phoneNumber' placeholder='Enter your phone number' className='pl-3 py-10 bg-transparent focus:outline-none'/>
           </div>
           </div>
           <div className="flex justify-center items-center w-full h-8 mb-10">
-            {(newPhoneNumber?.length > 10) ?
-            <button className='w-full text-white bg-primary font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm'>Confirm</button> :
+            {(newPhoneNumber?.length >= 10) ?
+            <button className='btn w-full text-white border-primary bg-primary hover:border-primary hover:bg-primary font-bold py-3 border rounded-xl'>Confirm</button> :
             <button disabled className='w-full bg-gray-200 text-gray-300 font-bold py-3 border rounded-xl'>Confirm</button>}
           </div>
+          {loadingRegister && <div className='mb-8 flex justify-center'>
+            <Oval
+              height={25}
+              wdivth={25}
+              color="#FF5F00"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+              ariaLabel='oval-loading'
+              secondaryColor="#fACEB6"
+              strokeWidth={5}
+              strokeWidthSecondary={5}
+            />
+          </div>}
+          {successRegisterMessage && <p className='mb-8 text-center text-green-600'>{successRegisterMessage}</p>}
+          {failedRegisterMessage && <p className='mb-8 text-center text-red-600'>{failedRegisterMessage}</p>}
         </form>
         </div>
       </div>

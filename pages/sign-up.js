@@ -12,6 +12,7 @@ import * as Yup from 'yup';
 import YupPassword from 'yup-password'
 import authPrivate from '../components/hoc/authPrivate'
 YupPassword(Yup)
+import { Oval } from  'react-loader-spinner'
 
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -41,18 +42,26 @@ const SignUp = () => {
   const [password, setPassword] = React.useState(null)
   const [eyePassword, setEyePassword] = React.useState(true)
 
+  // Register
+  const [loadingRegister, setLoadingRegister] = React.useState(false)
+  const [successRegisterMessage, setSuccessRegisterMessage] = React.useState(null)
+  const [failedRegisterMessage, setFailedRegisterMessage] = React.useState(null)
   const cb = () => {
     router.push('/phone-number')
   }
-
   const register = async (value) => {
+    setLoadingRegister(true)
     try {
       const {data} = await http().post('/auth/register', value)
       const token = data?.results?.token
       dispatch(loginUser({token}))
+      setLoadingRegister(false)
+      setSuccessRegisterMessage('Register success')
       cb()
     } catch(error) {
       console.log(error)
+      setLoadingRegister(false)
+      setFailedRegisterMessage('Register failed')
     }
   }
 
@@ -122,11 +131,27 @@ const SignUp = () => {
             </div>
             {errors.password && touched.password ? <div className='text-red-500 text-sm'>{errors.password}</div> : null}
             <div className="flex justify-center items-center w-full h-8 py-14">
-              <button type='submit' className={`w-full bg-primary text-white font-bold py-3 border rounded-xl active:w-11/12 active:py-2 active:text-sm text-white`}>Sign Up</button>
+              <button type='submit' className={`btn w-full border-primary bg-primary hover:bg-primary hover:border-primary text-white font-bold py-3 border rounded-xl text-white`}>Sign Up</button>
             </div>
           </Form>
           )}
         </Formik>
+        {loadingRegister && <div className='mb-8 flex justify-center'>
+          <Oval
+            height={25}
+            wdivth={25}
+            color="#FF5F00"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+            ariaLabel='oval-loading'
+            secondaryColor="#fACEB6"
+            strokeWidth={5}
+            strokeWidthSecondary={5}
+          />
+        </div>}
+        {successRegisterMessage && <p className='mb-8 text-center text-green-600'>{successRegisterMessage}</p>}
+        {failedRegisterMessage && <p className='mb-8 text-center text-red-600'>{failedRegisterMessage}</p>}
         <div className="text-center">
           <p>Already have an account? Let&apos;s <Link href='/login' className="text-primary cursor-pointer hover:font-bold">Login</Link></p>
         </div>

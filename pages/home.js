@@ -12,15 +12,17 @@ import http from "../helper/http"
 import React from "react"
 import withAuth from "../components/hoc/withAuth"
 import ListNotifications from "../components/ListNotifications"
-
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const Home = () => {
   const router = useRouter()
   const dispatch = useDispatch()
-  const token = useSelector((state) => state?.auth?.token?.token)
+  const token = useSelector((state) => state?.auth?.token)
 
   // Get User
   const [user, setUser] = React.useState({})
+  const fullName = `${user?.firstName} ${user?.lastName}`
   React.useEffect(()=> {
     const getUser = async () => {
       try {
@@ -35,14 +37,16 @@ const Home = () => {
     })
   }, [setUser, token])
 
-  const fullName = `${user.firstName} ${user.lastName}`
-
   // Get List Transctions
   const [transactions, setTransactions] = React.useState([])
   React.useEffect(() => {
     const getTransactions = async () => {
-      const response = await http(token).get('/transactions?page=1&limit=5')
+      try {
+        const response = await http(token).get('/transactions?page=1&limit=5')
       setTransactions(response?.data?.results)
+      } catch (error) {
+        console.log(error)
+      }
     }
     getTransactions()
   }, [token])
@@ -58,11 +62,10 @@ const Home = () => {
     }
   }
 
-
+  // Logout
   const logout = () => {
     dispatch(logoutUser())
     dispatch(transferLogout())
-    router.push('/login')
   }
 
   return(
@@ -74,7 +77,7 @@ const Home = () => {
     <Header token={token} />
     <section className="md:hidden flex items-center bg-primary md:bg-white rounded-b-3xl drop-shadow-md font-primary px-5 md:px-32 py-8">
       <div className="md:hidden mr-3 bg-slate-300 p-2 rounded">
-        <Image src={require('../assets/images/user.png')} className='w-8' alt='photo-profile'/>
+        <Image src={user?.picture ? `https://68xkph-8888.preview.csb.app/upload/${user?.picture}` : require('../assets/images/user.png')} className='w-12 h-12 rounded-full' alt='photo-profile' width={80} height={80} />
       </div>
       <div className="flex-1 md:hidden">
         <p className="text-sm text-slate-500">Balance</p>
@@ -121,88 +124,95 @@ const Home = () => {
       </div>
 
       <div className="flex-[70%] flex flex-col gap-5">
-        <div className="hidden md:flex items-center bg-primary shadow p-5 rounded-xl">
-          <div className="flex-1 text-white">
-            <p>Balance</p>
-            <p className="text-4xl font-bold py-2">{'Rp'+new Intl.NumberFormat('en-DE').format(user?.balance)}</p>
-            <p>{user?.phoneNumber}</p>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div onClick={() => router.push('/transfer')} className="h-10 w-32 flex items-center justify-center  cursor-pointer">
-              <button className="flex items-center justify-center  cursor-pointer gap-2 font-bold bg-orange-400 border-2 rounded-lg h-10 w-32 text-white border-white active:h-8 active:w-28 active:text-sm">
-                <ArrowUp />
-                <p>Transfer</p>
-              </button>
+        {!user?.firstName &&
+        <div>
+          <Skeleton height={550} />
+        </div>}
+        {user?.firstName &&
+        <>
+          <div className="hidden md:flex items-center bg-primary shadow p-5 rounded-xl">
+            <div className="flex-1 text-white">
+              <p>Balance</p>
+              <p className="text-4xl font-bold py-2">{'Rp' + new Intl.NumberFormat('en-DE').format(user?.balance)}</p>
+              <p>{user?.phoneNumber}</p>
             </div>
-            <div onClick={() => router.push('/top-up')} className="h-10 w-32 flex items-center justify-center  cursor-pointer">
-              <button className="flex items-center justify-center  cursor-pointer gap-2 font-bold bg-orange-400 border-2 rounded-lg h-10 w-32 text-white border-white active:h-8 active:w-28 active:text-sm">
-                <Plus />
-                <p>Top Up</p>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="md:flex gap-5">
-          <div className="hidden md:block flex-[55%] bg-white shadow p-5 rounded-xl">
-            <div className="flex items-center mb-10">
-              <div className="flex-1">
-                <ArrowDown className="text-green-500" />
-                <p>Income</p>
-                <p className="font-bold">No Available</p>
+            <div className="flex flex-col gap-3">
+              <div onClick={() => router.push('/transfer')} className="h-10 w-32 flex items-center justify-center  cursor-pointer">
+                <button type="button" className="btn flex items-center justify-center  cursor-pointer gap-2 font-bold bg-orange-400 border-white hover:bg-orange-400 hover:border-white border-2 rounded-lg h-10 w-32 text-white">
+                  <ArrowUp />
+                  <p>Transfer</p>
+                </button>
               </div>
-              <div>
-                <ArrowUp className="text-red-500"/>
-                <p>Expense</p>
-                <p className="font-bold">No Available</p>
+              <div onClick={() => router.push('/top-up')} className="h-10 w-32 flex items-center justify-center  cursor-pointer">
+                <button type="button" className="btn flex items-center justify-center  cursor-pointer gap-2 font-bold bg-orange-400 border-white hover:bg-orange-400 hover:border-white border-2 rounded-lg h-10 w-32 text-white">
+                  <Plus />
+                  <p>Top Up</p>
+                </button>
               </div>
             </div>
-            <div className="flex justify-center">
-              <Image src={require('../assets/images/graphic.png')} alt='graphic' className="w-4/5" />
-            </div>
           </div>
-          <div className="flex justify-center gap-3 px-5 py-5 md:hidden">
-            <div onClick={() => router.push('/transfer')} className="flex w-full items-center justify-center  cursor-pointer">
-              <button className="flex py-3 w-full items-center justify-center  cursor-pointer gap-2 font-bold bg-orange-400 border-2 rounded-lg text-white border-white active:h-8 active:w-28 active:text-sm">
-                <ArrowUp />
-                <p>Transfer</p>
-              </button>
-            </div>
-            <div onClick={() => router.push('/top-up')} className="flex w-full items-center justify-center  cursor-pointer">
-              <button className="flex py-3 w-full items-center justify-center  cursor-pointer gap-2 font-bold bg-orange-400 border-2 rounded-lg text-white border-white active:h-8 active:w-28 active:text-sm">
-                <Plus />
-                <p>Top Up</p>
-              </button>
-            </div>
-          </div>
-
-          {/* Transactions History */}
-          <div className="md:flex-[45%] md:bg-white md:shadow md:p-5 md:rounded-xl">
-            <div className="flex items-center mb-8 px-5 md:px-0 mt-5 md:mt-0">
-              <p className="flex-1 font-bold">Transaction History</p>
-              <Link href='/history' className="text-sm font-bold text-primary hover:underline">See All</Link>
-            </div>
-            <div className="flex flex-col gap-3 md:gap-5 pb-10 md:pb-0">
-              {transactions?.map((transaction, index) => {
-                return(
-                  <div key={Number(index)} className="flex items-center bg-white shadow md:bg-transparent md:shadow-none p-5 md:p-0 rounded-lg md:rounded-0">
-                    <div className="bg-slate-300 w-10 h-10 rounded mr-2">
-                      <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap">{transaction.recipientname}</p>
-                      {transaction.sendername === ' ' ? <p className="text-sm">Top Up</p> : false}
-                      {transaction.sendername === fullName ? <p className="text-sm">Transfer</p> : false}
-                    </div>
-                    <div className="flex-2">
-                      {transaction.sendername === ' ' ? <p className="text-green-500 font-bold">+Rp{new Intl.NumberFormat('en-DE').format(transaction.amount)}</p> : false}
-                      {transaction.sendername === fullName ? <p className="text-red-500 font-bold">-Rp{new Intl.NumberFormat('en-DE').format(transaction.amount)}</p> : false}
-                    </div>
+          <div className="md:flex gap-5">
+              <div className="hidden md:block flex-[55%] bg-white shadow p-5 rounded-xl">
+                <div className="flex items-center mb-10">
+                  <div className="flex-1">
+                    <ArrowDown className="text-green-500" />
+                    <p>Income</p>
+                    <p className="font-bold">No Available</p>
                   </div>
-                )
-              })}
-            </div>
+                  <div>
+                    <ArrowUp className="text-red-500" />
+                    <p>Expense</p>
+                    <p className="font-bold">No Available</p>
+                  </div>
+                </div>
+                <div className="flex justify-center">
+                  <Image src={require('../assets/images/graphic.png')} alt='graphic' className="w-4/5" width={100} height={100} />
+                </div>
+              </div>
+              <div className="flex justify-center gap-3 px-5 py-5 md:hidden">
+                <div onClick={() => router.push('/transfer')} className="flex w-full items-center justify-center  cursor-pointer">
+                  <button className="btn flex py-3 w-full items-center justify-center  cursor-pointer gap-2 font-bold bg-orange-400 border-white hover:bg-orange-400 hover:border-white border-2 rounded-lg text-white">
+                    <ArrowUp />
+                    <p>Transfer</p>
+                  </button>
+                </div>
+                <div onClick={() => router.push('/top-up')} className="flex w-full items-center justify-center  cursor-pointer">
+                  <button className="btn flex py-3 w-full items-center justify-center  cursor-pointer gap-2 font-bold bg-orange-400 border-white hover:bg-orange-400 hover:border-white border-2 rounded-lg text-white">
+                    <Plus />
+                    <p>Top Up</p>
+                  </button>
+                </div>
+              </div>
+
+              {/* Transactions History */}
+              <div className="md:flex-[45%] md:bg-white md:shadow md:p-5 md:rounded-xl">
+                <div className="flex items-center mb-8 px-5 md:px-0 mt-5 md:mt-0">
+                  <p className="flex-1 font-bold">Transaction History</p>
+                  <Link href='/history' className="text-sm font-bold text-primary hover:underline">See All</Link>
+                </div>
+                <div className="flex flex-col gap-3 md:gap-5 pb-10 md:pb-0">
+                  {transactions?.map((transaction, index) => {
+                    return (
+                      <div key={Number(index)} className="flex items-center bg-white shadow md:bg-transparent md:shadow-none p-5 md:p-0 rounded-lg md:rounded-0">
+                        <div className="w-10 h-10 rounded mr-2">
+                         <Image src={transaction?.recipientPicture ? `https://68xkph-8888.preview.csb.app/upload/${transaction?.recipientPicture}` : require('../assets/images/user.png')} className='w-10 h-10 rounded-full' alt='photo-profile' width={100} height={100} />
+                        </div>
+                        <div className="flex-1">
+                          <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap">{transaction?.recipientname}</p>
+                          {transaction?.sendername === ' ' ? <p className="text-sm">Top Up</p> : false}
+                          {transaction?.sendername === fullName ? <p className="text-sm">Transfer</p> : false}
+                        </div>
+                        <div className="flex-2">
+                          {transaction?.sendername === ' ' ? <p className="text-green-500 font-bold">+Rp{new Intl.NumberFormat('en-DE').format(transaction?.amount)}</p> : false}
+                          {transaction?.sendername === fullName ? <p className="text-red-500 font-bold">-Rp{new Intl.NumberFormat('en-DE').format(transaction?.amount)}</p> : false}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
           </div>
-        </div>
+        </>}
       </div>
     </section>
 
