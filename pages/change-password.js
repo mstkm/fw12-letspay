@@ -122,20 +122,20 @@ const ChangePassword = () => {
             </div> }
           </div>
           {loadingPassword &&
-            <div className='flex justify-center'>
-              <Oval
-                height={25}
-                wdivth={25}
-                color="#FF5F00"
-                wrapperStyle={{}}
-                wrapperClass=""
-                visible={true}
-                ariaLabel='oval-loading'
-                secondaryColor="#fACEB6"
-                strokeWidth={5}
-                strokeWidthSecondary={5}
-              />
-            </div>}
+          <div className='flex justify-center'>
+            <Oval
+              height={25}
+              wdivth={25}
+              color="#FF5F00"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+              ariaLabel='oval-loading'
+              secondaryColor="#fACEB6"
+              strokeWidth={5}
+              strokeWidthSecondary={5}
+            />
+          </div>}
         </form>
       </div>
     </section>
