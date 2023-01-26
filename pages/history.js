@@ -8,10 +8,12 @@ import { ArrowDown, ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, ChevronLeft, C
 import { useSelector } from "react-redux"
 import http from '../helper/http'
 import withAuth from '../components/hoc/withAuth'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const History = () => {
   const router = useRouter()
-  const token = useSelector((state) => state?.auth?.token?.token)
+  const token = useSelector((state) => state?.auth?.token)
   const [page, setPage] = React.useState(1)
 
   // Get User
@@ -37,8 +39,13 @@ const History = () => {
     getTransactions()
   }, [page])
   const getTransactions = async () => {
-    const response = await http(token).get(`/transactions?page=${page}&limit=5`)
-    setTransactions(response?.data?.results)
+    try {
+      const response = await http(token).get(`/transactions?page=${page}&limit=5`)
+      console.log(response)
+      setTransactions(response?.data)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   // Pagination
@@ -109,8 +116,13 @@ const History = () => {
             </select>
           </div>
         </div>
-
-        {transactions?.map((transaction, index) => {
+        {!transactions?.results &&
+        <div>
+          <Skeleton height={400} />
+        </div>}
+        {transactions?.results?.length === 0 &&
+        <p className='text-center py-32'>No results</p>}
+        {transactions?.results?.map((transaction, index) => {
           return(
             <div key={Number(index)} className="flex items-center md:bg-transparent p-5 md:p-0 rounded-lg md:rounded-0">
               <div className="bg-slate-300 w-10 h-10 rounded mr-2">
