@@ -22,11 +22,18 @@ const Home = () => {
 
   // Get User
   const [user, setUser] = React.useState({})
+  const [modalSetPin, setModalSetPin] = React.useState(false)
   const fullName = `${user?.firstName} ${user?.lastName}`
   React.useEffect(()=> {
     const getUser = async () => {
       try {
         const {data} = await http(token).get('/profile')
+        setUser(data)
+        if (!data?.results?.phoneNumber && !data?.results?.pin) {
+          setModalSetPin(true)
+        } else {
+          setModalSetPin(false)
+        }
         return data?.results
       } catch (error) {
         console.log(error?.response?.data?.message)
@@ -68,6 +75,12 @@ const Home = () => {
     dispatch(transferLogout())
   }
 
+  // Check phone number and pin
+
+  React.useEffect(() => {
+
+  }, [])
+
   return(
     <div className="bg-orange-100 relative h-screen md:h-full">
     <Head>
@@ -75,6 +88,17 @@ const Home = () => {
     </Head>
 
     <Header token={token} />
+
+    {user?.firstName && modalSetPin &&
+    <div className="fixed top-0 bg-black/80 w-screen h-screen z-10 flex justify-center items-center">
+      <div className="bg-white p-8 rounded flex flex-col justify-center items-center gap-5">
+        <p className="text-xl font-bold">Congratulation! Your registration successful...</p>
+        <div>
+          <button onClick={() => router.push('/phone-number')} className="btn bg-primary border-primary hover:bg-primary hover:border-primary">Set Phone Number and PIN</button>
+        </div>
+      </div>
+    </div>}
+
     <section className="md:hidden flex items-center bg-primary md:bg-white rounded-b-3xl drop-shadow-md font-primary px-5 md:px-32 py-8">
       <div className="md:hidden mr-3 bg-slate-300 p-2 rounded">
         <Image src={user?.picture ? `https://68xkph-8888.preview.csb.app/upload/${user?.picture}` : require('../assets/images/user.png')} className='w-12 h-12 rounded-full' alt='photo-profile' width={80} height={80} />
