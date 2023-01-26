@@ -130,7 +130,7 @@ const History = () => {
           <Skeleton height={400} />
         </div>}
         {transactions?.results?.length === 0 &&
-        <p className='text-center py-32'>No results</p>}
+        <p className='text-center py-10'>No results</p>}
         {transactions?.results?.map((transaction, index) => {
           return(
             <div key={Number(index)} className="flex items-center md:bg-transparent p-5 md:p-0 rounded-lg md:rounded-0">
