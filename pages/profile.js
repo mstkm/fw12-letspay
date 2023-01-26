@@ -170,7 +170,7 @@ const Profile = () => {
         </div>
         <div className='flex flex-col items-center gap-5'>
           <div className='flex flex-col items-center'>
-            <Image src={user?.picture ? `https://68xkph-8888.preview.csb.app/upload/${userPicture}` : require('../assets/images/user.png')} alt='profile' className='mb-2 rounded-full w-[100px] h-[100px]' width="100" height="150" />
+            <Image src={userPicture ?  `https://68xkph-8888.preview.csb.app/upload/${userPicture}` : require('../assets/images/user.png')} alt='profile' className='mb-2 rounded-full w-[100px] h-[100px]' width="100" height="150" />
             <div onClick={() => setShowModal(true)} className='flex gap-2 items-center cursor-pointer'>
               <Edit2 className='w-3'/>
               <p className='text-sm'>Edit</p>
