@@ -5,7 +5,9 @@ import { useRouter } from "next/router"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import { ArrowDown, ArrowLeft, ArrowUp, Grid, Plus, User, LogOut, ChevronLeft, ChevronRight } from "react-feather"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { logoutUser } from "../redux/reducers/auth"
+import { transferLogout } from "../redux/reducers/transfer"
 import http from '../helper/http'
 import withAuth from '../components/hoc/withAuth'
 import Skeleton from 'react-loading-skeleton'
@@ -13,6 +15,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 const History = () => {
   const router = useRouter()
+  const dispatch = useDispatch()
   const token = useSelector((state) => state?.auth?.token)
   const [page, setPage] = React.useState(1)
 
@@ -60,6 +63,12 @@ const History = () => {
     }
   }
 
+  // Logout
+  const logout = () => {
+    dispatch(logoutUser())
+    dispatch(transferLogout())
+  }
+
   return(
     <div className="bg-orange-100">
     <Head>
@@ -96,7 +105,7 @@ const History = () => {
             <p>Profile</p>
           </div>
         </div>
-        <div>
+        <div onClick={logout}>
           <div className="flex items-center gap-5 px-8 hover:text-primary hover:font-bold hover:border-l-2 hover:border-primary cursor-pointer">
             <LogOut />
             <p>Logout</p>
