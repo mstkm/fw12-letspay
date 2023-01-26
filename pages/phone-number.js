@@ -26,7 +26,9 @@ const PhoneNumber = () => {
       const {data} = await http(token).post('/profile/phone-number', {phoneNumber: newPhoneNumber})
       setLoadingRegister(false)
       setSuccessRegisterMessage('Create phone number success')
-      router.push('/pin')
+      setTimeout(() => {
+        router.push('/pin')
+      }, 3000)
       return data?.results
     } catch (error) {
       console.log(error?.response?.data?.message)
