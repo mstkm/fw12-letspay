@@ -46,18 +46,14 @@ const SignUp = () => {
   const [loadingRegister, setLoadingRegister] = React.useState(false)
   const [successRegisterMessage, setSuccessRegisterMessage] = React.useState(null)
   const [failedRegisterMessage, setFailedRegisterMessage] = React.useState(null)
-  const cb = () => {
-    router.push('/phone-number')
-  }
   const register = async (value) => {
     setLoadingRegister(true)
     try {
       const {data} = await http().post('/auth/register', value)
       const token = data?.results?.token
-      dispatch(loginUser({token}))
       setLoadingRegister(false)
       setSuccessRegisterMessage('Register success')
-      cb()
+      dispatch(loginUser({token}))
     } catch(error) {
       console.log(error)
       setLoadingRegister(false)

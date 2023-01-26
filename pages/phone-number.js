@@ -5,7 +5,7 @@ import { Phone } from "react-feather"
 import {useSelector} from 'react-redux'
 import http from '../helper/http'
 import { useRouter } from "next/router"
-import authPrivate from '../components/hoc/authPrivate'
+import withAuth from '../components/hoc/withAuth'
 import { Oval } from  'react-loader-spinner'
 
 const PhoneNumber = () => {
@@ -106,4 +106,4 @@ const PhoneNumber = () => {
   )
 }
 
-export default authPrivate(PhoneNumber)
+export default withAuth(PhoneNumber)
