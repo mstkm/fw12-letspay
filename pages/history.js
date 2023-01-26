@@ -134,8 +134,8 @@ const History = () => {
         {transactions?.results?.map((transaction, index) => {
           return(
             <div key={Number(index)} className="flex items-center md:bg-transparent p-5 md:p-0 rounded-lg md:rounded-0">
-              <div className="bg-slate-300 w-10 h-10 rounded mr-2">
-                <Image src={require('../assets/images/user.png')} alt='user' className="w-10 h-10 p-1" />
+              <div className="w-10 h-10 rounded mr-2">
+              <Image src={transaction?.recipientPicture ? `https://68xkph-8888.preview.csb.app/upload/${transaction?.recipientPicture}` : require('../assets/images/user.png')} className='w-10 h-10 rounded-full' alt='photo-profile' width={100} height={100} />
               </div>
               <div className="flex-1">
                 <p className="w-[115px] text-ellipsis overflow-hidden whitespace-nowrap">{transaction.recipientname}</p>
