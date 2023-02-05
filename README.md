@@ -1,26 +1,26 @@
 <div align="center">
   <br>
   <h1><strong>Karcis App</strong></h1>
-  <p>Aplikasi dompet digital.</p>
+  <p>Digital wallet application.</p>
 
   <!-- [**View the Web App**](https://exceltodynamodbjson.vercel.app) -->
 </div>
 
-## Daftar Isi
+## Table of contents
 
-- [Daftar isi](#daftar-isi)
-- [Deskripsi](#deskripsi)
-- [Teknologi](#teknologi)
+- [Table of contents](#table-of-contents)
+- [Description](#description)
+- [Technologies](#technologies)
 
-## Deskripsi
+## Description
 
-**Letspay** adalah aplikasi dompet digital yang dapat digunakan untuk menyimpan dana maupun transfer dana antar pengguna.  
+**Letspay** is a digital wallet application that can be used to store funds or transfer funds between users.  
 
 <br>
 <img src="https://res.cloudinary.com/dvzrmzldr/image/upload/v1674703940/Screenshot_20230126_103057_alcyog.png">
 <br>
 
-## Teknologi
+## Technologies
 
 -   [Next.js](https://nextjs.org/)
 -   [TailwindCSS](https://tailwindcss.com/)
